@@ -3,14 +3,29 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Nanigans\SingleTableInheritance\SingleTableInheritanceTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use App\Models\Landlord;
+use App\Models\Tenant;
+use App\Models\ProspectiveTenant;
+
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
+    use SingleTableInheritanceTrait;
     use HasFactory, Notifiable;
+    protected $table = 'users';
+
+    protected static $singleTableTypeField = 'user_type';
+    protected static $singleTableSubclasses = [
+        Landlord::class,
+        Tenant::class,
+        ProspectiveTenant::class,
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +33,15 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'user_name',
         'email',
         'password',
+        'user_contact_number',
+        'user_type',
+        'move_in_date',
+        'employment_status',
+
+
     ];
 
     /**
@@ -33,16 +54,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 }
