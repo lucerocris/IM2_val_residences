@@ -13,7 +13,14 @@ const slides = [
   <div className="flex items-center justify-center h-100 bg-gray-400 text-3xl font-bold"><img src= {img4} alt="Slide 3" className = "w-full h-full object-cover"/></div>,
 ];
 
-const MainLayout = () => {
+interface MainLayoutProps {
+  title: string;
+  description: string;
+  buttonLabel: string;
+  
+}
+    
+const MainLayout = ({ title, description, buttonLabel }: MainLayoutProps) => {
     return (
         <div className = "overflow-x-hidden">
             <div className="w-full h-[30px] bg-[#323232]"></div>
@@ -24,10 +31,9 @@ const MainLayout = () => {
                 <div className="absolute top-0 left-0 w-[75%] h-full pointer-events-none" style={{ background: 'linear-gradient(to right, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 65%, rgba(255, 255, 255, 0.4) 85%, rgba(255, 255, 255, 0) 100%)'}} />
 
                 <div className = "w-[30%] flex flex-col absolute left-[10%] top-[15%]">
-                    <h1 className = "text-[2.4rem] pb-[30px]">Val Residences</h1>
-                    <p className = "text-[1.1rem] pb-[30px] font-medium">Wake up to refreshing mornings in our apartments at Corona del Mar, a Spanish Mediterranean-inspired
-                    seaside community in Cebu.</p>
-                    <button className = "bg-[#323232] hover:bg-[#606060] transition-colors duration-300 cursor-pointer text-[1rem] w-[200px] text-white py-[10px] px-[15px]">VIEW LISTINGS</button>
+                    <h1 className = "text-[2.4rem] pb-[30px]">{title}</h1>
+                    <p className = "text-[1.1rem] pb-[30px] font-medium">  {description}</p>
+                    <button className = "bg-[#323232] hover:bg-[#606060] transition-colors duration-300 cursor-pointer text-[1rem] w-[200px] text-white py-[10px] px-[15px]">{buttonLabel}</button>
                 </div>
             </div>
             <Footer />
