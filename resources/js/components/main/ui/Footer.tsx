@@ -58,11 +58,22 @@ const Middle = () => {
             <div className = "flex-1 p-[20px] min-w-[280px] relative border-l border-r  border-gray-500">
                 <h3 className = "text-[1.3rem] mb-[30px]">Socials</h3>
 
-                <div className = "grid grid-cols-2 gap-[15px] justify-start">
-                    <a href=""><Facebook /></a>
-                    <a href=""><Instagram /></a>
-                    <a href=""><Twitter /></a>
-                    <a href=""><Youtube /></a>
+                <div className = "flex flex-col space-y-4">
+                    <div className = "w-full flex">
+                        <Facebook className = "mr-2"/> - <a href="https://facebook.com/val-residences" className = "ml-4">Follow us on Facebook</a>
+                    </div>
+
+                    <div className = "w-full flex">
+                        <Instagram className = "mr-2"/> - <a href="https://instagram.com/valResidencesInIG" className = "ml-4">Follow us on Instagram</a>
+                    </div>
+
+                    <div className = "w-full flex">
+                        <Twitter className = "mr-2"/> - <a href="https://x.com/valResidences" className = "ml-4">Follor our Twitter</a>
+                    </div>
+
+                    <div className = "w-full flex">
+                        <Youtube className = "mr-2"/> - <a href="https://youtube.com/Val-Residences" className = "ml-4">Subscribe to our YouTube Channel</a>
+                    </div>
                 </div>
             </div>
         </>
