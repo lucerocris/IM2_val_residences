@@ -43,7 +43,7 @@ const Carousel: React.FC<CarouselProps> = ({ slides, autoPlay = true, autoPlayIn
   };
 
   return (
-    <div className="w-full h-full mb-40 relative">
+    <div className="w-full h-full relative">
       <Slider {...settings}>
         {slides.map((slide, idx) => (
           <div key={idx} className="w-full h-full">

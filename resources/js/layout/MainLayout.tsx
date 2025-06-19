@@ -16,9 +16,10 @@ const slides = [
 
 interface MainLayoutProps {
     carouselText: ReactNode;
+    children: ReactNode;
 }
     
-const MainLayout = ({ carouselText }:MainLayoutProps) => {
+const MainLayout = ({ carouselText, children }:MainLayoutProps) => {
     return (
         <div className = "overflow-x-hidden">
             <div className="w-full h-[30px] bg-[#323232]"></div>
@@ -29,6 +30,7 @@ const MainLayout = ({ carouselText }:MainLayoutProps) => {
                 <div className="absolute top-0 left-0 w-[75%] h-full pointer-events-none" style={{ background: 'linear-gradient(to right, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 65%, rgba(255, 255, 255, 0.4) 85%, rgba(255, 255, 255, 0) 100%)'}} />
                 {carouselText}
             </div>
+            {children}
             <Footer />
         </div>
     )
