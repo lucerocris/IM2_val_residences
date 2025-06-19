@@ -1,4 +1,5 @@
 import MainLayout from '@/layout/MainLayout';
+import CarouselText from '@/components/main/ui/CarouselText';
 
 const landing = () => {
     const desc = "Enjoy stunning views and a revitalizing sea breeze for a truly relaxing stay here at Val Residences at Corona del Mar.";
@@ -6,7 +7,7 @@ const landing = () => {
     const title = "About Us";
 
     return (
-        <MainLayout title = {title} description = {desc}  buttonLabel = {btnLabel}/>
+        <MainLayout carouselText = {<CarouselText description = {desc} buttonLabel= {btnLabel} title = {title} />}/>
     )
 }
 
