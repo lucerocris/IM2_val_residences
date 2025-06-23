@@ -20,7 +20,7 @@ const Modal = ({trigger, title, description, children}:ModalProps) => {
         <>
             <Dialog>
                 <DialogTrigger asChild>{trigger}</DialogTrigger>
-                <DialogContent className = "sm:max-w-[425px]">
+                <DialogContent className = "sm:max-w-[425px] md:min-[425px] lg:min-w-[700px]">
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
                         <DialogDescription>{description}</DialogDescription>
