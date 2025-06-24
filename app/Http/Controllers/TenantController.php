@@ -8,6 +8,6 @@ use Inertia\Inertia;
 class TenantController extends Controller
 {
      public function index() {
-        return Inertia::render('user/Landing');
+        return Inertia::render('tenant/Landing');
     }
 }
