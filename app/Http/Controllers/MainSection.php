@@ -18,4 +18,6 @@ class MainSection extends Controller
     public function contact() {
         return Inertia::render('main/ContactUs');
     }
+
+    
 }  
