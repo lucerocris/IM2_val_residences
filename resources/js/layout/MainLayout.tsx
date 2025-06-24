@@ -22,8 +22,6 @@ interface MainLayoutProps {
 const MainLayout = ({ carouselText, children }:MainLayoutProps) => {
     return (
         <div className = "overflow-x-hidden">
-            <div className="w-full h-[30px] bg-[#323232]"></div>
-            <Header/>
             <div className = "relative isolate top-0 left-0 w-full h-full flex overflow-hidden">
                 <Carousel slides={slides} />
 

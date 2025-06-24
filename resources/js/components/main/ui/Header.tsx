@@ -3,9 +3,16 @@ import Modal from './Modal';
 import LoginForm from './Login'
 import SignUpForm from './SignUp'
 
-const Header = () => {
+type HeaderLink = { label: string, href: string }
+type HeaderProps = {
+    links: HeaderLink[],
+    actions?: React.ReactNode
+}
+
+const Header = ({links, actions}: HeaderProps) => {
     return (
         <>
+            <div className="w-full h-[30px] bg-[#323232]"></div>
             <div className="flex h-[80px] flex-col justify-center gap-[8px] self-stretch px-[70px]">
                 <div className="flex justify-between items-center self-stretch">
 
@@ -15,22 +22,10 @@ const Header = () => {
                     </div>
                     {/*Nav bar links*/}
                     <div className="flex items-center gap-[24px]">
-                        <Modal
-                            trigger = {<button className = "hover:underline">Log in </button>}
-                            title = "Login"
-                            description = "Enter your credentials to access your account.">
-                                <LoginForm></LoginForm>
-                        </Modal>
-                        <Modal
-                            trigger = {<button className = "hover:underline">Sign up</button>}
-                            title = "Sign Up"
-                            description = "Enter your credentials to make your account.">
-                                <SignUpForm></SignUpForm>
-                        </Modal>
-                        <Link href="/">Home</Link>
-                        <Link href="/about">About Us</Link>
-                        <Link href="/contact">Contact us</Link>
-
+                        {links.map(link => (
+                            <Link key = {link.href} href = {link.href}>{link.label}</Link>
+                        ))}
+                        {actions}
                     </div>
                 </div>
             </div>

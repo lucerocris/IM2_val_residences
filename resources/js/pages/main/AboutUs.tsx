@@ -1,5 +1,8 @@
 import MainLayout from '@/layout/MainLayout';
 import CarouselText from '@/components/main/ui/CarouselText';
+import Header from '@/components/main/ui/Header';
+import LoginModal from '@/components/main/ui/LoginModal';
+import SignUpModal from '@/components/main/ui/SignUpModal';
 
 const landing = () => {
     const desc = "Enjoy stunning views and a revitalizing sea breeze for a truly relaxing stay here at Val Residences at Corona del Mar.";
@@ -7,29 +10,44 @@ const landing = () => {
     const title = "About Us";
 
     return (
-        <MainLayout carouselText = {<CarouselText description = {desc} buttonLabel= {btnLabel} title = {title} />}>
-            <div className = "p-[4.3rem] flex gap-[40px] items-start">
-                <div className = "flex-[2] text-[1.1em] leading-[1.5]">
-                    <Text />
-                </div>
+        <>
+            <Header links = {[
+                {label: "Home", href: "/"},
+                {label: "About Us", href: "/about"},
+                {label: "Contact Us", href: "contact"}
+            ]}
+            actions = {
+                <> 
+                    <LoginModal />
+                    <SignUpModal />
+                </>
+            }
+            />
+            <MainLayout carouselText = {<CarouselText description = {desc} buttonLabel= {btnLabel} title = {title} />}>
+                <div className = "p-[4.3rem] flex gap-[40px] items-start">
+                    <div className = "flex-[2] text-[1.1em] leading-[1.5]">
+                        <Text />
+                    </div>
 
-                <div className = "flex-[1]">
-                    <div className = "grid grid-cols-2 gap-2.5">
-                        <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
-                        <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
+                    <div className = "flex-[1]">
+                        <div className = "grid grid-cols-2 gap-2.5">
+                            <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
+                            <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
 
-                        <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
-                        <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
+                            <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
+                            <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
 
-                        <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
-                        <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
+                            <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
+                            <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
 
-                        <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
-                        <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
+                            <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
+                            <img src="https://t4.ftcdn.net/jpg/00/76/25/75/360_F_76257590_OMqEbhnSnz30cLj6xAG511xSZrJabcsq.jpg" alt="" />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </MainLayout>
+            </MainLayout>
+        </>
+
     )
 }
 
