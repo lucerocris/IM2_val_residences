@@ -91,7 +91,7 @@ const Lease = () => {
     );
 }
 
-const Contact = () => {
+export const Contact = () => {
     return(
         <>
             <div className = "flex flex-col w-[90%]">

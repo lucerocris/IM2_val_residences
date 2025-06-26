@@ -14,3 +14,4 @@ Route::get('/tenant', [TenantController::class, 'index']);
 Route::get('/tenant/listings', [TenantController::class, 'listings']);
 
 Route::get('/user',[UserController::class, 'index']);
+Route::get('/user/listings', [UserController::class, 'listings']);
