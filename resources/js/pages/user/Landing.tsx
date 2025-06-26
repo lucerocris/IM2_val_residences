@@ -11,7 +11,7 @@ const tenantHome = () => {
                 {label: "LOG OUT", href: "/"}
             ]}/>
             <MainLayout carouselText = {<CarouselText />}>
-                nigga
+                
             </MainLayout>
         </>
     );
