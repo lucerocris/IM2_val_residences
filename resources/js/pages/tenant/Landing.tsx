@@ -1,14 +1,13 @@
 import MainLayout from "@/layout/MainLayout";
 import Header from "@/components/main/ui/Header";
 import CarouselText from "@/components/main/ui/CarouselText";
-import Sidebar from "@/components/main/ui/Sidebar"
+import Btn from "@/components/main/ui/Button";
 
 const tenantHome = () => {   
     const title = "Welcome, Jose"
     const desc = "Signed in as tenant"
     return(
         <>
-            <Sidebar />
             <Header links = {[ 
                 {label: "VIEW LISTINGS", href: "/tenant/listings"},
                 {label: "TENANT DASHBOARD", href: "/tenant"},
@@ -95,7 +94,27 @@ const Contact = () => {
     return(
         <>
             <div className = "flex flex-col w-[90%]">
+                <div className = "bg-[#474747] text-white p-[0.8rem] text-[1.2rem] text-left">
+                    <h5>CONTACT LANDLORD</h5>
+                </div>
 
+
+                <div className = "flex bg-[#e8e8e8] p-[1rem]">
+                    <div className = "w-full">
+                        <form action="" className = "flex flex-col">
+                            <label htmlFor="">Email</label>
+                            <input type="text" placeholder = "Enter your name" className = "w-full p-[10px] mt-[10px] mb-[1rem] text-[0.9rem] bg-white border-1 border-solid border-neutral-400"/>
+
+                            <label htmlFor="">Subject</label>
+                            <input type="text" placeholder = "Enter your email" className = "w-full p-[10px] mt-[10px] mb-[1rem] text-[0.9rem] bg-white border-1 border-solid border-neutral-400"/>
+
+                            <label htmlFor="">Message</label>
+                            <textarea placeholder = "Enter your message" className = "w-full p-[10px] mt-[10px] mb-[1rem] text-[0.9rem] bg-white border-1 border-solid border-neutral-400"/>
+
+                            <Btn className = "py-2 w-2/3 self-center">Submit</Btn>
+                        </form>
+                    </div>
+                </div>
             </div>
         </>
     );
