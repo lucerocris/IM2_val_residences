@@ -10,4 +10,4 @@ Route::get('/about', [MainSection::class, 'about']);
 Route::get('/contact', [MainSection::class, 'contact']);
 
 Route::get('/tenant', [TenantController::class, 'index']);
-
+Route::get('/tenant/listings', [TenantController::class, 'listings']);

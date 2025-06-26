@@ -53,7 +53,7 @@ const landing = () => {
     )
 }
 
-const CardContent = () => {
+export const CardContent = () => {
     return(
         <>
             <div className = "h-[40%] overflow-hidden">

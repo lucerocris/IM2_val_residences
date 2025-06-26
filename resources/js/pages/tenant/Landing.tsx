@@ -5,7 +5,8 @@ import Btn from "@/components/main/ui/Button";
 
 const tenantHome = () => {   
     const title = "Welcome, Jose"
-    const desc = "Signed in as tenant"
+    const subtitle = "Signed in as Tenant"
+    
     return(
         <>
             <Header links = {[ 
@@ -14,7 +15,7 @@ const tenantHome = () => {
                 {label: "LOG OUT", href: "/"}
             ]}
             />
-            <MainLayout carouselText = {<CarouselText title = {title} description = {desc}/>}>
+            <MainLayout carouselText = {<CarouselText title = {title} subTitle = {subtitle}/>}>
                 <div className = "flex flex-col items-center gap-[3rem] py-[4.3rem]">
                     <Lease />
                     <Contact />
