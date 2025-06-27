@@ -4,7 +4,7 @@ namespace App\Models;
 
 class Tenant extends User
 {
-    protected static $singleTableType = 'Tenant';
+    protected static $singleTableType = 'tenant';
 
     // Add Tenant-specific methods and relationships here
 }
