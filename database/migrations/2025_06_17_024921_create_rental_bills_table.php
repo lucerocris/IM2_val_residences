@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,16 +14,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('lease_id')->constrained('leases')->onDelete('cascade');
             $table->date('billing_date');
-            $table->decimal('amount_due', 10, 2);
-            $table->enum('payment_status', ['pending', 'paid', 'overdue', 'partial'])->default('pending');
+            $table->decimal('rent_amount', 10, 2);
             $table->date('due_date');
             $table->date('paid_date')->nullable();
-//            $table->decimal('amount_paid', 10, 2)->default(0);
-//            $table->string('payment_method')->nullable();
-//            $table->string('payment_reference')->nullable();
-//            $table->text('bill_details')->nullable();
-//            $table->decimal('late_fee', 10, 2)->default(0);
+            $table->decimal('amount_paid', 10, 2)->default(0);
+            $table->enum('payment_status', ['pending', 'paid', 'overdue', 'partial'])
+                ->default('pending');
             $table->timestamps();
+
 
             // Indexes
             $table->index(['lease_id', 'payment_status']);

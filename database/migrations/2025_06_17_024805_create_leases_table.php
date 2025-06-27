@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,16 +16,22 @@ return new class extends Migration
             $table->foreignId('unit_id')->constrained('rental_units')->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
+            $table->decimal('monthly_rent', 10, 2);
             $table->decimal('deposit_amount', 10, 2);
             $table->integer('lease_term');
             $table->enum('lease_status', ['active', 'expired', 'terminated', 'pending'])->default('pending');
-//            $table->text('terms_and_conditions')->nullable();
+            $table->text('terms_and_conditions')->nullable();
             $table->timestamps();
 
 
+            // Indexes
             $table->index(['tenant_id', 'lease_status']);
             $table->index(['unit_id', 'lease_status']);
             $table->index(['start_date', 'end_date']);
+            $table->index(['lease_status', 'end_date']);
+
+            // Prevent overlapping active leases for same unit
+            $table->unique(['unit_id', 'start_date', 'end_date'], 'unit_lease_period_unique');
         });
     }
 

@@ -18,9 +18,12 @@ return new class extends Migration
             $table->date('application_date');
             $table->date('preferred_move_in_date')->nullable();
             $table->enum('application_status', ['pending', 'approved', 'rejected', 'withdrawn'])->default('pending');
-            //            $table->text('additional_notes')->nullable();
-            //            $table->json('documents_submitted')->nullable();
+            $table->text('additional_notes')->nullable();
+            $table->date('reviewed_date')->nullable();
+            $table->text('review_notes')->nullable();
             $table->timestamps();
+
+
 
             // Indexes
             $table->index(

@@ -12,6 +12,12 @@ use App\Models\Landlord;
 use App\Models\Tenant;
 use App\Models\ProspectiveTenant;
 
+use App\Models\RentalUnit;
+use App\Models\RentalApplication;
+use App\Models\Lease;
+use App\Models\MaintenanceRequest;
+use App\Models\VacancySubscription;
+
 
 class User extends Authenticatable
 {
@@ -40,9 +46,15 @@ class User extends Authenticatable
         'user_type',
         'move_in_date',
         'employment_status',
-
-
+        'emergency_contact',
+        'tenant_occupation',
+        'business_license',
+        'landlord_bio',
+        'monthly_income',
+        'current_address',
     ];
+
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -65,5 +77,29 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'move_in_date' => 'date',
+        'monthly_income' => 'decimal:2',
     ];
+
+    public function ownedUnits() {
+        return $this->hasMany(RentalUnit::class, 'landlord_id');
+    }
+
+    public function appliedApplications() {
+        return $this->hasMany(RentalApplication::class, 'prospective_tenant_id');
+    }
+
+    public function signedLeases() {
+        return $this->hasMany(Lease::class, 'tenant_id');
+    }
+
+    public function requestedMaintenance() {
+        return $this->hasMany(MaintenanceRequest::class, 'tenant_id');
+    }
+
+    public function subscribedVacancyReports() {
+        return $this->hasMany(VacancySubscription::class);
+    }
 }
+
+

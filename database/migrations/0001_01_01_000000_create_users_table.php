@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('user_name');
-            $table->string('user_email')->unique();
+            $table->string('email')->unique();
             $table->string('user_contact_number');
-            $table->string('user_type');
+            $table->enum('user_type', ['landlord', 'tenant', 'prospective_tenant']);
 
 
             //para sa tenants
@@ -24,6 +24,14 @@ return new class extends Migration
             $table->string('employment_status')->nullable();
             $table->string('emergency_contact')->nullable();
             $table->string('tenant_occupation')->nullable();
+
+            //landlord stuff for transparency
+            $table->string('business_license')->nullable();
+            $table->text('landlord_bio')->nullable();
+
+            //prospective tenants stuff
+            $table->decimal('monthly_income', 10, 2)->nullable();
+            $table->string('current_address')->nullable();
 
 
             $table->timestamp('email_verified_at')->nullable();
@@ -33,7 +41,7 @@ return new class extends Migration
 
 //            Indexes
             $table->index('user_type');
-            $table->index('user_email');
+            $table->index('email');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

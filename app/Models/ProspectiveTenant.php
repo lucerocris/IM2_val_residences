@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+    namespace App\Models;
 
-class ProspectiveTenant extends User
-{
-    protected static $singleTableType = 'ProspectiveTenant';
+    class ProspectiveTenant extends User
+    {
+        protected static $singleTableType = 'prospective_tenant';
 
-    // Add subtype-specific methods or relationships here
-}
+        // Add subtype-specific methods or relationships here
+    }
