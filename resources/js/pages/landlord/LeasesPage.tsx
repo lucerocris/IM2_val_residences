@@ -1,0 +1,437 @@
+import { leaseColumns, type Lease } from '@/components/landlord/leases/leasesTable/leaseColumn';
+import { LeasesDataTable } from '@/components/landlord/leases/leasesTable/leases-data-table';
+import MetricCard from '@/components/landlord/ui/MetricCard';
+import LandlordLayout from '@/layout/LandlordLayout';
+import { AlertTriangle, CheckCircle, Clock, FileText } from 'lucide-react';
+
+
+const LeasesPage = () => {
+    const leases: Lease[] = [
+        {
+            id: '1',
+            tenant_id: 't1',
+            unit_id: 'u1',
+            start_date: '2024-01-01',
+            end_date: '2024-12-31',
+            monthly_rent: 1200,
+            deposit_amount: 2400,
+            lease_term: 12,
+            lease_status: 'active',
+            terms_and_conditions: 'Standard rental terms...',
+            terminated_date: null,
+            termination_reason: null,
+            created_at: '2023-12-15T10:00:00Z',
+            updated_at: '2023-12-15T10:00:00Z',
+            tenant: {
+                id: 't1',
+                user_name: 'John Doe',
+                email: 'john.doe@example.com',
+                user_contact_number: '+1234567890',
+            },
+            unit: {
+                id: 'u1',
+                address: '123 Main Street',
+                unit_number: 'A',
+                property_type: 'duplex',
+                landlord: {
+                    id: 'l1',
+                    user_name: 'Jane Smith',
+                },
+            },
+            total_bills: 12,
+            pending_bills: 1,
+            overdue_bills: 0,
+            maintenance_requests: 2,
+        },
+        {
+            id: '2',
+            tenant_id: 't2',
+            unit_id: 'u2',
+            start_date: '2024-03-15',
+            end_date: '2025-03-14',
+            monthly_rent: 1500,
+            deposit_amount: 3000,
+            lease_term: 12,
+            lease_status: 'active',
+            terms_and_conditions: 'Pet-friendly lease with additional deposit...',
+            terminated_date: null,
+            termination_reason: null,
+            created_at: '2024-02-20T14:30:00Z',
+            updated_at: '2024-02-20T14:30:00Z',
+            tenant: {
+                id: 't2',
+                user_name: 'Sarah Johnson',
+                email: 'sarah.johnson@email.com',
+                user_contact_number: '+1987654321',
+            },
+            unit: {
+                id: 'u2',
+                address: '456 Oak Avenue',
+                unit_number: 'B2',
+                property_type: 'duplex',
+                landlord: {
+                    id: 'l2',
+                    user_name: 'Michael Brown',
+                },
+            },
+            total_bills: 9,
+            pending_bills: 0,
+            overdue_bills: 1,
+            maintenance_requests: 0,
+        },
+        {
+            id: '3',
+            tenant_id: 't3',
+            unit_id: 'u3',
+            start_date: '2023-06-01',
+            end_date: '2024-05-31',
+            monthly_rent: 950,
+            deposit_amount: 1900,
+            lease_term: 12,
+            lease_status: 'terminated',
+            terms_and_conditions: 'Studio apartment lease agreement...',
+            terminated_date: '2024-04-30',
+            termination_reason: 'Tenant relocated for work',
+            created_at: '2023-05-10T09:15:00Z',
+            updated_at: '2024-04-30T16:45:00Z',
+            tenant: {
+                id: 't3',
+                user_name: 'David Wilson',
+                email: 'david.wilson@gmail.com',
+                user_contact_number: '+1555123456',
+            },
+            unit: {
+                id: 'u3',
+                address: '789 Pine Street',
+                unit_number: '301',
+                property_type: 'triplex',
+                landlord: {
+                    id: 'l1',
+                    user_name: 'Jane Smith',
+                },
+            },
+            total_bills: 10,
+            pending_bills: 0,
+            overdue_bills: 0,
+            maintenance_requests: 1,
+        },
+        {
+            id: '4',
+            tenant_id: 't4',
+            unit_id: 'u4',
+            start_date: '2024-02-01',
+            end_date: '2026-01-31',
+            monthly_rent: 2200,
+            deposit_amount: 4400,
+            lease_term: 24,
+            lease_status: 'active',
+            terms_and_conditions: 'Two-year lease with annual rent increase clause...',
+            terminated_date: null,
+            termination_reason: null,
+            created_at: '2024-01-15T11:20:00Z',
+            updated_at: '2024-01-15T11:20:00Z',
+            tenant: {
+                id: 't4',
+                user_name: 'Emma Davis',
+                email: 'emma.davis@company.com',
+                user_contact_number: '+1444555666',
+            },
+            unit: {
+                id: 'u4',
+                address: '321 Elm Drive',
+                unit_number: '1A',
+                property_type: 'triplex',
+                landlord: {
+                    id: 'l3',
+                    user_name: 'Robert Anderson',
+                },
+            },
+            total_bills: 10,
+            pending_bills: 2,
+            overdue_bills: 0,
+            maintenance_requests: 3,
+        },
+        {
+            id: '5',
+            tenant_id: 't5',
+            unit_id: 'u5',
+            start_date: '2024-05-01',
+            end_date: '2024-10-31',
+            monthly_rent: 1800,
+            deposit_amount: 1800,
+            lease_term: 6,
+            lease_status: 'active',
+            terms_and_conditions: 'Short-term furnished apartment lease...',
+            terminated_date: null,
+            termination_reason: null,
+            created_at: '2024-04-10T13:45:00Z',
+            updated_at: '2024-04-10T13:45:00Z',
+            tenant: {
+                id: 't5',
+                user_name: 'Alex Chen',
+                email: 'alex.chen@tech.com',
+                user_contact_number: '+1333444555',
+            },
+            unit: {
+                id: 'u5',
+                address: '654 Maple Court',
+                unit_number: '2B',
+                property_type: 'duplex',
+                landlord: {
+                    id: 'l2',
+                    user_name: 'Michael Brown',
+                },
+            },
+            total_bills: 7,
+            pending_bills: 1,
+            overdue_bills: 0,
+            maintenance_requests: 0,
+        },
+        {
+            id: '6',
+            tenant_id: 't6',
+            unit_id: 'u6',
+            start_date: '2023-09-01',
+            end_date: '2024-08-31',
+            monthly_rent: 1350,
+            deposit_amount: 2700,
+            lease_term: 12,
+            lease_status: 'pending',
+            terms_and_conditions: 'Standard lease with option to renew...',
+            terminated_date: null,
+            termination_reason: null,
+            created_at: '2023-08-15T08:30:00Z',
+            updated_at: '2024-07-01T10:15:00Z',
+            tenant: {
+                id: 't6',
+                user_name: 'Lisa Martinez',
+                email: 'lisa.martinez@email.com',
+                user_contact_number: '+1777888999',
+            },
+            unit: {
+                id: 'u6',
+                address: '987 Cedar Lane',
+                unit_number: 'C',
+                property_type: 'duplex',
+                landlord: {
+                    id: 'l4',
+                    user_name: 'Karen Thompson',
+                },
+            },
+            total_bills: 11,
+            pending_bills: 0,
+            overdue_bills: 2,
+            maintenance_requests: 1,
+        },
+        {
+            id: '7',
+            tenant_id: 't7',
+            unit_id: 'u7',
+            start_date: '2024-06-15',
+            end_date: '2025-06-14',
+            monthly_rent: 1100,
+            deposit_amount: 2200,
+            lease_term: 12,
+            lease_status: 'active',
+            terms_and_conditions: 'Ground floor apartment with garden access...',
+            terminated_date: null,
+            termination_reason: null,
+            created_at: '2024-05-20T15:00:00Z',
+            updated_at: '2024-05-20T15:00:00Z',
+            tenant: {
+                id: 't7',
+                user_name: 'James Rodriguez',
+                email: 'james.rodriguez@email.com',
+                user_contact_number: '+1666777888',
+            },
+            unit: {
+                id: 'u7',
+                address: '147 Birch Street',
+                unit_number: '1',
+                property_type: 'duplex',
+                landlord: {
+                    id: 'l1',
+                    user_name: 'Jane Smith',
+                },
+            },
+            total_bills: 6,
+            pending_bills: 1,
+            overdue_bills: 0,
+            maintenance_requests: 0,
+        },
+        {
+            id: '8',
+            tenant_id: 't8',
+            unit_id: 'u8',
+            start_date: '2023-11-01',
+            end_date: '2024-10-31',
+            monthly_rent: 1750,
+            deposit_amount: 3500,
+            lease_term: 12,
+            lease_status: 'terminated',
+            terms_and_conditions: 'Luxury apartment with amenities included...',
+            terminated_date: '2024-06-15',
+            termination_reason: 'Lease violation - noise complaints',
+            created_at: '2023-10-10T12:00:00Z',
+            updated_at: '2024-06-15T14:30:00Z',
+            tenant: {
+                id: 't8',
+                user_name: 'Michelle Lee',
+                email: 'michelle.lee@email.com',
+                user_contact_number: '+1222333444',
+            },
+            unit: {
+                id: 'u8',
+                address: '852 Willow Way',
+                unit_number: '4A',
+                property_type: 'triplex',
+                landlord: {
+                    id: 'l3',
+                    user_name: 'Robert Anderson',
+                },
+            },
+            total_bills: 7,
+            pending_bills: 0,
+            overdue_bills: 1,
+            maintenance_requests: 2,
+        },
+        {
+            id: '9',
+            tenant_id: 't9',
+            unit_id: 'u9',
+            start_date: '2024-04-01',
+            end_date: '2025-03-31',
+            monthly_rent: 2800,
+            deposit_amount: 5600,
+            lease_term: 12,
+            lease_status: 'active',
+            terms_and_conditions: 'Family home with yard and garage...',
+            terminated_date: null,
+            termination_reason: null,
+            created_at: '2024-03-10T09:45:00Z',
+            updated_at: '2024-03-10T09:45:00Z',
+            tenant: {
+                id: 't9',
+                user_name: 'Christopher Taylor',
+                email: 'chris.taylor@family.com',
+                user_contact_number: '+1111222333',
+            },
+            unit: {
+                id: 'u9',
+                address: '741 Spruce Avenue',
+                unit_number: 'House',
+                property_type: 'triplex',
+                landlord: {
+                    id: 'l4',
+                    user_name: 'Karen Thompson',
+                },
+            },
+            total_bills: 8,
+            pending_bills: 0,
+            overdue_bills: 0,
+            maintenance_requests: 1,
+        },
+        {
+            id: '10',
+            tenant_id: 't10',
+            unit_id: 'u10',
+            start_date: '2024-07-01',
+            end_date: '2024-12-31',
+            monthly_rent: 1400,
+            deposit_amount: 1400,
+            lease_term: 6,
+            lease_status: 'active',
+            terms_and_conditions: 'Temporary housing with utilities included...',
+            terminated_date: null,
+            termination_reason: null,
+            created_at: '2024-06-15T16:20:00Z',
+            updated_at: '2024-06-15T16:20:00Z',
+            tenant: {
+                id: 't10',
+                user_name: 'Amanda White',
+                email: 'amanda.white@email.com',
+                user_contact_number: '+1999888777',
+            },
+            unit: {
+                id: 'u10',
+                address: '963 Aspen Road',
+                unit_number: '3C',
+                property_type: 'triplex',
+                landlord: {
+                    id: 'l2',
+                    user_name: 'Michael Brown',
+                },
+            },
+            total_bills: 5,
+            pending_bills: 1,
+            overdue_bills: 0,
+            maintenance_requests: 0,
+        },
+    ];
+
+    const leaseStatuses = [
+        { label: 'Active', value: 'active' },
+        { label: 'Pending', value: 'pending' },
+        { label: 'Expired', value: 'expired' },
+        { label: 'Terminated', value: 'terminated' },
+    ];
+
+    const propertyTypes = [
+        { label: 'Duplex', value: 'duplex' },
+        { label: 'Triplex', value: 'triplex' },
+    ];
+
+    return (
+        <LandlordLayout>
+            <div className="space-y-6">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-900">Leases</h1>
+                        <p className="mt-1 text-gray-600">Manage active leases, renewals, and terminations</p>
+                    </div>
+                </div>
+
+                <div className="flex w-full gap-6">
+                    <MetricCard
+                        className="flex-1"
+                        title={'Total Leases'}
+                        metric={'1'}
+                        metricDescription={'All lease agreements'}
+                        Icon={<FileText className="h-4 w-4 text-muted-foreground" />}
+                    />
+
+                    <MetricCard
+                        className="flex-1"
+                        title={'Active Leases'}
+                        metric={'1'}
+                        metricDescription={'Currently active agreements'}
+                        Icon={<CheckCircle className="h-4 w-4 text-green-600" />}
+                    />
+
+                    <MetricCard
+                        className="flex-1"
+                        title={'Pending Approval'}
+                        metric={'0'}
+                        metricDescription={'Awaiting approval process'}
+                        Icon={<Clock className="h-4 w-4 text-orange-600" />}
+                    />
+
+                    <MetricCard
+                        className="flex-1"
+                        title={'With Overdue Bills'}
+                        metric={'0'}
+                        metricDescription={'Outstanding payment issues'}
+                        Icon={<AlertTriangle className="h-4 w-4 text-red-600" />}
+                    />
+                </div>
+
+                <div className="flex-col items-start gap-2 self-stretch">
+                    <LeasesDataTable columns={leaseColumns} data={leases} leaseStatuses={leaseStatuses} propertyTypes={propertyTypes} />
+                </div>
+            </div>
+        </LandlordLayout>
+    );
+};
+
+export default LeasesPage;

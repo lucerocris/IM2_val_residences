@@ -67,11 +67,11 @@ const propertiesNavigation: NavigationType[] = [
         submenu: [
             {
                 name: 'My Properties',
-                href: '/properties/list',
+                href: '/landlord/properties',
             },
             {
-                name: 'Property Details',
-                href: '/properties/details',
+                name: 'Add Property',
+                href: '/landlord/properties/create',
             },
         ],
     },
@@ -85,33 +85,20 @@ const tenantsNavigation: NavigationType[] = [
         submenu: [
             {
                 name: 'Current Tenants',
-                href: '/tenants/current',
+                href: '/landlord/tenants',
             },
             {
-                name: 'Leases',
-                href: '/tenants/leases',
+                name: 'Applications',
+                href: '/landlord/applications',
+            },
+            {
+                name: 'Lease Management',
+                href: '/landlord/leases',
             },
         ],
     },
 ];
 
-const applicationsNavigation: NavigationType[] = [
-    {
-        name: 'Applications',
-        href: 'applications',
-        icon: FileText,
-        submenu: [
-            {
-                name: 'New Applications',
-                href: '/applications/new',
-            },
-            {
-                name: 'Application History',
-                href: '/applications/history',
-            },
-        ],
-    },
-];
 
 const paymentsNavigation: NavigationType[] = [
     {
@@ -234,7 +221,6 @@ const LandlordSidebar = () => {
                         <SidebarMenu>
                             {renderNavigationGroup(propertiesNavigation)}
                             {renderNavigationGroup(tenantsNavigation)}
-                            {renderNavigationGroup(applicationsNavigation)}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

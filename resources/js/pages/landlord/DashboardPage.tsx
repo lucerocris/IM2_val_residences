@@ -1,8 +1,11 @@
+import MetricCard from '@/components/landlord/ui/MetricCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import LandlordLayout from '@/layout/LandlordLayout';
 import { AlertCircle, Building2, Calendar, DollarSign, Eye, FileText, Plus, TrendingUp, Users, Wrench } from 'lucide-react';
+import LandlordTextHeader from '@/components/landlord/ui/LandlordTextHeader';
+import DashboardCardHeader from '@/components/landlord/dashboard/ui/CardHeader';
 
 const mockData = {
     metrics: {
@@ -122,10 +125,7 @@ const DashboardPage = () => {
                 <div className="space-y-6">
                     {/* Header */}
                     <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-                            <p className="mt-1 text-gray-600">Overview of your rental properties and operations</p>
-                        </div>
+                        <LandlordTextHeader title={'Dashboard'} subtitle={'Overview of your rental properties and operations'}/>
                         <div className="flex gap-3">
                             <Button variant="outline" size="sm">
                                 <FileText className="mr-2 h-4 w-4" />
@@ -140,57 +140,37 @@ const DashboardPage = () => {
 
                     {/* Key Metrics */}
                     <div className="flex w-full gap-5">
-                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1 flex-1">
-                            <Card>
-                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Total Units</CardTitle>
-                                    <Building2 className="h-4 w-4 text-muted-foreground" />
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-2xl font-bold">{mockData.metrics.totalUnits}</div>
-                                    <p className="text-xs text-muted-foreground">
-                                        {mockData.metrics.occupiedUnits} occupied, {mockData.metrics.availableUnits} available
-                                    </p>
-                                </CardContent>
-                            </Card>
-                            <Card>
-                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
-                                    <DollarSign className="h-4 w-4 text-muted-foreground" />
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-2xl font-bold">₱{mockData.metrics.monthlyRevenue.toLocaleString()}</div>
+                        <div className="grid flex-1 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1">
+                            <MetricCard
+                                title={'Total Units'}
+                                metric={mockData.metrics.totalUnits}
+                                metricDescription={`${mockData.metrics.occupiedUnits} occupied, ${mockData.metrics.availableUnits} available`}
+                                Icon={<Building2 className="h-4 w-4 text-muted-foreground" />}
+                            />
+
+                            <MetricCard
+                                title={'Monthly Revenue'}
+                                metric={`₱${mockData.metrics.monthlyRevenue.toLocaleString()}`}
+                                metricDescription={
                                     <p className="mt-1 flex items-center text-xs text-green-600">
                                         <TrendingUp className="mr-1 h-3 w-3" />
                                         +8.2% from last month
                                     </p>
-                                </CardContent>
-                            </Card>
-
-                            <Card>
-                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
-                                    <AlertCircle className="h-4 w-4 text-muted-foreground" />
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-2xl font-bold">
-                                        {mockData.maintenanceRequests.filter((req) => req.status === 'pending').length}
-                                    </div>
-                                    <p className="text-xs text-muted-foreground">Maintenance requests</p>
-                                </CardContent>
-                            </Card>
+                                }
+                                Icon={<DollarSign className="h-4 w-4 text-muted-foreground" />}
+                            />
+                            <MetricCard
+                                title={'Pending Requests'}
+                                metric={mockData.maintenanceRequests.filter((req) => req.status === 'pending').length}
+                                metricDescription={'Maintenance requests'}
+                                Icon={<AlertCircle className="h-4 w-4 text-muted-foreground" />}
+                            />
                         </div>
 
                         {/* Recent Activities */}
                         <div className="flex-1">
                             <Card>
-                                <CardHeader>
-                                    <CardTitle className="flex items-center gap-2">
-                                        <Calendar className="h-5 w-5" />
-                                        Recent Activities
-                                    </CardTitle>
-                                    <CardDescription>Latest updates across your properties</CardDescription>
-                                </CardHeader>
+                                <DashboardCardHeader icon={<Calendar className="h-5 w-5" />} cardTitle={'Recent Activities'} cardDescription={'Latest updates across your properties'} />
                                 <CardContent>
                                     <div className="space-y-4">
                                         {mockData.recentActivities.map((activity) => (
@@ -211,13 +191,7 @@ const DashboardPage = () => {
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                         {/* Upcoming Lease Expirations */}
                         <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Calendar className="h-5 w-5" />
-                                    Upcoming Lease Expirations
-                                </CardTitle>
-                                <CardDescription>Leases expiring in the next 60 days</CardDescription>
-                            </CardHeader>
+                            <DashboardCardHeader icon={<Calendar className="h-5 w-5" />} cardTitle={'Upcoming Lease Expirations'} cardDescription={'Leases expiring in the next 60 days'} />
                             <CardContent>
                                 <div className="space-y-3">
                                     {mockData.upcomingExpirations.map((lease) => (
@@ -238,13 +212,7 @@ const DashboardPage = () => {
 
                         {/* Maintenance Requests */}
                         <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Wrench className="h-5 w-5" />
-                                    Maintenance Requests
-                                </CardTitle>
-                                <CardDescription>Current maintenance and repair requests</CardDescription>
-                            </CardHeader>
+                            <DashboardCardHeader icon={ <Wrench className="h-5 w-5" />} cardTitle={'Maintenance Requests'} cardDescription={'Current maintenance and repair requests'} />
                             <CardContent>
                                 <div className="space-y-3">
                                     {mockData.maintenanceRequests.map((request) => (
@@ -253,7 +221,10 @@ const DashboardPage = () => {
                                             <div className="flex-1">
                                                 <div className="flex items-center justify-between">
                                                     <p className="font-medium">{request.unit}</p>
-                                                    <Badge className={getStatusColor(request.status)}>{request.status.replace('_', ' ')}</Badge>
+                                                    <Badge className={getStatusColor(request.status)}>
+                                                        {request.status.replace('_', ' ').charAt(0).toUpperCase() +
+                                                            request.status.replace('_', ' ').slice(1)}
+                                                    </Badge>
                                                 </div>
                                                 <p className="mt-1 text-sm text-gray-600">{request.issue}</p>
                                                 <p className="mt-1 text-xs text-gray-500">
