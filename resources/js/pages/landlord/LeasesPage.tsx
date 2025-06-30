@@ -1,9 +1,8 @@
 import { leaseColumns, type Lease } from '@/components/landlord/leases/leasesTable/leaseColumn';
 import { LeasesDataTable } from '@/components/landlord/leases/leasesTable/leases-data-table';
-import MetricCard from '@/components/landlord/ui/MetricCard';
+import LandlordPageHeaderSection from '@/components/landlord/ui/LandlordPageHeaderSection';
 import LandlordLayout from '@/layout/LandlordLayout';
 import { AlertTriangle, CheckCircle, Clock, FileText } from 'lucide-react';
-
 
 const LeasesPage = () => {
     const leases: Lease[] = [
@@ -381,50 +380,40 @@ const LeasesPage = () => {
         { label: 'Triplex', value: 'triplex' },
     ];
 
+    const metricData = [
+        {
+            title: 'Total leases',
+            metric: '1',
+            metricDescription: 'All lease agreements',
+            icon: <FileText className="h-4 w-4 text-muted-foreground" />,
+        },
+
+        {
+            title: 'Active Leases',
+            metric: '1',
+            metricDescription: 'Currently active agreements',
+            icon: <CheckCircle className="h-4 w-4 text-green-600" />,
+        },
+
+        {
+            title: 'Pending Approval',
+            metric: '0',
+            metricDescription: 'Awaiting approval process',
+            icon: <Clock className="h-4 w-4 text-orange-600" />,
+        },
+        {
+            title: 'With Overdue Bills',
+            metric: '0',
+            metricDescription: 'Outstanding payment issues',
+            icon: <AlertTriangle className="h-4 w-4 text-red-600" />,
+        },
+    ];
+
     return (
         <LandlordLayout>
             <div className="space-y-6">
-                {/* Header */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Leases</h1>
-                        <p className="mt-1 text-gray-600">Manage active leases, renewals, and terminations</p>
-                    </div>
-                </div>
-
-                <div className="flex w-full gap-6">
-                    <MetricCard
-                        className="flex-1"
-                        title={'Total Leases'}
-                        metric={'1'}
-                        metricDescription={'All lease agreements'}
-                        Icon={<FileText className="h-4 w-4 text-muted-foreground" />}
-                    />
-
-                    <MetricCard
-                        className="flex-1"
-                        title={'Active Leases'}
-                        metric={'1'}
-                        metricDescription={'Currently active agreements'}
-                        Icon={<CheckCircle className="h-4 w-4 text-green-600" />}
-                    />
-
-                    <MetricCard
-                        className="flex-1"
-                        title={'Pending Approval'}
-                        metric={'0'}
-                        metricDescription={'Awaiting approval process'}
-                        Icon={<Clock className="h-4 w-4 text-orange-600" />}
-                    />
-
-                    <MetricCard
-                        className="flex-1"
-                        title={'With Overdue Bills'}
-                        metric={'0'}
-                        metricDescription={'Outstanding payment issues'}
-                        Icon={<AlertTriangle className="h-4 w-4 text-red-600" />}
-                    />
-                </div>
+                {/* Header Section*/}
+                <LandlordPageHeaderSection title={'Leases'} subtitle={'Manage active leases, renewals, and terminations'} metric={metricData} />
 
                 <div className="flex-col items-start gap-2 self-stretch">
                     <LeasesDataTable columns={leaseColumns} data={leases} leaseStatuses={leaseStatuses} propertyTypes={propertyTypes} />

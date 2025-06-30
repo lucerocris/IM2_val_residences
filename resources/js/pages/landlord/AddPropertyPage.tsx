@@ -13,6 +13,8 @@ import { Textarea } from '@/components/ui/textarea';
 import LandlordLayout from '@/layout/LandlordLayout';
 import { Camera, Check, DollarSign, Home, MapPin, Save, Upload, X } from 'lucide-react';
 import { useState } from 'react';
+import LandlordTextHeader from '@/components/landlord/ui/LandlordTextHeader';
+import LandlordPageHeader from '@/components/landlord/ui/LandlordPageHeader';
 
 interface PropertyFormData {
     address: string;
@@ -27,26 +29,11 @@ interface PropertyFormData {
 }
 
 const availableAmenities = [
-    'Air Conditioning',
-    'Heating',
-    'Parking',
-    'Laundry',
-    'Dishwasher',
-    'Microwave',
-    'Refrigerator',
-    'Balcony',
-    'Garden',
-    'Swimming Pool',
-    'Gym',
-    'Security System',
-    'Internet/WiFi',
-    'Cable TV',
+    'Covered Parking',
+    'Dirty Kitchen',
     'Pet Friendly',
-    'Furnished',
-    'Hardwood Floors',
-    'Carpet',
     'Tile Floors',
-    'Walk-in Closet',
+    'Balcony'
 ];
 
 interface AddPropertyProps {
@@ -175,12 +162,7 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
         <LandlordLayout>
             <div className="space-y-6">
                 {/* Header */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Add Property</h1>
-                        <p className="mt-1 text-gray-600">Create a new rental unit listing</p>
-                    </div>
-                </div>
+                <LandlordPageHeader title={'Add Property'} subtitle={'Create a new rental unit listing'} />
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Basic Information */}

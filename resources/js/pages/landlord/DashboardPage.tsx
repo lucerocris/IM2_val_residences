@@ -1,5 +1,7 @@
 import DashboardCardContent from '@/components/landlord/dashboard/ui/DashboardCardContent';
 import DashboardCardHeader from '@/components/landlord/dashboard/ui/DashboardCardHeader';
+import QuickActionsButtons from '@/components/landlord/dashboard/ui/QuickActionsButtons';
+import LandlordPageHeader from '@/components/landlord/ui/LandlordPageHeader';
 import LandlordTextHeader from '@/components/landlord/ui/LandlordTextHeader';
 import MetricCard from '@/components/landlord/ui/MetricCard';
 import { Badge } from '@/components/ui/badge';
@@ -7,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import LandlordLayout from '@/layout/LandlordLayout';
 import { AlertCircle, Building2, Calendar, DollarSign, Eye, FileText, Plus, TrendingUp, Users, Wrench } from 'lucide-react';
-import QuickActionsButtons from '@/components/landlord/dashboard/ui/QuickActionsButtons';
+import MetricGrid from '@/components/landlord/ui/MetricGrid';
 
 type MaintenanceRequest = {
     id: number;
@@ -149,55 +151,55 @@ const getStatusColor = (status: string) => {
             return 'bg-gray-100 text-gray-800';
     }
 };
+
+const metricData = [
+    {
+        title: "Total Units",
+        metric: mockData.metrics.totalUnits,
+        metricDescription: `${mockData.metrics.occupiedUnits} occupied, ${mockData.metrics.availableUnits} available`,
+        icon: <Building2 className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+        title: "Monthly Revenue",
+        metric: `₱${mockData.metrics.monthlyRevenue.toLocaleString()}`,
+        metricDescription: (
+            <p className="mt-1 flex items-center text-xs text-green-600">
+                <TrendingUp className="mr-1 h-3 w-3" />
+                +8.2% from last month
+            </p>
+        ),
+        icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+        title: "Pending Requests",
+        metric: maintenanceRequests.filter((req) => req.status === "pending").length,
+        metricDescription: "Maintenance requests",
+        icon: <AlertCircle className="h-4 w-4 text-muted-foreground" />,
+    },
+]
+
+
+
 const DashboardPage = () => {
     return (
         <>
             <LandlordLayout>
                 <div className="space-y-6">
                     {/* Header */}
-                    <div className="flex items-center justify-between">
-                        <LandlordTextHeader title={'Dashboard'} subtitle={'Overview of your rental properties and operations'} />
-                        <div className="flex gap-3">
-                            <Button variant="outline" size="sm">
-                                <FileText className="mr-2 h-4 w-4" />
-                                Reports
-                            </Button>
+                    <LandlordPageHeader
+                        title={'Dashboard'}
+                        subtitle={'Overview of your rental properties and operations'}
+                        actions={
                             <Button size="sm">
                                 <Plus className="mr-2 h-4 w-4" />
                                 Add Unit
                             </Button>
-                        </div>
-                    </div>
+                        }
+                    />
 
                     {/* Key Metrics */}
                     <div className="flex w-full gap-5">
-                        <div className="grid flex-1 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1">
-                            <MetricCard
-                                title={'Total Units'}
-                                metric={mockData.metrics.totalUnits}
-                                metricDescription={`${mockData.metrics.occupiedUnits} occupied, ${mockData.metrics.availableUnits} available`}
-                                Icon={<Building2 className="h-4 w-4 text-muted-foreground" />}
-                            />
-
-                            <MetricCard
-                                title={'Monthly Revenue'}
-                                metric={`₱${mockData.metrics.monthlyRevenue.toLocaleString()}`}
-                                metricDescription={
-                                    <p className="mt-1 flex items-center text-xs text-green-600">
-                                        <TrendingUp className="mr-1 h-3 w-3" />
-                                        +8.2% from last month
-                                    </p>
-                                }
-                                Icon={<DollarSign className="h-4 w-4 text-muted-foreground" />}
-                            />
-                            <MetricCard
-                                title={'Pending Requests'}
-                                metric={maintenanceRequests.filter((req) => req.status === 'pending').length}
-                                metricDescription={'Maintenance requests'}
-                                Icon={<AlertCircle className="h-4 w-4 text-muted-foreground" />}
-                            />
-                        </div>
-
+                        <MetricGrid metrics={metricData} className={"grid flex-1 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1"} />
                         {/* Recent Activities */}
                         <div className="flex-1">
                             <Card>
@@ -289,10 +291,10 @@ const DashboardPage = () => {
                         <CardContent>
                             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
                                 <QuickActionsButtons icon={<Plus className="h-5 w-5" />} buttonTitle={'Add Unit'} />
-                                <QuickActionsButtons icon={ <Users className="h-5 w-5" />} buttonTitle={'New Tenant'} />
-                                <QuickActionsButtons icon={ <FileText className="h-5 w-5" />} buttonTitle={'Create Lease'} />
-                                <QuickActionsButtons icon={ <DollarSign className="h-5 w-5" />} buttonTitle={'Record Payment'} />
-                                <QuickActionsButtons icon={  <Wrench className="h-5 w-5" />} buttonTitle={'Maintenance'} />
+                                <QuickActionsButtons icon={<Users className="h-5 w-5" />} buttonTitle={'New Tenant'} />
+                                <QuickActionsButtons icon={<FileText className="h-5 w-5" />} buttonTitle={'Create Lease'} />
+                                <QuickActionsButtons icon={<DollarSign className="h-5 w-5" />} buttonTitle={'Record Payment'} />
+                                <QuickActionsButtons icon={<Wrench className="h-5 w-5" />} buttonTitle={'Maintenance'} />
                                 <QuickActionsButtons icon={<Eye className="h-5 w-5" />} buttonTitle={'View Reports'} />
                             </div>
                         </CardContent>

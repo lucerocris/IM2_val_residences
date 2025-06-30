@@ -1,6 +1,6 @@
 import { Tenant, tenantColumns } from '@/components/landlord/tenants/tenantsTable/tenantColumn';
 import { TenantsDataTable } from '@/components/landlord/tenants/tenantsTable/tenants-data-table';
-import MetricCard from '@/components/landlord/ui/MetricCard';
+import LandlordPageHeaderSection from '@/components/landlord/ui/LandlordPageHeaderSection';
 import LandlordLayout from '@/layout/LandlordLayout';
 import { AlertCircle, AlertTriangle, Calendar, CheckCircle2, Clock, DollarSign, House, Users, XCircle } from 'lucide-react';
 
@@ -337,51 +337,38 @@ export const leaseStatuses = [
     },
 ];
 
+const metricData = [
+    {
+        title: 'Active Tenants',
+        metric: '7',
+        metricDescription: '1 pending lease renewal',
+        icon: <Users className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+        title: 'Lease Expiring Soon',
+        metric: '2',
+        metricDescription: 'Within next 90 days',
+        icon: <Calendar className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+        title: 'Monthly Revenue',
+        metric: '$12,800',
+        metricDescription: '+8.5% from last month',
+        icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+        title: 'Issues to Address',
+        metric: '2',
+        metricDescription: '1 expired lease, 1 unemployed tenant',
+        icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
+    },
+];
+
 const TenantsOverviewPage = () => {
     return (
         <LandlordLayout>
             <div className="w-full space-y-6">
-                {/* Header */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Tenants</h1>
-                        <p className="mt-1 text-gray-600">View and Manage Tenant Details</p>
-                    </div>
-                </div>
-
-                <div className="flex w-full gap-6">
-                    <MetricCard
-                        className="flex-1"
-                        title="Active Tenants"
-                        metric="7"
-                        metricDescription="1 pending lease renewal"
-                        Icon={<Users className="h-4 w-4 text-muted-foreground" />}
-                    />
-
-                    <MetricCard
-                        className="flex-1"
-                        title="Lease Expiring Soon"
-                        metric="2"
-                        metricDescription="Within next 90 days"
-                        Icon={<Calendar className="h-4 w-4 text-muted-foreground" />}
-                    />
-
-                    <MetricCard
-                        className="flex-1"
-                        title="Monthly Revenue"
-                        metric="$12,800"
-                        metricDescription="+8.5% from last month"
-                        Icon={<DollarSign className="h-4 w-4 text-muted-foreground" />}
-                    />
-
-                    <MetricCard
-                        className="flex-1"
-                        title="Issues to Address"
-                        metric="2"
-                        metricDescription="1 expired lease, 1 unemployed tenant"
-                        Icon={<AlertTriangle className="h-4 w-4 text-muted-foreground" />}
-                    />
-                </div>
+                <LandlordPageHeaderSection title={'Tenants'} subtitle={'View and Manage Tenant Details'} metric={metricData} />
                 <div className="flex-col items-start gap-2 self-stretch">
                     <TenantsDataTable
                         columns={tenantColumns}
