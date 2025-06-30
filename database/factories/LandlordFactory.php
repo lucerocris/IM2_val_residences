@@ -2,15 +2,23 @@
 
 namespace Database\Factories;
 
+use App\Models\Landlord;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Landlord>
  */
-class UserFactory extends Factory
+class LandlordFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Landlord::class;
+
     /**
      * The current password being used by the factory.
      */
@@ -28,38 +36,12 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'user_contact_number' => fake()->phoneNumber(),
             'email_verified_at' => now(),
-            'password' => Hash::make('password'),
+            'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-        ];
-    }
-
-    public function landlord(): static
-    {
-        return $this->state(fn(array $attributes) => [
             'user_type' => 'landlord',
             'business_license' => fake()->regexify('[A-Z]{2}[0-9]{8}'),
             'landlord_bio' => fake()->paragraph(),
-        ]);
-    }
-
-    public function tenant(): static
-    {
-        return $this->state(fn(array $attributes) => [
-            'user_type' => 'tenant',
-            'move_in_date' => fake()->dateTimeBetween('-2 years', 'now'),
-            'employment_status' => fake()->randomElement(['employed', 'self-employed', 'unemployed', 'student']),
-            'emergency_contact' => fake()->phoneNumber(),
-            'tenant_occupation' => fake()->jobTitle(),
-        ]);
-    }
-
-    public function prospectiveTenant(): static
-    {
-        return $this->state(fn(array $attributes) => [
-            'user_type' => 'prospective_tenant',
-            'monthly_income' => fake()->randomFloat(2, 20000, 80000),
-            'current_address' => fake()->address(),
-        ]);
+        ];
     }
 
     /**
