@@ -27,4 +27,5 @@ Route::get('/landlord/properties/create', [PropertiesController::class, 'create'
 Route::get('/landlord/tenants', [TenantLandlordController::class, 'index']);
 Route::get('/landlord/applications', [TenantLandlordController::class, 'applications']);
 Route::get('/landlord/leases', [TenantLandlordController::class, 'leases']);
-Route::get('/landlord/rent', [FinanceController::class, 'rent']);
+Route::get('/landlord/finances', [FinanceController::class, 'rent']);
+Route::get('/landlord/finances/report', [FinanceController::class, 'report']);
