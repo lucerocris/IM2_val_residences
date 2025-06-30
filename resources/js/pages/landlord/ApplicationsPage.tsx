@@ -1,4 +1,4 @@
-
+import LandlordPageHeader from '@/components/landlord/ui/LandlordPageHeader';
 import MetricCard from '@/components/landlord/ui/MetricCard';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -26,6 +26,8 @@ import {
     XCircle,
 } from 'lucide-react';
 import { useState } from 'react';
+import MetricGrid from '@/components/landlord/ui/MetricGrid';
+import LandlordPageHeaderSection from '@/components/landlord/ui/LandlordPageHeaderSection';
 
 interface RentalApplication {
     id: string;
@@ -345,6 +347,17 @@ export default function TenantApplicationsPage() {
     const [messageText, setMessageText] = useState('');
     const [activeTab, setActiveTab] = useState('pending');
 
+    const totalApplications = applications.length;
+    const pendingApplications = applications.filter((app) => app.application_status === 'pending').length;
+    const approvedApplications = applications.filter((app) => app.application_status === 'approved').length;
+    const rejectedApplications = applications.filter((app) => app.application_status === 'rejected').length;
+    const needingReview = applications.filter((app) => app.application_status === 'pending' && !app.reviewed_date).length;
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const recentApplications: number = applications
+        .filter((app: RentalApplication) => app.application_date !== null)
+        .filter((app: RentalApplication) => new Date(app.application_date!) >= sevenDaysAgo).length;
+
     const handleApplicationAction = (applicationId: string, action: 'approved' | 'rejected', notes: string) => {
         setApplications((prev) =>
             prev.map((app) =>
@@ -440,64 +453,42 @@ export default function TenantApplicationsPage() {
         return app.application_status === activeTab;
     });
 
-    const totalApplications = applications.length;
-    const pendingApplications = applications.filter((app) => app.application_status === 'pending').length;
-    const approvedApplications = applications.filter((app) => app.application_status === 'approved').length;
-    const rejectedApplications = applications.filter((app) => app.application_status === 'rejected').length;
+    const metricData = [
+        {
+            title: 'Total Applications',
+            metric: totalApplications.toString(),
+            metricDescription: `${pendingApplications} pending, ${approvedApplications} approved, ${rejectedApplications} rejected`,
+            icon: <FileText className="h-4 w-4 text-muted-foreground" />
+        },
 
-    const needingReview = applications.filter((app) => app.application_status === 'pending' && !app.reviewed_date).length;
+        {
+            title: 'Pending Review',
+            metric: pendingApplications.toString(),
+            metricDescription: `${needingReview} awaiting initial review`,
+            icon: <Clock className="h-4 w-4 text-orange-600" />
+        },
+        {
+            title: 'Approved',
+            metric: approvedApplications.toString(),
+            metricDescription: 'Ready for lease agreements',
+            icon: <CheckCircle className="h-4 w-4 text-green-600" />
+        },
+        {
+            title: 'Recent (7 days)',
+            metric: recentApplications.toString(),
+            metricDescription: `${Math.round((recentApplications / totalApplications) * 100)}% of total applications`,
+            icon: <TrendingUp className="h-4 w-4 text-blue-600" />
+        },
 
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    const recentApplications: number = applications
-        .filter((app: RentalApplication) => app.application_date !== null)
-        .filter((app: RentalApplication) => new Date(app.application_date!) >= sevenDaysAgo).length;
+    ]
+
+
 
     return (
         <LandlordLayout>
             <div className="container mx-auto space-y-6">
-                {/* Header */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Applications</h1>
-                        <p className="mt-1 text-gray-600">Review and manage rental applications for your properties</p>
-                    </div>
-                </div>
-
-                <div className="flex gap-6">
-                    <MetricCard
-                        className="flex-1"
-                        title={'Total Applications'}
-                        metric={totalApplications.toString()}
-                        metricDescription={`${pendingApplications} pending, ${approvedApplications} approved, ${rejectedApplications} rejected`}
-                        Icon={<FileText className="h-4 w-4 text-muted-foreground" />}
-                    />
-
-                    <MetricCard
-                        className="flex-1"
-                        title={'Pending Review'}
-                        metric={pendingApplications.toString()}
-                        metricDescription={`${needingReview} awaiting initial review`}
-                        Icon={<Clock className="h-4 w-4 text-orange-600" />}
-                    />
-
-                    <MetricCard
-                        className="flex-1"
-                        title={'Approved'}
-                        metric={approvedApplications.toString()}
-                        metricDescription={'Ready for lease agreements'}
-                        Icon={<CheckCircle className="h-4 w-4 text-green-600" />}
-                    />
-
-                    <MetricCard
-                        className="flex-1"
-                        title={'Recent (7 days)'}
-                        metric={recentApplications.toString()}
-                        metricDescription={`${Math.round((recentApplications / totalApplications) * 100)}% of total applications`}
-                        Icon={<TrendingUp className="h-4 w-4 text-blue-600" />}
-                    />
-                </div>
-
+                {/* Header Section */}
+                <LandlordPageHeaderSection title={'Applications'} subtitle={'Review and manage rental applications for your properties'} metric={metricData} />
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
                     <TabsList>
                         <TabsTrigger value="pending">Pending ({applications.filter((a) => a.application_status === 'pending').length})</TabsTrigger>
