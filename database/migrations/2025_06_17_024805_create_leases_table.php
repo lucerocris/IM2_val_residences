@@ -21,6 +21,8 @@ return new class extends Migration {
             $table->integer('lease_term');
             $table->enum('lease_status', ['active', 'expired', 'terminated', 'pending'])->default('pending');
             $table->text('terms_and_conditions')->nullable();
+            $table->date('terminated_date')->nullable();
+            $table->string('termination_reason')->nullable();
             $table->timestamps();
 
 

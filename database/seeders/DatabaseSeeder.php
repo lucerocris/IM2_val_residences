@@ -67,7 +67,30 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Get available units (should be 4 remaining)
+        // Create some terminated leases for historical data
+        $remainingUnits = $units->skip(4)->take(2); // Take 2 more units for terminated leases
+        foreach ($remainingUnits as $index => $unit) {
+            $tenant = $tenants[$index % $tenants->count()];
+
+            $terminatedLease = Lease::factory()->terminated()->create([
+                'tenant_id' => $tenant->id,
+                'unit_id' => $unit->id,
+                'monthly_rent' => $unit->rent_price,
+            ]);
+
+            // Create some rental bills for terminated leases (historical data)
+            RentalBill::factory(rand(2, 6))->create([
+                'lease_id' => $terminatedLease->id,
+                'rent_amount' => $terminatedLease->monthly_rent,
+                'due_date' => fake()->dateTimeBetween($terminatedLease->start_date, $terminatedLease->terminated_date),
+                'payment_status' => fake()->randomElement(['paid', 'overdue']),
+            ]);
+
+            // Unit remains available after termination
+            $unit->update(['availability_status' => 'available']);
+        }
+
+        // Get available units (should be 6 remaining now: 4 original + 2 from terminated leases)
         $availableUnits = $units->where('availability_status', 'available');
 
         // Add safety check to prevent the error
@@ -114,7 +137,7 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('Database seeded successfully!');
         $this->command->info("Created: 1 Landlord, {$tenants->count()} Tenants, {$prospects->count()} Prospective Tenants");
-        $this->command->info("Created: {$units->count()} Rental Units, {$occupiedUnits->count()} Active Leases");
+        $this->command->info("Created: {$units->count()} Rental Units, {$occupiedUnits->count()} Active Leases, 2 Terminated Leases");
         $this->command->info("Available units: {$availableUnits->count()}");
     }
 }
