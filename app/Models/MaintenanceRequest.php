@@ -22,12 +22,12 @@ class MaintenanceRequest extends Model
         'actual_costs'
     ];
 
-    public function tenants()
+    public function tenant()
     {
         return $this->belongsTo(User::class, 'tenant_id');
     }
 
-    public function leases()
+    public function lease()
     {
         return $this->belongsTo(Lease::class);
     }

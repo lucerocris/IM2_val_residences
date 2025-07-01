@@ -34,7 +34,7 @@ export type Lease = {
         email: string
         user_contact_number: string
     }
-    unit: {
+    units: {
         id: string
         address: string
         unit_number: string | null
@@ -151,20 +151,20 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                 <div className="flex flex-col space-y-1">
                     <div className="flex items-center text-sm font-medium">
                         <Building className="mr-2 h-3 w-3" />
-                        <span className="truncate max-w-[200px]">{lease.unit.address}</span>
+                        <span className="truncate max-w-[200px]">{lease.units.address}</span>
                     </div>
-                    {lease.unit.unit_number && (
+                    {lease.units.unit_number && (
                         <span className="text-xs text-muted-foreground">
-                            Unit: {lease.unit.unit_number}
+                            Unit: {lease.units.unit_number}
                         </span>
                     )}
                     <div className="flex items-center space-x-1">
-                        <Badge variant={propertyTypeConfig[lease.unit.property_type].variant} className="text-xs">
-                            {propertyTypeConfig[lease.unit.property_type].label}
+                        <Badge variant={propertyTypeConfig[lease.units.property_type].variant} className="text-xs">
+                            {propertyTypeConfig[lease.units.property_type].label}
                         </Badge>
                     </div>
                     <span className="text-xs text-muted-foreground">
-                        Owner: {lease.unit.landlord.user_name}
+                        Owner: {lease.units.landlord.user_name}
                     </span>
                 </div>
             );

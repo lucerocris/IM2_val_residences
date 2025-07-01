@@ -23,10 +23,9 @@ export type Tenant = {
     move_in_date: string | null
     created_at: string
     updated_at: string
-    // Current lease information (if any)
     current_lease?: {
         id: string
-        unit: {
+        units: {
             id: string
             address: string
             unit_number: string | null
@@ -36,7 +35,8 @@ export type Tenant = {
         monthly_rent: number
         lease_status: 'active' | 'expired' | 'terminated' | 'pending'
     } | null
-    // Aggregate data
+
+
     total_leases: number
     active_maintenance_requests: number
 }
@@ -246,11 +246,11 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
                 <div className="flex flex-col">
                     <div className="flex items-center text-sm font-medium">
                         <Building className="mr-2 h-3 w-3" />
-                        <span className="truncate max-w-[150px]">{lease.unit.address}</span>
+                        <span className="truncate max-w-[150px]">{lease.units.address}</span>
                     </div>
-                    {lease.unit.unit_number && (
+                    {lease.units.unit_number && (
                         <span className="text-xs text-muted-foreground">
-                            Unit: {lease.unit.unit_number}
+                            Unit: {lease.units.unit_number}
                         </span>
                     )}
                     <span className="text-xs text-muted-foreground">

@@ -24,7 +24,7 @@ class Lease extends Model
         'terminated_date' => 'date',
     ];
 
-    public function unit() {
+    public function units() {
         return $this->belongsTo(RentalUnit::class, 'unit_id');
     }
 
