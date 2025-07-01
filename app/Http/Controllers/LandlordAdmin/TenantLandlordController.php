@@ -4,16 +4,21 @@ namespace App\Http\Controllers\LandlordAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lease;
+use App\Models\Tenant;
 use Inertia\Inertia;
 
 class TenantLandlordController extends Controller
 {
     public function index() {
 
+        $tenants = Tenant::with(['leases:id,unit_id', 'currentLease.units:id,address,unit_number'])->withCount(['leases as total_leases', 'maintenanceRequests'])->get();
 
-
-        return Inertia::render('landlord/TenantsOverviewPage');
+        return Inertia::render('landlord/TenantsOverviewPage', [
+            'tenants' => $tenants,
+        ]);
     }
+
+
 
     public function applications() {
         return Inertia::render('landlord/ApplicationsPage');
@@ -23,8 +28,8 @@ class TenantLandlordController extends Controller
 
         $leases = Lease::with([
             'tenant:id,user_name,email,user_contact_number',
-            'unit:id,address,unit_number,property_type,landlord_id',
-            'unit.landlord:id,user_name'
+            'units:id,address,unit_number,property_type,landlord_id',
+            'units.landlord:id,user_name'
         ])
             ->withCount([
                 'rentalBills as total_bills',
