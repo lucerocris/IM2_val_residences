@@ -19,8 +19,8 @@ interface PropertyPerformance {
 }
 
 interface OverviewTabProps {
-    monthlyRevenue: MonthlyRevenue[];
-    propertyPerformance: PropertyPerformance[];
+    monthlyRevenue?: MonthlyRevenue[];
+    propertyPerformance?: PropertyPerformance[];
 }
 
 const OverViewTab = ({ monthlyRevenue, propertyPerformance }: OverviewTabProps) => {
@@ -28,56 +28,69 @@ const OverViewTab = ({ monthlyRevenue, propertyPerformance }: OverviewTabProps) 
         <>
             <TabsContent value = "overview" className = "space-y-6">
                 <div className = "grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Monthly Revenue Trend */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Monthly Revenue Trend</CardTitle>
-                            <CardDescription>Revenue, expenses, and profit over time</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className = "space-y-4">
-                                {monthlyRevenue.slice(-3).map((monthl, idx) => (
-                                    <div key = {idx} className = "flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                        <div>
-                                            <div className = "font-medium">{monthl.month}</div>
-                                            <div className = "text-sm tex-gray-500">
-                                                Revenue: ₱{monthl.revenue.toLocaleString()} | Expenses: ₱{monthl.expenses.toLocaleString()}
-                                            </div>
-                                        </div>
-                                        <div className = "text-right">
-                                            <div className = "font-bold text-green-600">₱{monthl.profit.toLocaleString()}</div>
-                                            <div className = "text-xs text-gray-500">Net Profit</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Top Performing Properties */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Top Performing Properties</CardTitle>
-                            <CardDescription>Properties ranked by net income</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className = "space-y-4">
-                                {propertyPerformance
-                                .sort((a, b) => b.netIncome - a.netIncome)
-                                .slice(0,3)
-                                .map((property, idx) => (
-                                    <div key = {idx} className = "flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                        <div>
-                                            <div className = "font-medium"> {property.address }</div>
-                                            <div className = "text-sm text-gray-500">{property.units} units • {property.occupancy}% occupied</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <MonthlyRevenueTrend monthlyRevenue={monthlyRevenue} />
+                    <TopPerformingProperties propertyPerformance={propertyPerformance} />
                 </div>
             </TabsContent>
+        </>
+    );
+}
+
+const MonthlyRevenueTrend = ({ monthlyRevenue }:OverviewTabProps) => {
+    return(
+        <>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Monthly Revenue Trend</CardTitle>
+                    <CardDescription>Revenue, expenses, and profit over time</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className = "space-y-4">
+                        {monthlyRevenue.slice(-3).map((monthly, idx) => (
+                            <div key = {idx} className = "flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <div className = "font-medium">{monthly.month}</div>
+                                    <div className = "text-sm tex-gray-500">
+                                        Revenue: ₱{monthly.revenue.toLocaleString()} | Expenses: ₱{monthly.expenses.toLocaleString()}
+                                    </div>
+                                </div>
+                                <div className = "text-right">
+                                    <div className = "font-bold text-green-600">₱{monthly.profit.toLocaleString()}</div>
+                                    <div className = "text-xs text-gray-500">Net Profit</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </CardContent>
+            </Card>
+        </>
+    );
+}
+
+const TopPerformingProperties = ({ propertyPerformance }:OverviewTabProps) => {
+    return(
+        <>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Top Performing Properties</CardTitle>
+                    <CardDescription>Properties ranked by net income</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className = "space-y-4">
+                        {propertyPerformance
+                        .sort((a, b) => b.netIncome - a.netIncome)
+                        .slice(0,3)
+                        .map((property, idx) => (
+                            <div key = {idx} className = "flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <div className = "font-medium"> {property.address }</div>
+                                    <div className = "text-sm text-gray-500">{property.units} units • {property.occupancy}% occupied</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </CardContent>
+            </Card>
         </>
     );
 }

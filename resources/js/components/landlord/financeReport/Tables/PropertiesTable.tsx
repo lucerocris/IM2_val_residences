@@ -21,39 +21,55 @@ const PropertiesTable = ( { propertyPerformance }:PropertiesTableProps) => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Property</TableHead>
-                        <TableHead>Units</TableHead>
-                        <TableHead>Occupancy</TableHead>
-                        <TableHead>Monthly Rent</TableHead>
-                        <TableHead>Annual Revenue</TableHead>
-                        <TableHead>Maintenance</TableHead>
-                        <TableHead>Net Income</TableHead>
+                        <TableHeads />
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {propertyPerformance.map((property, idx) => (
-                        <TableRow key = {idx}>
-                            <TableCell className = "font-medium">{property.address}</TableCell>
-                            <TableCell>{property.units}</TableCell>
-                            <TableCell>
-                                <Badge variant = {
-                                    property.occupancy === 100
-                                    ? "default"
-                                    : property.occupancy >= 75
-                                    ? "secondary"
-                                    : "destructive"
-                                }>
-                                    {property.occupancy}%
-                                </Badge>
-                            </TableCell>
-                            <TableCell>₱{property.monthlyRent.toLocaleString()}</TableCell>
-                            <TableCell>₱{property.yearlyRevenue.toLocaleString()}</TableCell>
-                            <TableCell className = "text-orange-600">₱{property.maintenanceCosts.toLocaleString()}</TableCell>
-                            <TableCell className = "text-green-600 font-medium">₱{property.netIncome.toLocaleString()}</TableCell>
-                        </TableRow>
-                    ))}
+                    <Body propertyPerformance={propertyPerformance} />
                 </TableBody>
             </Table>
+        </>
+    );
+}
+
+const TableHeads = () => {
+    return(
+        <>
+            <TableHead>Property</TableHead>
+            <TableHead>Units</TableHead>
+            <TableHead>Occupancy</TableHead>
+            <TableHead>Monthly Rent</TableHead>
+            <TableHead>Annual Revenue</TableHead>
+            <TableHead>Maintenance</TableHead>
+            <TableHead>Net Income</TableHead>
+        </>
+    );
+}
+
+const Body = ({ propertyPerformance }:PropertiesTableProps) => {
+    return(
+        <>
+            {propertyPerformance.map((property, idx) => (
+                <TableRow key = {idx}>
+                    <TableCell className = "font-medium">{property.address}</TableCell>
+                    <TableCell>{property.units}</TableCell>
+                    <TableCell>
+                        <Badge variant = {
+                            property.occupancy === 100
+                            ? "success"
+                            : property.occupancy >= 75
+                            ? "orange"
+                            : "destructive"
+                        }>
+                            {property.occupancy}%
+                        </Badge>
+                    </TableCell>
+                    <TableCell>₱{property.monthlyRent.toLocaleString()}</TableCell>
+                    <TableCell>₱{property.yearlyRevenue.toLocaleString()}</TableCell>
+                    <TableCell className = "text-orange-600">₱{property.maintenanceCosts.toLocaleString()}</TableCell>
+                    <TableCell className = "text-green-600 font-medium">₱{property.netIncome.toLocaleString()}</TableCell>
+                </TableRow>
+            ))}
         </>
     );
 }
