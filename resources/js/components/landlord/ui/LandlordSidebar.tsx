@@ -108,11 +108,11 @@ const paymentsNavigation: NavigationType[] = [
         submenu: [
             {
                 name: 'Rent Collection',
-                href: '/payments/rent-collection',
+                href: '/landlord/payments/rent-collection',
             },
             {
                 name: 'Financial Reports',
-                href: '/payments/reports',
+                href: '/landlord/payments/report',
             },
         ],
     },
