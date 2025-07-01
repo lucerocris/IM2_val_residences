@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { TabsContent } from "@/components/ui/tabs";
+import RevenueTable from "../Tables/RevenueTable";
 
 interface MonthlyRevenue {
     month: string;
@@ -13,7 +13,7 @@ interface RevenueTabProps {
     monthlyRevenue: MonthlyRevenue[];
 }
 
-const RevenueTab = () => {
+const RevenueTab = ({ monthlyRevenue }: RevenueTabProps) => {
     return(
         <>
             <TabsContent value = "revenue" className = "space-y-6">
@@ -23,7 +23,7 @@ const RevenueTab = () => {
                         <CardDescription>Detailed breakdown of revenue streams</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        
+                        <RevenueTable monthlyRevenue={monthlyRevenue} />
                     </CardContent>
                 </Card>
             </TabsContent>

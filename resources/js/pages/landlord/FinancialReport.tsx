@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MetricCard from "@/components/landlord/ui/MetricCard";
 import LandlordLayout from "@/layout/LandlordLayout";
 import { TrendingUp, DollarSign, Home, Wrench, Calendar, Download, WrenchIcon, HomeIcon } from "lucide-react"
 import OverViewTab from "@/components/landlord/financeReport/Tabs/OverviewTab";
+import RevenueTab from "@/components/landlord/financeReport/Tabs/RevenueTab";
+import PropertiesTab from "@/components/landlord/financeReport/Tabs/PropertiesTab";
+import ExpensesTab from "@/components/landlord/financeReport/Tabs/ExpensesTab";
 
 const monthlyRevenue = [
   { month: "Jan 2024", revenue: 18500, expenses: 3200, profit: 15300 },
@@ -80,8 +80,6 @@ const maintenanceExpenses = [
 
 
 const FinanceReport = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState("6months")
-
   const currentMonthRevenue = monthlyRevenue[monthlyRevenue.length - 1]
   const previousMonthRevenue = monthlyRevenue[monthlyRevenue.length - 2]
   const revenueChange =
@@ -95,7 +93,7 @@ const FinanceReport = () => {
     return(
         <LandlordLayout>
             <div className = "space-y-6">
-                <div className = "w-full px-6 py-8">
+                <div className = "w-full px-6 ">
 
                     <div className = "flex items-center justify-between mb-6">
                         <div className = "flex items-center gap-4">
@@ -171,7 +169,10 @@ const TabArea = () => {
                     <TabsTrigger value = "expenses">Expenses</TabsTrigger>
                 </TabsList>
 
-                <OverViewTab monthlyRevenue={monthlyRevenue} propertyPerformance={propertyPerformance} />
+                <OverViewTab monthlyRevenue = {monthlyRevenue} propertyPerformance={propertyPerformance} />
+                <RevenueTab monthlyRevenue = {monthlyRevenue} />
+                <PropertiesTab propertyPerformance = {propertyPerformance} />
+                <ExpensesTab maintenanceExpenses={maintenanceExpenses} />
             </Tabs>
         </>
     );
