@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import MetricCard from "@/components/landlord/ui/MetricCard";
 import LandlordLayout from "@/layout/LandlordLayout";
-import { TrendingUp, DollarSign, Home, Wrench, Calendar, Download, WrenchIcon, HomeIcon } from "lucide-react"
+import LandlordPageHeaderSection from "@/components/landlord/ui/LandlordPageHeaderSection";
+import { TrendingUp, DollarSign, Home, Wrench } from "lucide-react"
 import OverViewTab from "@/components/landlord/financeReport/Tabs/OverviewTab";
 import RevenueTab from "@/components/landlord/financeReport/Tabs/RevenueTab";
 import PropertiesTab from "@/components/landlord/financeReport/Tabs/PropertiesTab";
@@ -78,8 +79,9 @@ const maintenanceExpenses = [
   { date: "2024-03-10", property: "654 Cedar Lane", description: "Painting", cost: 600, category: "Cosmetic" },
 ]
 
-
 const FinanceReport = () => {
+  const [selectedPeriod, setSelectedPeriod] = useState("6months")
+
   const currentMonthRevenue = monthlyRevenue[monthlyRevenue.length - 1]
   const previousMonthRevenue = monthlyRevenue[monthlyRevenue.length - 2]
   const revenueChange =
@@ -90,72 +92,66 @@ const FinanceReport = () => {
   const totalNetIncome = propertyPerformance.reduce((sum, prop) => sum + prop.netIncome, 0)
   const averageOccupancy = propertyPerformance.reduce((sum, prop) => sum + prop.occupancy, 0) / propertyPerformance.length
 
-    return(
-        <LandlordLayout>
-            <div className = "space-y-6">
-                <div className = "w-full px-6 ">
+  // Prepare metrics data for LandlordPageHeaderSection
+  const metrics = [
+    {
+      title: "Total Revenue",
+      metric: `₱${totalYearlyRevenue.toLocaleString()}`,
+      metricDescription: (
+        <span className="flex items-center text-sm text-muted-foreground">
+          <TrendingUp className="w-3 h-3 mr-1" />
+          {`${revenueChange.toFixed(1)}%`} from last month
+        </span>
+      ),
+      icon: <DollarSign className="h-4 w-4 text-muted-foreground" />
+    },
+    {
+      title: "Net Income",
+      metric: `₱${totalNetIncome.toLocaleString()}`,
+      metricDescription: (
+        <span className="flex items-center text-sm text-muted-foreground">
+          {((totalNetIncome / totalYearlyRevenue) * 100).toFixed(1)}% profit margin
+        </span>
+      ),
+      icon: <TrendingUp className="h-4 w-4 text-green-600" />
+    },
+    {
+      title: "Maintenance Costs",
+      metric: `₱${totalMaintenanceCosts.toLocaleString()}`,
+      metricDescription: (
+        <span className="flex items-center text-sm text-muted-foreground">
+          {((totalMaintenanceCosts / totalYearlyRevenue) * 100).toFixed(1)}% of revenue
+        </span>
+      ),
+      icon: <Wrench className="h-4 w-4 text-orange-600" />
+    },
+    {
+      title: "Occupancy Rate",
+      metric: `${averageOccupancy.toFixed(1)}%`,
+      metricDescription: "Across all properties",
+      icon: <Home className="h-4 w-4 text-blue-600" />
+    }
+  ]
 
-                    <div className = "flex items-center justify-between mb-6">
-                        <div className = "flex items-center gap-4">
-                            <div>
-                                <h1 className = "text-3xl font-bold text-gray-900">Financial Reports</h1>
-                                <p className="text-gray-600">Comprehensive financial analytics and insights</p>
-                            </div>
-                        </div>
-                    </div>
+  return (
+    <LandlordLayout>
+      <div className="space-y-6">
+        <div className="w-full px-6 py-8">
+          {/* Header Section with Data Summary */}
+          <LandlordPageHeaderSection
+            title="Financial Reports"
+            subtitle="Comprehensive financial analytics and insights"
+            metric={metrics}
+          />
 
-                    <div className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 xl:gap-6 mb-8">
-
-                        <MetricCard 
-                        title = "Total Revenue" 
-                        metric = {`$${totalYearlyRevenue.toLocaleString()}`}
-                        metricDescription = {
-                            <span className = "flex items-center text-sm text-muted-foreground">
-                                <TrendingUp className = "w-3 h-3 mr-1" />
-                                {`${revenueChange.toFixed(1)}%`} from last month
-                            </span>
-                        }       
-                        Icon = {<DollarSign className = "h-4 w-4 text-muted-foreground"/>}
-                        />
-
-                        <MetricCard 
-                        title = "Net Income"
-                        metric = {`$${totalNetIncome.toLocaleString()}`}
-                        metricDescription = {
-                            <span className = "flex items-center text-sm text-muted-foreground">
-                                {((totalNetIncome / totalYearlyRevenue) * 100).toFixed(1)}
-                                % profit margin
-                            </span>
-                        }
-                        Icon = { <TrendingUp className = "h-4 w-4 text-muted-foreground" />}
-                        />
-
-                        <MetricCard
-                        title = "Maintenance Cost"
-                        metric = {`$${totalMaintenanceCosts.toLocaleString()}`}
-                        metricDescription = {
-                            <span className = "flex items-center text-sm text-muted-foreground">
-                                {((totalMaintenanceCosts / totalYearlyRevenue) * 100).toFixed(1)}
-                                % of revenue
-                            </span>
-                        }
-                        Icon = {<WrenchIcon className = "h-4 w-4 text-muted-foreground" />}
-                        />
-
-                        <MetricCard 
-                        title = "Occupancy Rate"
-                        metric = {`${averageOccupancy.toFixed(1)}%`}
-                        metricDescription = "Across all properties"
-                        Icon = {<HomeIcon className = "h-4 w-4 text-muted-foreground" />}
-                        />
-
-                    </div>
-
-                    <TabArea />
-                </div>
-            </div>
-        </LandlordLayout>
-    );
+          {/* Tabs Section */}
+          <div className="mt-8">
+            <TabArea />
+          </div>
+        </div>
+      </div>
+    </LandlordLayout>
+  );
 }
 
 const TabArea = () => {
@@ -171,7 +167,7 @@ const TabArea = () => {
 
                 <OverViewTab monthlyRevenue = {monthlyRevenue} propertyPerformance={propertyPerformance} />
                 <RevenueTab monthlyRevenue = {monthlyRevenue} />
-                <PropertiesTab propertyPerformance = {propertyPerformance} />
+                <PropertiesTab propertyPerformance={propertyPerformance}  />
                 <ExpensesTab maintenanceExpenses={maintenanceExpenses} />
             </Tabs>
         </>
