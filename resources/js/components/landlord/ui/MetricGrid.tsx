@@ -17,8 +17,8 @@ const MetricGrid = ({ metrics, className }: MetricGridProps) => {
     const containerClass = className ?? 'flex w-full gap-6';
     return (
         <div className={containerClass}>
-            {metrics.map((m) => (
-                <MetricCard title={m.title} metric={m.metric} metricDescription={m.metricDescription} Icon={m.icon} className={'flex-1'} />
+            {metrics.map((m, idx) => (
+                <MetricCard key={idx} title={m.title} metric={m.metric} metricDescription={m.metricDescription} Icon={m.icon} className="flex-1" />
             ))}
         </div>
     );

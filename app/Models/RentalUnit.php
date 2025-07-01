@@ -30,7 +30,7 @@ class RentalUnit extends Model
     ];
 
     public function landlord() {
-        return $this->belongsTo(User::class, 'landlord_id');
+        return $this->belongsTo(Landlord::class, 'landlord_id');
     }
 
     public function rentalUnits() {
@@ -52,6 +52,4 @@ class RentalUnit extends Model
     public function maintenanceRequests() {
         return $this->hasMany(MaintenanceRequest::class, 'unit_id');
     }
-
-
 }

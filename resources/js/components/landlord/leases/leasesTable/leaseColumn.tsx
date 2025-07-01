@@ -349,11 +349,6 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                             <User className="mr-2 h-4 w-4" /> Contact tenant
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        {lease.lease_status === 'active' && (
-                            <DropdownMenuItem className="text-red-600">
-                                <Trash2 className="mr-2 h-4 w-4" /> Terminate lease
-                            </DropdownMenuItem>
-                        )}
                         {lease.lease_status === 'pending' && (
                             <>
                                 <DropdownMenuItem className="text-green-600">
@@ -363,6 +358,11 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                                     Reject lease
                                 </DropdownMenuItem>
                             </>
+                        )}
+                        {lease.lease_status === 'active' && (
+                            <DropdownMenuItem className="text-red-600">
+                                <Trash2 className="mr-2 h-4 w-4" /> Terminate lease
+                            </DropdownMenuItem>
                         )}
                     </DropdownMenuContent>
                 </DropdownMenu>

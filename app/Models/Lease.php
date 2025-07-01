@@ -18,15 +18,21 @@ class Lease extends Model
         'lease_status',
     ];
 
-    public function rentalUnits() {
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'terminated_date' => 'date',
+    ];
+
+    public function unit() {
         return $this->belongsTo(RentalUnit::class, 'unit_id');
     }
 
-    public function tenants() {
-        return $this->belongsTo(User::class, 'tenant_id');
+    public function tenant() {
+        return $this->belongsTo(Tenant::class, 'tenant_id');
     }
 
-    public function bills() {
+    public function rentalBills() {
         return $this->hasMany(RentalBill::class);
     }
 
