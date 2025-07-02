@@ -15,7 +15,6 @@ class StorePropertyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'landlord_id' => 'required|exists:users,id',
             'address' => 'required|string|max:255',
             'unit_number' => 'nullable|string|max:50',
             'availability_status' => 'required|in:available,occupied,maintenance,unavailable',

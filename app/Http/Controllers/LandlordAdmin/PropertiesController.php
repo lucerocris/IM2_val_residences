@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\LandlordAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePropertyRequest;
 use App\Models\RentalUnit;
 use Inertia\Inertia;
 
@@ -44,5 +45,11 @@ class PropertiesController extends Controller
     public function create()
     {
         return Inertia::render('landlord/AddPropertyPage');
+    }
+
+    public function store(StorePropertyRequest $request)
+    {
+        RentalUnit::create($request->validated());
+        return redirect()->route('landlord.properties')->with('success', 'Rental Unit created successfully');
     }
 }
