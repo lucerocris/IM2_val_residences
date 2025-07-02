@@ -152,35 +152,40 @@ const getStatusColor = (status: string) => {
     }
 };
 
-const metricData = [
-    {
-        title: "Total Units",
-        metric: mockData.metrics.totalUnits,
-        metricDescription: `${mockData.metrics.occupiedUnits} occupied, ${mockData.metrics.availableUnits} available`,
-        icon: <Building2 className="h-4 w-4 text-muted-foreground" />,
-    },
-    {
-        title: "Monthly Revenue",
-        metric: `₱${mockData.metrics.monthlyRevenue.toLocaleString()}`,
-        metricDescription: (
-            <p className="mt-1 flex items-center text-xs text-green-600">
-                <TrendingUp className="mr-1 h-3 w-3" />
-                +8.2% from last month
-            </p>
-        ),
-        icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
-    },
-    {
-        title: "Pending Requests",
-        metric: maintenanceRequests.filter((req) => req.status === "pending").length,
-        metricDescription: "Maintenance requests",
-        icon: <AlertCircle className="h-4 w-4 text-muted-foreground" />,
-    },
-]
+interface DashboardPageProps {
+    numberOfUnits: number
+}
 
 
 
-const DashboardPage = () => {
+const DashboardPage = ({numberOfUnits}: DashboardPageProps) => {
+    const metricData = [
+        {
+            title: "Total Units",
+            metric: numberOfUnits,
+            metricDescription: `${mockData.metrics.occupiedUnits} occupied, ${mockData.metrics.availableUnits} available`,
+            icon: <Building2 className="h-4 w-4 text-muted-foreground" />,
+        },
+        {
+            title: "Monthly Revenue",
+            metric: `₱${mockData.metrics.monthlyRevenue.toLocaleString()}`,
+            metricDescription: (
+                <p className="mt-1 flex items-center text-xs text-green-600">
+                    <TrendingUp className="mr-1 h-3 w-3" />
+                    +8.2% from last month
+                </p>
+            ),
+            icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
+        },
+        {
+            title: "Pending Requests",
+            metric: maintenanceRequests.filter((req) => req.status === "pending").length,
+            metricDescription: "Maintenance requests",
+            icon: <AlertCircle className="h-4 w-4 text-muted-foreground" />,
+        },
+    ]
+
+
     return (
         <>
             <LandlordLayout>

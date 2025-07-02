@@ -2,6 +2,7 @@
 
 import type React from 'react';
 
+import LandlordPageHeader from '@/components/landlord/ui/LandlordPageHeader';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,10 +12,9 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import LandlordLayout from '@/layout/LandlordLayout';
+import { router, useForm } from '@inertiajs/react';
 import { Camera, Check, DollarSign, Home, MapPin, Save, Upload, X } from 'lucide-react';
 import { useState } from 'react';
-import LandlordTextHeader from '@/components/landlord/ui/LandlordTextHeader';
-import LandlordPageHeader from '@/components/landlord/ui/LandlordPageHeader';
 
 interface PropertyFormData {
     address: string;
@@ -26,23 +26,13 @@ interface PropertyFormData {
     description: string;
     amenities: string[];
     photos: File[];
+    [key: string]: string | string[] | File[];
 }
 
-const availableAmenities = [
-    'Covered Parking',
-    'Dirty Kitchen',
-    'Pet Friendly',
-    'Tile Floors',
-    'Balcony'
-];
+const availableAmenities = ['Covered Parking', 'Dirty Kitchen', 'Pet Friendly', 'Tile Floors', 'Balcony'];
 
-interface AddPropertyProps {
-    onBack: () => void;
-    onSave: (data: PropertyFormData) => void;
-}
-
-export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
-    const [formData, setFormData] = useState<PropertyFormData>({
+export default function AddProperty() {
+    const { data, setData, post, processing, errors, reset } = useForm<PropertyFormData>({
         address: '',
         unit_number: '',
         property_type: '',
@@ -55,22 +45,16 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
     });
 
     const [photoPreviewUrls, setPhotoPreviewUrls] = useState<string[]>([]);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const handleInputChange = (field: keyof PropertyFormData, value: string) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
-        // Clear error when user starts typing
-        if (errors[field]) {
-            setErrors((prev) => ({ ...prev, [field]: '' }));
-        }
+    const handleInputChange = (field: keyof PropertyFormData, value: string | string[]) => {
+        setData(field, value);
     };
 
     const handleAmenityToggle = (amenity: string) => {
-        setFormData((prev) => ({
-            ...prev,
-            amenities: prev.amenities.includes(amenity) ? prev.amenities.filter((a) => a !== amenity) : [...prev.amenities, amenity],
-        }));
+        const currentAmenities = data.amenities;
+        const updatedAmenities = currentAmenities.includes(amenity) ? currentAmenities.filter((a) => a !== amenity) : [...currentAmenities, amenity];
+
+        setData('amenities', updatedAmenities);
     };
 
     const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,10 +73,7 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
         }
 
         // Update form data
-        setFormData((prev) => ({
-            ...prev,
-            photos: [...prev.photos, ...validFiles],
-        }));
+        setData('photos', [...data.photos, ...validFiles]);
 
         // Create preview URLs
         const newPreviewUrls = validFiles.map((file) => URL.createObjectURL(file));
@@ -103,59 +84,60 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
         // Revoke the URL to prevent memory leaks
         URL.revokeObjectURL(photoPreviewUrls[index]);
 
-        setFormData((prev) => ({
-            ...prev,
-            photos: prev.photos.filter((_, i) => i !== index),
-        }));
+        setData(
+            'photos',
+            data.photos.filter((_, i) => i !== index),
+        );
         setPhotoPreviewUrls((prev) => prev.filter((_, i) => i !== index));
     };
 
-    const validateForm = (): boolean => {
-        const newErrors: Record<string, string> = {};
-
-        if (!formData.address.trim()) {
-            newErrors.address = 'Address is required';
-        }
-
-        if (!formData.property_type) {
-            newErrors.property_type = 'Property type is required';
-        }
-
-        if (!formData.floor_area.trim()) {
-            newErrors.floor_area = 'Floor area is required';
-        } else if (isNaN(Number(formData.floor_area)) || Number(formData.floor_area) <= 0) {
-            newErrors.floor_area = 'Please enter a valid floor area';
-        }
-
-        if (!formData.rent_price.trim()) {
-            newErrors.rent_price = 'Rent price is required';
-        } else if (isNaN(Number(formData.rent_price)) || Number(formData.rent_price) <= 0) {
-            newErrors.rent_price = 'Please enter a valid rent price';
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = async (event: React.FormEvent) => {
+    const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-        if (!validateForm()) {
-            return;
-        }
+        // Create FormData for file upload
+        const formData = new FormData();
 
-        setIsSubmitting(true);
+        // Append regular form fields
+        formData.append('address', data.address);
+        formData.append('unit_number', data.unit_number);
+        formData.append('property_type', data.property_type);
+        formData.append('floor_area', data.floor_area);
+        formData.append('rent_price', data.rent_price);
+        formData.append('availability_status', data.availability_status);
+        formData.append('description', data.description);
 
-        try {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            onSave(formData);
-        } catch (error) {
-            console.error('Error saving property:', error);
-            alert('Failed to save property. Please try again.');
-        } finally {
-            setIsSubmitting(false);
-        }
+        // Append amenities as JSON
+        formData.append('amenities', JSON.stringify(data.amenities));
+
+        // Append photos
+        data.photos.forEach((photo, index) => {
+            formData.append(`photos[${index}]`, photo);
+        });
+
+        // Submit using Inertia with file upload
+        router.post('/landlord/properties', formData, {
+            forceFormData: true,
+            onSuccess: () => {
+                // Clean up preview URLs
+                photoPreviewUrls.forEach((url) => URL.revokeObjectURL(url));
+                setPhotoPreviewUrls([]);
+
+                // Navigate back to properties list
+                router.visit('/landlord/properties');
+            },
+            onError: (errors) => {
+                console.error('Form submission errors:', errors);
+            },
+        });
+    };
+
+    const handleCancel = () => {
+        // Clean up preview URLs before navigating
+        photoPreviewUrls.forEach((url) => URL.revokeObjectURL(url));
+        setPhotoPreviewUrls([]);
+
+        // Navigate back to properties list
+        router.visit('/landlord/properties');
     };
 
     return (
@@ -181,7 +163,7 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                     <Input
                                         id="address"
                                         placeholder="123 Main Street, City, State"
-                                        value={formData.address}
+                                        value={data.address}
                                         onChange={(e) => handleInputChange('address', e.target.value)}
                                         className={errors.address ? 'border-red-500' : ''}
                                     />
@@ -193,9 +175,10 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                     <Input
                                         id="unit_number"
                                         placeholder="1A, 2B, etc. (optional)"
-                                        value={formData.unit_number}
+                                        value={data.unit_number}
                                         onChange={(e) => handleInputChange('unit_number', e.target.value)}
                                     />
+                                    {errors.unit_number && <p className="text-sm text-red-500">{errors.unit_number}</p>}
                                 </div>
                             </div>
 
@@ -203,7 +186,7 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                 <div className="flex flex-1 gap-4">
                                     <div className="space-y-2">
                                         <Label htmlFor="property_type">Property Type *</Label>
-                                        <Select value={formData.property_type} onValueChange={(value) => handleInputChange('property_type', value)}>
+                                        <Select value={data.property_type} onValueChange={(value) => handleInputChange('property_type', value)}>
                                             <SelectTrigger className={errors.property_type ? 'border-red-500' : ''}>
                                                 <SelectValue placeholder="Select type" />
                                             </SelectTrigger>
@@ -223,7 +206,7 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                                 id="rent_price"
                                                 type="number"
                                                 placeholder="1800"
-                                                value={formData.rent_price}
+                                                value={data.rent_price}
                                                 onChange={(e) => handleInputChange('rent_price', e.target.value)}
                                                 className={`pl-10 ${errors.rent_price ? 'border-red-500' : ''}`}
                                             />
@@ -239,7 +222,7 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                             id="floor_area"
                                             type="number"
                                             placeholder="850"
-                                            value={formData.floor_area}
+                                            value={data.floor_area}
                                             onChange={(e) => handleInputChange('floor_area', e.target.value)}
                                             className={errors.floor_area ? 'border-red-500' : ''}
                                         />
@@ -249,7 +232,7 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                     <div className="flex-1 space-y-2">
                                         <Label htmlFor="availability_status">Availability Status</Label>
                                         <Select
-                                            value={formData.availability_status}
+                                            value={data.availability_status}
                                             onValueChange={(value) => handleInputChange('availability_status', value)}
                                         >
                                             <SelectTrigger>
@@ -262,6 +245,7 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                                 <SelectItem value="unavailable">Unavailable</SelectItem>
                                             </SelectContent>
                                         </Select>
+                                        {errors.availability_status && <p className="text-sm text-red-500">{errors.availability_status}</p>}
                                     </div>
                                 </div>
                             </div>
@@ -308,6 +292,8 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                     ))}
                                 </div>
                             )}
+
+                            {errors.photos && <p className="text-sm text-red-500">{errors.photos}</p>}
                         </CardContent>
                     </Card>
 
@@ -326,7 +312,7 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                     <div key={amenity} className="flex items-center space-x-2">
                                         <Checkbox
                                             id={amenity}
-                                            checked={formData.amenities.includes(amenity)}
+                                            checked={data.amenities.includes(amenity)}
                                             onCheckedChange={() => handleAmenityToggle(amenity)}
                                         />
                                         <Label htmlFor={amenity} className="cursor-pointer text-sm font-normal">
@@ -336,11 +322,11 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                 ))}
                             </div>
 
-                            {formData.amenities.length > 0 && (
+                            {data.amenities.length > 0 && (
                                 <div className="mt-4 border-t pt-4">
                                     <p className="mb-2 text-sm font-medium text-gray-700">Selected Amenities:</p>
                                     <div className="flex flex-wrap gap-2">
-                                        {formData.amenities.map((amenity) => (
+                                        {data.amenities.map((amenity) => (
                                             <Badge key={amenity} variant="secondary" className="flex items-center gap-1">
                                                 <Check className="h-3 w-3" />
                                                 {amenity}
@@ -349,6 +335,8 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                     </div>
                                 </div>
                             )}
+
+                            {errors.amenities && <p className="text-sm text-red-500">{errors.amenities}</p>}
                         </CardContent>
                     </Card>
 
@@ -364,21 +352,22 @@ export default function AddProperty({ onBack, onSave }: AddPropertyProps) {
                                 <Textarea
                                     id="description"
                                     placeholder="Describe the property, neighborhood, special features, etc."
-                                    value={formData.description}
+                                    value={data.description}
                                     onChange={(e) => handleInputChange('description', e.target.value)}
                                     rows={4}
                                 />
+                                {errors.description && <p className="text-sm text-red-500">{errors.description}</p>}
                             </div>
                         </CardContent>
                     </Card>
 
                     {/* Submit Buttons */}
                     <div className="flex justify-end gap-4">
-                        <Button type="button" variant="outline" onClick={onBack} disabled={isSubmitting}>
+                        <Button type="button" variant="outline" onClick={handleCancel} disabled={processing}>
                             Cancel
                         </Button>
-                        <Button type="submit" disabled={isSubmitting} className="min-w-32">
-                            {isSubmitting ? (
+                        <Button type="submit" disabled={processing} className="min-w-32">
+                            {processing ? (
                                 <div className="flex items-center gap-2">
                                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                                     Saving...
