@@ -31,7 +31,11 @@ interface PropertyFormData {
 
 const availableAmenities = ['Covered Parking', 'Dirty Kitchen', 'Pet Friendly', 'Tile Floors', 'Balcony'];
 
-export default function AddProperty() {
+interface AddPropertyProps {
+    landlord_id?: number;
+}
+
+export default function AddProperty({ landlord_id = 1 }: AddPropertyProps) {
     const { data, setData, post, processing, errors, reset } = useForm<PropertyFormData>({
         address: '',
         unit_number: '',
@@ -97,6 +101,9 @@ export default function AddProperty() {
         // Create FormData for file upload
         const formData = new FormData();
 
+        // Append landlord_id
+        formData.append('landlord_id', landlord_id.toString());
+
         // Append regular form fields
         formData.append('address', data.address);
         formData.append('unit_number', data.unit_number);
@@ -106,8 +113,10 @@ export default function AddProperty() {
         formData.append('availability_status', data.availability_status);
         formData.append('description', data.description);
 
-        // Append amenities as JSON
-        formData.append('amenities', JSON.stringify(data.amenities));
+        // Append amenities as array
+        data.amenities.forEach((amenity, index) => {
+            formData.append(`amenities[${index}]`, amenity);
+        });
 
         // Append photos
         data.photos.forEach((photo, index) => {
