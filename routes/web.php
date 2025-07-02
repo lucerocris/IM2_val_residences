@@ -9,6 +9,7 @@ use App\Http\Controllers\LandlordAdmin\DashboardController;
 use App\Http\Controllers\LandlordAdmin\PropertiesController;
 use App\Http\Controllers\LandlordAdmin\TenantLandlordController;
 use App\Http\Controllers\LandlordAdmin\FinanceController;
+use App\Http\Controllers\LandlordAdmin\MaintenanceController;
 
 Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
@@ -29,3 +30,4 @@ Route::get('/landlord/applications', [TenantLandlordController::class, 'applicat
 Route::get('/landlord/leases', [TenantLandlordController::class, 'leases']);
 Route::get('/landlord/payments/rent-collection', [FinanceController::class, 'rent']);
 Route::get('/landlord/payments/report', [FinanceController::class, 'report']);
+Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index']);
