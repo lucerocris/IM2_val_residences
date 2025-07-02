@@ -23,7 +23,8 @@ Route::get('/user/listings', [UserController::class, 'listings']);
 
 
 Route::get('/landlord/dashboard', [DashboardController::class, 'index']);
-Route::get('/landlord/properties', [PropertiesController::class, 'index']);
+Route::get('/landlord/properties', [PropertiesController::class, 'index'])->name('landlord.properties');
+Route::post('/landlord/properties', [PropertiesController::class, 'store']);
 Route::get('/landlord/properties/create', [PropertiesController::class, 'create']);
 Route::get('/landlord/tenants', [TenantLandlordController::class, 'index']);
 Route::get('/landlord/applications', [TenantLandlordController::class, 'applications']);
