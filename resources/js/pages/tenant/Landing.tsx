@@ -18,10 +18,13 @@ import {
   Clock,
   LogOut,
   Eye,
+  Contact,
 } from "lucide-react";
 import CurrentBill from "@/components/landlord/tenants/tenantsDashboard/current-bill";
 import LeaseDetails from '@/components/landlord/tenants/tenantsDashboard/lease-details';
 import MaintenanceRequestComponent from "@/components/landlord/tenants/tenantsDashboard/maintenance-request";
+import ButtonSection from "@/components/landlord/tenants/tenantsDashboard/button-section";
+import ContactLandlord from "@/components/landlord/tenants/tenantsDashboard/contact-landlord";
 
 
 const TenantDashboard = () => {   
@@ -104,6 +107,12 @@ const [paymentModalOpen, setPaymentModalOpen] = useState(false)
                         <CurrentBill currentBill={currentBill} />
                         <LeaseDetails leaseData = {leaseData} />
                         <MaintenanceRequestComponent maintenanceRequests={maintenanceRequests} />
+                    </div>
+
+                    <div className = "space-y-6">
+                        
+                        <ContactLandlord />
+                        <ButtonSection leaseData = {leaseData} currentBill = {currentBill} />
                     </div>
                 </div>
             </TenantLayout>
