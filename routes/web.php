@@ -15,7 +15,8 @@ Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
 Route::get('/contact', [MainSection::class, 'contact']);
 
-Route::get('/tenant', [TenantController::class, 'index'])->name('tenant.dashboard');
+
+Route::get('/tenant/dashboard', [TenantController::class, 'index']);
 Route::get('/tenant/listings', [TenantController::class, 'listings']);
 
 Route::get('/user',[UserController::class, 'index'])->name('user.dashboard');
