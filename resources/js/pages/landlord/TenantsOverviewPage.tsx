@@ -96,38 +96,42 @@ export const leaseStatuses = [
     },
 ];
 
-const metricData = [
-    {
-        title: 'Active Tenants',
-        metric: '7',
-        metricDescription: '1 pending lease renewal',
-        icon: <Users className="h-4 w-4 text-muted-foreground" />,
-    },
-    {
-        title: 'Lease Expiring Soon',
-        metric: '2',
-        metricDescription: 'Within next 90 days',
-        icon: <Calendar className="h-4 w-4 text-muted-foreground" />,
-    },
-    {
-        title: 'Monthly Revenue',
-        metric: '$12,800',
-        metricDescription: '+8.5% from last month',
-        icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
-    },
-    {
-        title: 'Issues to Address',
-        metric: '2',
-        metricDescription: '1 expired lease, 1 unemployed tenant',
-        icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
-    },
-];
+''
 
 interface TenantsOverviewPageProps {
     tenants: Tenant[];
+    numberOfActiveTenants: number;
+
 }
 
-const TenantsOverviewPage = ({ tenants }: TenantsOverviewPageProps) => {
+const TenantsOverviewPage = ({ tenants, numberOfActiveTenants }: TenantsOverviewPageProps) => {
+    const metricData = [
+        {
+            title: 'Active Tenants',
+            metric: numberOfActiveTenants,
+            metricDescription: '1 pending lease renewal',
+            icon: <Users className="h-4 w-4 text-muted-foreground" />,
+        },
+        {
+            title: 'Lease Expiring Soon',
+            metric: '2',
+            metricDescription: 'Within next 90 days',
+            icon: <Calendar className="h-4 w-4 text-muted-foreground" />,
+        },
+        {
+            title: 'Monthly Revenue',
+            metric: '$12,800',
+            metricDescription: '+8.5% from last month',
+            icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
+        },
+        {
+            title: 'Issues to Address',
+            metric: '2',
+            metricDescription: '1 expired lease, 1 unemployed tenant',
+            icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
+        },
+    ];
+
     return (
         <LandlordLayout>
             <div className="w-full space-y-6">
