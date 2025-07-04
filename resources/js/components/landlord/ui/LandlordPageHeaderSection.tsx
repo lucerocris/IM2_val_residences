@@ -20,7 +20,7 @@ const LandlordPageHeaderSection = ({title, subtitle, metric, action}: LandlordPa
     return (
         <>
             {/* Header */}
-            <LandlordPageHeader title={title} subtitle={subtitle}  {...(action && { action })} />
+            <LandlordPageHeader title={title} subtitle={subtitle}  actions={action ? action : undefined}  />
 
             {/* Metric Grid Cards */}
             <MetricGrid metrics={metric} />

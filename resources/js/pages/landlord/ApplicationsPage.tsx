@@ -1,5 +1,4 @@
-import LandlordPageHeader from '@/components/landlord/ui/LandlordPageHeader';
-import MetricCard from '@/components/landlord/ui/MetricCard';
+import LandlordPageHeaderSection from '@/components/landlord/ui/LandlordPageHeaderSection';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -26,8 +25,6 @@ import {
     XCircle,
 } from 'lucide-react';
 import { useState } from 'react';
-import MetricGrid from '@/components/landlord/ui/MetricGrid';
-import LandlordPageHeaderSection from '@/components/landlord/ui/LandlordPageHeaderSection';
 
 interface RentalApplication {
     id: string;
@@ -270,6 +267,7 @@ const mockApplications: RentalApplication[] = [
             },
         },
     },
+
     {
         id: '7',
         prospective_tenant_id: 'pt7',
@@ -304,6 +302,8 @@ const mockApplications: RentalApplication[] = [
             },
         },
     },
+
+
     {
         id: '8',
         prospective_tenant_id: 'pt8',
@@ -458,37 +458,38 @@ export default function TenantApplicationsPage() {
             title: 'Total Applications',
             metric: totalApplications.toString(),
             metricDescription: `${pendingApplications} pending, ${approvedApplications} approved, ${rejectedApplications} rejected`,
-            icon: <FileText className="h-4 w-4 text-muted-foreground" />
+            icon: <FileText className="h-4 w-4 text-muted-foreground" />,
         },
 
         {
             title: 'Pending Review',
             metric: pendingApplications.toString(),
             metricDescription: `${needingReview} awaiting initial review`,
-            icon: <Clock className="h-4 w-4 text-orange-600" />
+            icon: <Clock className="h-4 w-4 text-orange-600" />,
         },
         {
             title: 'Approved',
             metric: approvedApplications.toString(),
             metricDescription: 'Ready for lease agreements',
-            icon: <CheckCircle className="h-4 w-4 text-green-600" />
+            icon: <CheckCircle className="h-4 w-4 text-green-600" />,
         },
         {
             title: 'Recent (7 days)',
             metric: recentApplications.toString(),
             metricDescription: `${Math.round((recentApplications / totalApplications) * 100)}% of total applications`,
-            icon: <TrendingUp className="h-4 w-4 text-blue-600" />
+            icon: <TrendingUp className="h-4 w-4 text-blue-600" />,
         },
-
-    ]
-
-
+    ];
 
     return (
         <LandlordLayout>
             <div className="container mx-auto space-y-6">
                 {/* Header Section */}
-                <LandlordPageHeaderSection title={'Applications'} subtitle={'Review and manage rental applications for your properties'} metric={metricData} />
+                <LandlordPageHeaderSection
+                    title={'Applications'}
+                    subtitle={'Review and manage rental applications for your properties'}
+                    metric={metricData}
+                />
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
                     <TabsList>
                         <TabsTrigger value="pending">Pending ({applications.filter((a) => a.application_status === 'pending').length})</TabsTrigger>

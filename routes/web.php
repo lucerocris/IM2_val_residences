@@ -6,7 +6,7 @@ use App\Http\Controllers\MainSection;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LandlordAdmin\DashboardController;
-use App\Http\Controllers\LandlordAdmin\PropertiesController;
+use App\Http\Controllers\LandlordAdmin\RentalUnitController;
 use App\Http\Controllers\LandlordAdmin\TenantLandlordController;
 use App\Http\Controllers\LandlordAdmin\FinanceController;
 use App\Http\Controllers\LandlordAdmin\MaintenanceController;
@@ -15,17 +15,17 @@ Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
 Route::get('/contact', [MainSection::class, 'contact']);
 
-Route::get('/tenant', [TenantController::class, 'index']);
+Route::get('/tenant', [TenantController::class, 'index'])->name('tenant.dashboard');
 Route::get('/tenant/listings', [TenantController::class, 'listings']);
 
-Route::get('/user',[UserController::class, 'index']);
+Route::get('/user',[UserController::class, 'index'])->name('user.dashboard');
 Route::get('/user/listings', [UserController::class, 'listings']);
 
 
 Route::get('/landlord/dashboard', [DashboardController::class, 'index']);
-Route::get('/landlord/properties', [PropertiesController::class, 'index'])->name('landlord.properties');
-Route::post('/landlord/properties', [PropertiesController::class, 'store']);
-Route::get('/landlord/properties/create', [PropertiesController::class, 'create']);
+Route::get('/landlord/properties', [RentalUnitController::class, 'index'])->name('landlord.properties');
+Route::post('/landlord/properties', [RentalUnitController::class, 'store']);
+Route::get('/landlord/properties/create', [RentalUnitController::class, 'create']);
 Route::get('/landlord/tenants', [TenantLandlordController::class, 'index']);
 Route::get('/landlord/applications', [TenantLandlordController::class, 'applications']);
 Route::get('/landlord/leases', [TenantLandlordController::class, 'leases']);

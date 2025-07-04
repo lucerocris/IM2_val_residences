@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class MaintenanceRequest extends Model
 {
@@ -35,5 +36,17 @@ class MaintenanceRequest extends Model
     public function units()
     {
         return $this->belongsTo(RentalUnit::class, 'unit_id');
+    }
+
+    public static function getLimitedMaintenanceRequestsWithUnits($limit) {
+        return DB::table('maintenance_requests')
+            ->join('rental_units', 'maintenance_requests.unit_id', '=', 'rental_units.id')
+            ->select('maintenance_requests.id', 'rental_units.unit_number', 'maintenance_requests.request_status', 'maintenance_requests.priority_level', 'maintenance_requests.maintenance_description', 'maintenance_requests.request_date')
+            ->limit($limit)
+            ->get();
+    }
+
+    public static function getNumberOfMaintenanceRequests() {
+        return MaintenanceRequest::all()->count();
     }
 }

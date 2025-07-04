@@ -90,6 +90,28 @@ class DatabaseSeeder extends Seeder
             $unit->update(['availability_status' => 'available']);
         }
 
+        // Create rental bills with specific month paid dates for monthly revenue tracking
+        $activeLeases = Lease::where('lease_status', 'active')->get();
+        foreach ($activeLeases as $lease) {
+            // Create bills for different months - July 2025 (default)
+            RentalBill::factory(rand(1, 2))->monthlyRevenue()->create([
+                'lease_id' => $lease->id,
+                'rent_amount' => $lease->monthly_rent,
+            ]);
+
+            // Create bills for June 2025
+            RentalBill::factory(1)->monthlyRevenue(6, 2025)->create([
+                'lease_id' => $lease->id,
+                'rent_amount' => $lease->monthly_rent,
+            ]);
+
+            // Create bills for May 2025
+            RentalBill::factory(1)->monthlyRevenue(5, 2025)->create([
+                'lease_id' => $lease->id,
+                'rent_amount' => $lease->monthly_rent,
+            ]);
+        }
+
         // Get available units (should be 6 remaining now: 4 original + 2 from terminated leases)
         $availableUnits = $units->where('availability_status', 'available');
 

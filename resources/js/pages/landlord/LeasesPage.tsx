@@ -56,7 +56,6 @@ const LeasesPage = ({leases}: LeasesPageProps) => {
             <div className="space-y-6">
                 {/* Header Section*/}
                 <LandlordPageHeaderSection title={'Leases'} subtitle={'Manage active leases, renewals, and terminations'} metric={metricData} />
-
                 <div className="flex-col items-start gap-2 self-stretch">
                     <LeasesDataTable columns={leaseColumns} data={leases} leaseStatuses={leaseStatuses} propertyTypes={propertyTypes} />
                 </div>
