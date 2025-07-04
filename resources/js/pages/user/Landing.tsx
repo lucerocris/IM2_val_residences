@@ -1,7 +1,7 @@
 import MainLayout from "@/layout/MainLayout";
 import Header from "@/components/main/ui/Header";
 import CarouselText from "@/components/main/ui/CarouselText";
-import { Contact } from "../tenant/Landing";
+
 
 const tenantHome = () => {   
     const title = "Welcome, Cris"
@@ -18,7 +18,7 @@ const tenantHome = () => {
                 <div className = "flex flex-col py-[3rem] gap-[3rem] items-center">
 
                     <ApplicationForm/>
-                    <Contact/>
+
                     
                 </div>
             </MainLayout>

@@ -5,6 +5,7 @@ import Header from '@/components/main/ui/Header';
 import LoginModal from '@/components/main/ui/LoginModal';
 import SignUpModal from '@/components/main/ui/SignUpModal';
 import { Map } from 'lucide-react'
+import ListingsMain from '@/components/main/ui/Listings/main';
 
 const landing = () => {
     const desc = "Wake up to refreshing mornings in our apartments at Corona del Mar, a Spanish Mediterranean-inspired seaside community in Cebu.";
@@ -13,7 +14,7 @@ const landing = () => {
 
     return (
         <>
-            <Header links = {[
+            {/* <Header links = {[
                 {label: "Home", href: "/"},
                 {label: "About Us", href: "/about"},
                 {label: "Contact Us", href: "contact"}
@@ -24,28 +25,10 @@ const landing = () => {
                     <SignUpModal />
                 </>
             }
-            />
-            <MainLayout carouselText = {<CarouselText description = {desc} buttonLabel = {btnLabel} title = {title}/>} >
+            /> */}
+            <MainLayout>
                 <div className = "w-full pt-[4.3rem] pb-[4.3rem] bg-white">
-                    <div className = "grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-[30px] justify-center px-[100px] py-0">
-                        {/* Boxes here */}
-
-                        <div className = "w-full max-w-[350px] h-[450px] bg-[#e8e8e8] text-left m-auto">
-                            <CardContent />
-                        </div>
-
-                        <div className = "w-full max-w-[350px] h-[450px] bg-[#e8e8e8] text-left m-auto">
-                            <CardContent />
-                        </div>
-
-                        <div className = "w-full max-w-[350px] h-[450px] bg-[#e8e8e8] text-left m-auto">
-                            <CardContent />
-                        </div>
-
-                        <div className = "w-full max-w-[350px] h-[450px] bg-[#e8e8e8] text-left m-auto">
-                            <CardContent />
-                        </div>
-                    </div>
+                    <ListingsMain />
                 </div>    
             </MainLayout> 
         </>
