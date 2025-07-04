@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 // COMPONENTS HERE ( TO BE MADE )
 import ListingsFilter from "./Filter";
+import SubscriptionModal from "./subscription-modal";
 
 const mockListings = [
   {
@@ -166,6 +167,10 @@ const ListingsMain = () => {
                onSubscriptionClick = {() => setSubscriptionModalOpen(true)}
                resultCount = {filteredAndSortedListings.length}
                />
+
+              <SubscriptionModal 
+                open = {subscriptionModalOpen} onOpenChange = {setSubscriptionModalOpen}
+              />
         </>
     );
 }
