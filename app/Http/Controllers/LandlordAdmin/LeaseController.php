@@ -17,4 +17,8 @@ class LeaseController extends Controller
             'leases' => $leases,
         ]);
     }
+
+    public function create() {
+        return Inertia::render('landlord/AddLeasePage');
+    }
 }
