@@ -41,12 +41,14 @@ Route::get('/landlord/properties/create', [RentalUnitController::class, 'create'
 
 // Landlord Tenants
 Route::get('/landlord/tenants', [TenantLandlordController::class, 'index']);
+Route::get('/landlord/tenants/create', [TenantLandlordController::class, 'create']);
 
 // Landlord applications
 Route::get('/landlord/applications', [RentalApplicationController::class, 'index']);
 
 // Landlord leases
 Route::get('/landlord/leases', [LeaseController::class, 'index']);
+Route::get('/landlord/leases/create', [LeaseController::class, 'create']);
 
 // Landlord payments
 Route::get('/landlord/payments/rent-collection', [FinanceController::class, 'rent']);

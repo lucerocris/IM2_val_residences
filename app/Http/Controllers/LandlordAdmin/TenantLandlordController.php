@@ -23,12 +23,7 @@ class TenantLandlordController extends Controller
     }
 
 
-    public function leases() {
-
-        $leases = Lease::getTableData();
-
-        return Inertia::render('landlord/LeasesPage', [
-            'leases' => $leases,
-        ]);
-    }
+   public function create() {
+        return Inertia::render('landlord/AddTenantPage');
+   }
 }
