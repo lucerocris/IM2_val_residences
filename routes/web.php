@@ -18,8 +18,12 @@ Route::get('/about', [MainSection::class, 'about']);
 Route::get('/contact', [MainSection::class, 'contact']);
 
 
+
 // Tenant User
-Route::get('/tenant', [TenantController::class, 'index'])->name('tenant.dashboard');
+
+
+Route::get('/tenant/dashboard', [TenantController::class, 'index']);
+
 Route::get('/tenant/listings', [TenantController::class, 'listings']);
 
 // Prospective Tenant

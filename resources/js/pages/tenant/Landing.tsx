@@ -1,12 +1,98 @@
+import { useState } from "react";
 import MainLayout from "@/layout/MainLayout";
 import Header from "@/components/main/ui/Header";
 import CarouselText from "@/components/main/ui/CarouselText";
 import Btn from "@/components/main/ui/Button";
+import TenantLayout from "@/layout/TenantLayout";
+import {
+  CreditCard,
+  Wrench,
+  Home,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  DollarSign,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  LogOut,
+  Eye,
+  Contact,
+} from "lucide-react";
+import CurrentBill from "@/components/landlord/tenants/tenantsDashboard/current-bill";
+import LeaseDetails from '@/components/landlord/tenants/tenantsDashboard/lease-details';
+import MaintenanceRequestComponent from "@/components/landlord/tenants/tenantsDashboard/maintenance-request";
+import ButtonSection from "@/components/landlord/tenants/tenantsDashboard/button-section";
+import ContactLandlord from "@/components/landlord/tenants/tenantsDashboard/contact-landlord";
 
-const tenantHome = () => {   
-    const title = "Welcome, Jose"
-    const subtitle = "Signed in as Tenant"
-    
+
+const TenantDashboard = () => {   
+
+const [paymentModalOpen, setPaymentModalOpen] = useState(false)
+  const [maintenanceModalOpen, setMaintenanceModalOpen] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState("")
+  const [priorityLevel, setPriorityLevel] = useState("")
+
+  // Mock data based on the schema
+  const tenantData = {
+    name: "Jose",
+    email: "jose@email.com",
+    contactNumber: "+63 912 345 6789",
+    moveInDate: "2024-01-15",
+    occupation: "Software Engineer",
+  }
+
+  const leaseData = {
+    apartment: "Ph. 4, Lot 6, Block 6",
+    unitNo: "3",
+    totalFloors: "2",
+    livingArea: "70.00",
+    bedrooms: "3",
+    toiletBaths: "2",
+    balcony: "Yes",
+    parkingSpace: "Yes",
+    petFriendly: "Yes",
+    furnished: "Unfurnished",
+    leaseTerm: "12",
+    rentPrice: "20000.00",
+    deposit: "2",
+    advance: "1",
+    startDate: "2024-01-15",
+    endDate: "2025-01-15",
+    status: "active",
+  }
+
+  const currentBill = {
+    id: 1,
+    billingDate: "2024-12-01",
+    rentAmount: "20000.00",
+    dueDate: "2024-12-15",
+    paymentStatus: "pending",
+    amountPaid: "0.00",
+  }
+
+  const maintenanceRequests = [
+    {
+      id: 1,
+      description: "Leaking faucet in kitchen",
+      status: "in_progress",
+      priority: "medium",
+      requestDate: "2024-11-28",
+      scheduledDate: "2024-12-05",
+    },
+    {
+      id: 2,
+      description: "Air conditioning not working",
+      status: "completed",
+      priority: "high",
+      requestDate: "2024-11-20",
+      completionDate: "2024-11-25",
+    },
+  ]
+
+
+
     return(
         <>
             <Header links = {[ 
@@ -15,110 +101,23 @@ const tenantHome = () => {
                 {label: "LOG OUT", href: "/"}
             ]}
             />
-            <MainLayout carouselText = {<CarouselText title = {title} subTitle = {subtitle}/>}>
-                <div className = "flex flex-col items-center gap-[3rem] py-[4.3rem]">
-                    <Lease />
-                    <Contact />
-                </div>
-            </MainLayout>
-        </>
-    );
-}
+            <TenantLayout>
+                <div className = " px-12 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className = "lg:col-span-2 space-y-6">
+                        <CurrentBill currentBill={currentBill} />
+                        <LeaseDetails leaseData = {leaseData} />
+                        <MaintenanceRequestComponent maintenanceRequests={maintenanceRequests} />
+                    </div>
 
-const Lease = () => {
-    return(
-        <>
-            <div className = "flex flex-col w-[90%]">
-                <div className = "bg-[#474747] p-[0.8rem] text-[1.2rem] text-left">
-                    <h5 className = "text-lg text-white">LEASE DETAILS</h5>
-                </div>
-
-                <div className = "flex flex-col bg-[#e8e8e8] p-[1rem]">
-                    <table className = "mb-[20px] w-full border-collapse table-auto text-[11px]">
-                        <thead>
-                            <tr>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Apartment</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Unit No.</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Total Floors</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Living Area (sqm)</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Bedrooms</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Toilet & Baths</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Balcony</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Parking Space</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Pet Friendly</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Furnished</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">Ph. 4, Lot 6, Block 8</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">3</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">2</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">70.00</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">3</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">2</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">Yes</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">Yes</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">Yes</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">Unfurnished</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table className = "w-full border-collapse table-auto text-[11px]">
-                        <thead>
-                            <tr>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Lease Term (months)</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Rent Price (Php)</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Deposit (Months)</th>
-                                <th className = "bg-[#f2f2f2] font-semibold border-1 border-solid border-[#ccc]">Advance (Months)</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">1</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">20000.00</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">2</td>
-                                <td className = "pt-[4px] pr-[6px] text-center border-1 border-solid border-[#ccc] whitespace-nowrap">1</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </>
-    );
-}
-
-export const Contact = () => {
-    return(
-        <>
-            <div className = "flex flex-col w-[90%]">
-                <div className = "bg-[#474747] text-white p-[0.8rem] text-[1.2rem] text-left">
-                    <h5>CONTACT LANDLORD</h5>
-                </div>
-
-
-                <div className = "flex bg-[#e8e8e8] p-[1rem]">
-                    <div className = "w-full">
-                        <form action="" className = "flex flex-col">
-                            <label htmlFor="">Email</label>
-                            <input type="text" placeholder = "Enter your name" className = "w-full p-[10px] mt-[10px] mb-[1rem] text-[0.9rem] bg-white border-1 border-solid border-neutral-400"/>
-
-                            <label htmlFor="">Subject</label>
-                            <input type="text" placeholder = "Enter your email" className = "w-full p-[10px] mt-[10px] mb-[1rem] text-[0.9rem] bg-white border-1 border-solid border-neutral-400"/>
-
-                            <label htmlFor="">Message</label>
-                            <textarea placeholder = "Enter your message" className = "w-full p-[10px] mt-[10px] mb-[1rem] text-[0.9rem] bg-white border-1 border-solid border-neutral-400"/>
-
-                            <Btn className = "py-2 w-2/3 self-center">Submit</Btn>
-                        </form>
+                    <div className = "space-y-6">
+                        
+                        <ContactLandlord />
+                        <ButtonSection leaseData = {leaseData} currentBill = {currentBill} />
                     </div>
                 </div>
-            </div>
+            </TenantLayout>
         </>
     );
 }
 
-export default tenantHome;
+export default TenantDashboard;
