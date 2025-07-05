@@ -54,6 +54,10 @@ class RentalUnit extends Model
         return $this->hasMany(MaintenanceRequest::class, 'unit_id');
     }
 
+    public function applications() {
+        return $this->hasMany(RentalApplication::class, 'unit_id');
+    }
+
     public static function getNumberOfAvailableUnits() {
         return DB::table('rental_units')
             ->where('availability_status', '=', 'available')
