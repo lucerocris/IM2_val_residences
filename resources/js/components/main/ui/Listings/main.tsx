@@ -3,6 +3,8 @@ import { useState, useMemo } from "react";
 import ListingsFilter from "./Filter";
 import SubscriptionModal from "./subscription-modal";
 import ListingsGrid from "./listing-grid";
+import { ViewDetailsModal } from "./view-details-modal";
+import ApplyModal from "./apply-modal";
 
 const mockListings = [
   {
@@ -177,6 +179,12 @@ const ListingsMain = () => {
 
               <SubscriptionModal 
                 open = {subscriptionModalOpen} onOpenChange = {setSubscriptionModalOpen}
+              />
+              <ViewDetailsModal
+                open = {viewDetailsModalOpen} onOpenChange = {setViewDetailsModalOpen} listing = {selectedListing}
+              />
+              <ApplyModal
+                open = {applyModalOpen} onOpenChange = {setApplyModalOpen} listing = {selectedListing}
               />
         </>
     );
