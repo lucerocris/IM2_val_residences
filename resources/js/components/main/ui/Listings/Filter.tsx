@@ -17,7 +17,7 @@ interface ListingsFilterProps {
 const ListingsFilter = ({ propertyTypeFilter, setPropertyTypeFilter, maxRentFilter, setMaxRentFilter, sortBy, setSortBy, onSubscriptionClick, resultCount }:ListingsFilterProps) => {
   return(
     <>
-        <div className = "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className = "max-w-7xl mx-auto py-6">
             <div className = "flex flex-col space-y-4">
 
                 <div className = "flex items-center justify-between">
