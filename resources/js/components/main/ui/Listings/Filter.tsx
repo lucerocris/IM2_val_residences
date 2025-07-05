@@ -21,7 +21,7 @@ const ListingsFilter = ({ propertyTypeFilter, setPropertyTypeFilter, maxRentFilt
             <div className = "flex flex-col space-y-4">
 
                 <div className = "flex items-center justify-between">
-                    <h1 className = "text-3xl font-bold text-gray-900">Available Rentals</h1>
+                    <h1 className = "text-3xl font-bold text-gray-900">Available Units</h1>
 
                     <div className = "flex items-center gap-3">
                         <Button
@@ -78,7 +78,7 @@ const ListingsFilter = ({ propertyTypeFilter, setPropertyTypeFilter, maxRentFilt
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value = "price_low">Price: Low to High</SelectItem>
-                            <SelectItem value = "priec_high">Price: High to Low</SelectItem>
+                            <SelectItem value = "price_high">Price: High to Low</SelectItem>
                             <SelectItem value = "area_large">Area: Large to Small</SelectItem>
                             <SelectItem value = "area_small">Area: Small to Large</SelectItem>
                         </SelectContent>
