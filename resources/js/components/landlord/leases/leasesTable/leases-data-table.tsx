@@ -12,13 +12,13 @@ import {
 } from '@tanstack/react-table';
 import { useState } from 'react';
 
+import { LeaseTableViewOptions } from '@/components/landlord/leases/leasesTable/leases-table-view-options';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Filter, Plus, Search, FileText } from 'lucide-react';
+import { FileText, Filter, Plus, Search } from 'lucide-react';
 import { DataTableFacetedFilter } from '../../ui/data-table-faceted-filter';
 import { DataTablePagination } from '../../ui/data-table-pagination';
-import { LeaseTableViewOptions } from '@/components/landlord/leases/leasesTable/leases-table-view-options';
 
 interface LeasesDataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -27,12 +27,7 @@ interface LeasesDataTableProps<TData, TValue> {
     propertyTypes: { label: string; value: string }[];
 }
 
-export function LeasesDataTable<TData, TValue>({
-                                                   columns,
-                                                   data,
-                                                   leaseStatuses,
-                                                   propertyTypes
-                                               }: LeasesDataTableProps<TData, TValue>) {
+export function LeasesDataTable<TData, TValue>({ columns, data, leaseStatuses, propertyTypes }: LeasesDataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -75,27 +70,15 @@ export function LeasesDataTable<TData, TValue>({
                     </div>
 
                     {table.getColumn('lease_status') && (
-                        <DataTableFacetedFilter
-                            column={table.getColumn('lease_status')}
-                            title="Status"
-                            options={leaseStatuses}
-                        />
+                        <DataTableFacetedFilter column={table.getColumn('lease_status')} title="Status" options={leaseStatuses} />
                     )}
 
                     {table.getColumn('property_info') && (
-                        <DataTableFacetedFilter
-                            column={table.getColumn('property_info')}
-                            title="Property Type"
-                            options={propertyTypes}
-                        />
+                        <DataTableFacetedFilter column={table.getColumn('property_info')} title="Property Type" options={propertyTypes} />
                     )}
 
                     {hasActiveFilters && (
-                        <Button
-                            variant="ghost"
-                            onClick={() => table.resetColumnFilters()}
-                            className="h-8 px-2 lg:px-3"
-                        >
+                        <Button variant="ghost" onClick={() => table.resetColumnFilters()} className="h-8 px-2 lg:px-3">
                             Reset
                             <Filter className="ml-2 h-4 w-4" />
                         </Button>
@@ -111,7 +94,6 @@ export function LeasesDataTable<TData, TValue>({
                 </div>
             </div>
 
-
             {/* Table Section */}
             <div className="rounded-md border">
                 <Table>
@@ -121,10 +103,7 @@ export function LeasesDataTable<TData, TValue>({
                                 {headerGroup.headers.map((header) => {
                                     return (
                                         <TableHead key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(header.column.columnDef.header, header.getContext())
-                                            }
+                                            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                                         </TableHead>
                                     );
                                 })}
@@ -134,15 +113,9 @@ export function LeasesDataTable<TData, TValue>({
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && 'selected'}
-                                    className="hover:bg-muted/50"
-                                >
+                                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'} className="hover:bg-muted/50">
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </TableCell>
+                                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                                     ))}
                                 </TableRow>
                             ))

@@ -19,15 +19,9 @@ class TenantLandlordController extends Controller
         return Inertia::render('landlord/TenantsOverviewPage', [
             'numberOfActiveTenants' => $numberOfActiveTenant,
             'tenants' => $tenants,
-
         ]);
     }
 
-
-
-    public function applications() {
-        return Inertia::render('landlord/ApplicationsPage');
-    }
 
     public function leases() {
 
