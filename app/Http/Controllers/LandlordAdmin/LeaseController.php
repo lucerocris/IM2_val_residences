@@ -11,9 +11,7 @@ class LeaseController extends Controller
     public function index() {
 
         $leases = Lease::getTableData()->toArray();
-        echo '<pre>';
-        print_r($leases);
-        echo '</pre>';
+
 
         return Inertia::render('landlord/LeasesPage', [
             'leases' => $leases,
