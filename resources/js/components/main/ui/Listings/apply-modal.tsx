@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import InputLabel from "@/components/landlord/tenants/tenantsDashboard/contact-landlord-inputs";
+import InputLabel from "@/components/tenants/tenantsDashboard/contact-landlord-inputs";
 
 interface Listing {
     id: number;

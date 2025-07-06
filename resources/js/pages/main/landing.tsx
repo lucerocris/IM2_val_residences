@@ -1,10 +1,11 @@
-import MainLayout from '@/layout/MainLayout';
+import LandingLayout from '@/layout/LandingLayout';
 import CarouselText from '@/components/main/ui/CarouselText'
 import Btn from '@/components/main/ui/Button'
 import Header from '@/components/main/ui/Header';
 import LoginModal from '@/components/main/ui/LoginModal';
 import SignUpModal from '@/components/main/ui/SignUpModal';
 import { Map } from 'lucide-react'
+import ListingsFilter from '@/components/main/ui/Listings/Filter';
 import ListingsMain from '@/components/main/ui/Listings/main';
 
 const landing = () => {
@@ -14,25 +15,14 @@ const landing = () => {
 
     return (
         <>
-            {/* <Header links = {[
-                {label: "Home", href: "/"},
-                {label: "About Us", href: "/about"},
-                {label: "Contact Us", href: "contact"}
-            ]}
-            actions = {
-                <> 
-                    <LoginModal />
-                    <SignUpModal />
-                </>
-            }
-            /> */}
-            <MainLayout>
-                <div className = "w-full pt-[4.3rem] pb-[4.3rem] bg-white">
-                    <ListingsMain />
-                </div>    
-            </MainLayout> 
+            <LandingLayout
+                title={title}
+                subtitle={desc}
+                buttonLabel={btnLabel}
+            >
+                <ListingsMain />
+            </LandingLayout>
         </>
-
     )
 }
 

@@ -9,17 +9,15 @@ const tenantHome = () => {
 
     return(
         <>
-            <Header links = {[ 
+            <Header links = {[
                 {label: "VIEW LISTINGS", href: "/user/listings"},
-                {label: "TENANT DASHBOARD", href: "/user"},
+                {label: "USER DASHBOARD", href: "/user"},
                 {label: "LOG OUT", href: "/"}
-            ]}/>
-            <MainLayout carouselText = {<CarouselText title = {title} subTitle= {subtitle}/>}>
+            ]}
+            />
+            <MainLayout>
                 <div className = "flex flex-col py-[3rem] gap-[3rem] items-center">
-
                     <ApplicationForm/>
-
-                    
                 </div>
             </MainLayout>
         </>
