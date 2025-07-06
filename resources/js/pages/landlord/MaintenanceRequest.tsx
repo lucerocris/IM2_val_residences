@@ -1,4 +1,4 @@
-import { MaintenanceDataTable } from "@/components/landlord/maintenance/maintenanceTable/MaintenanceDataTable";
+import { MaintenanceDataTable } from "@/components/landlord/maintenance/maintenanceTable/maintenanceDataTable";
 import { maintenanceColumns, MaintenanceRequest } from "@/components/landlord/maintenance/maintenanceTable/maintenanceTableColumn";
 import LandlordLayout from "@/layout/LandlordLayout";
 

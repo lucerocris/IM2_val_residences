@@ -72,7 +72,7 @@ const Hero = ({ title, subtitle, buttonLabel, onHeaderToggle, showScrollButton =
                             <Button 
                                 onClick={scrollToListings}
                                 size="lg"
-                                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 text-lg font-semibold flex items-center gap-2"
+                                className="bg-white hover:bg-white/90 text-black px-8 py-3 text-lg font-semibold flex items-center gap-2"
                             >
                                 {buttonLabel || "VIEW LISTINGS"}
                                 <ChevronDown className="size-5" />

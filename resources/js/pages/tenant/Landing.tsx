@@ -4,6 +4,7 @@ import Header from "@/components/main/ui/Header";
 import CarouselText from "@/components/main/ui/CarouselText";
 import Btn from "@/components/main/ui/Button";
 import TenantLayout from "@/layout/TenantLayout";
+import TenantProfileModal from "@/components/tenants/tenantsDashboard/tenant-profile-modal";
 import {
   CreditCard,
   Wrench,
@@ -19,28 +20,32 @@ import {
   LogOut,
   Eye,
   Contact,
+  User,
 } from "lucide-react";
-import CurrentBill from "@/components/landlord/tenants/tenantsDashboard/current-bill";
-import LeaseDetails from '@/components/landlord/tenants/tenantsDashboard/lease-details';
-import MaintenanceRequestComponent from "@/components/landlord/tenants/tenantsDashboard/maintenance-request";
-import ButtonSection from "@/components/landlord/tenants/tenantsDashboard/button-section";
-import ContactLandlord from "@/components/landlord/tenants/tenantsDashboard/contact-landlord";
+import CurrentBill from "@/components/tenants/tenantsDashboard/current-bill";
+import LeaseDetails from '@/components/tenants/tenantsDashboard/lease-details';
+import MaintenanceRequestComponent from "@/components/tenants/tenantsDashboard/maintenance-request";
+import ButtonSection from "@/components/tenants/tenantsDashboard/button-section";
+import ContactLandlord from "@/components/tenants/tenantsDashboard/contact-landlord";
 
 
 const TenantDashboard = () => {   
-
-const [paymentModalOpen, setPaymentModalOpen] = useState(false)
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false)
   const [maintenanceModalOpen, setMaintenanceModalOpen] = useState(false)
+  const [profileModalOpen, setProfileModalOpen] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState("")
   const [priorityLevel, setPriorityLevel] = useState("")
 
-  // Mock data based on the schema
+  // Mock data following the exact schema
   const tenantData = {
-    name: "Jose",
-    email: "jose@email.com",
-    contactNumber: "+63 912 345 6789",
-    moveInDate: "2024-01-15",
-    occupation: "Software Engineer",
+    user_name: "Jose Rivera",
+    email: "jose.rivera@email.com",
+    user_contact_number: "+63 912 345 6789",
+    user_type: "tenant",
+    move_in_date: "2024-01-15",
+    employment_status: "Full-time",
+    emergency_contact: "Maria Rivera - +63 920 123 4567",
+    tenant_occupation: "Software Engineer",
   }
 
   const leaseData = {
@@ -91,33 +96,46 @@ const [paymentModalOpen, setPaymentModalOpen] = useState(false)
     },
   ]
 
+  return(
+    <>
+      <Header 
+        links={[ 
+          {label: "VIEW LISTINGS", href: "/tenant/listings"},
+          {label: "TENANT DASHBOARD", href: "/tenant/dashboard"},
+          {label: "LOG OUT", href: "/"}
+        ]}
+        actions={
+          <button 
+            onClick={() => setProfileModalOpen(true)}
+            className="flex items-center gap-2 px-3 py-1.5 text-white hover:bg-white/10 rounded-md transition-colors"
+          >
+            <User className="h-4 w-4" />
+            Profile
+          </button>
+        }
+      />
+      <TenantLayout>
+        <div className=" px-12 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-6">
+            <CurrentBill currentBill={currentBill} />
+            <LeaseDetails leaseData={leaseData} />
+            <MaintenanceRequestComponent maintenanceRequests={maintenanceRequests} />
+          </div>
 
+          <div className="space-y-6">
+            <ContactLandlord />
+            <ButtonSection leaseData={leaseData} currentBill={currentBill} />
+          </div>
+        </div>
+      </TenantLayout>
 
-    return(
-        <>
-            <Header links = {[ 
-                {label: "VIEW LISTINGS", href: "/tenant/listings"},
-                {label: "TENANT DASHBOARD", href: "/tenant/dashboard"},
-                {label: "LOG OUT", href: "/"}
-            ]}
-            />
-            <TenantLayout>
-                <div className = " px-12 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className = "lg:col-span-2 space-y-6">
-                        <CurrentBill currentBill={currentBill} />
-                        <LeaseDetails leaseData = {leaseData} />
-                        <MaintenanceRequestComponent maintenanceRequests={maintenanceRequests} />
-                    </div>
-
-                    <div className = "space-y-6">
-                        
-                        <ContactLandlord />
-                        <ButtonSection leaseData = {leaseData} currentBill = {currentBill} />
-                    </div>
-                </div>
-            </TenantLayout>
-        </>
-    );
+      <TenantProfileModal
+        open={profileModalOpen}
+        onOpenChange={setProfileModalOpen}
+        tenantData={tenantData}
+      />
+    </>
+  );
 }
 
 export default TenantDashboard;

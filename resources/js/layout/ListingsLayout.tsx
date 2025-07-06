@@ -9,9 +9,10 @@ interface ListingsLayoutProps {
     subtitle: string;
     buttonLabel?: string;
     headerLinks: { label: string; href: string }[];
+    headerActions?: ReactNode;
 }
 
-const ListingsLayout = ({ children, title, subtitle, buttonLabel, headerLinks }: ListingsLayoutProps) => {
+const ListingsLayout = ({ children, title, subtitle, buttonLabel, headerLinks, headerActions }: ListingsLayoutProps) => {
     const [headerVisible, setHeaderVisible] = useState(false);
 
     return (
@@ -20,7 +21,7 @@ const ListingsLayout = ({ children, title, subtitle, buttonLabel, headerLinks }:
             <div className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
                 headerVisible ? 'translate-y-0' : '-translate-y-full'
             }`}>
-                <Header links={headerLinks} />
+                <Header links={headerLinks} actions={headerActions} />
             </div>
 
             {/* Hero Section */}
@@ -42,4 +43,4 @@ const ListingsLayout = ({ children, title, subtitle, buttonLabel, headerLinks }:
     );
 };
 
-export default ListingsLayout; 
+export default ListingsLayout;

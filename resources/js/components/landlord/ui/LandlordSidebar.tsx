@@ -126,7 +126,7 @@ const maintenanceNavigation: NavigationType[] = [
         submenu: [
             {
                 name: 'Requests',
-                href: '/maintenance/requests',
+                href: '/landlord/maintenance/requests',
             },
             {
                 name: 'History',
