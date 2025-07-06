@@ -1,47 +1,15 @@
+import FinancialTermsCard from '@/components/landlord/addLease/components/FinancialTermsCard';
+import LeaseFormAction from '@/components/landlord/addLease/components/LeaseFormAction';
+import LeaseTermsCard from '@/components/landlord/addLease/components/LeaseTermsCard';
+import TenantPropertyCard from '@/components/landlord/addLease/components/TenantPropertyCard';
+import TermsAndConditionCard from '@/components/landlord/addLease/components/TermsAndConditionCard';
 import LandlordPageHeader from '@/components/landlord/ui/LandlordPageHeader';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import LandlordLayout from '@/layout/LandlordLayout';
+import type { AddLeaseProps, LeaseFormData } from '@/types/addLease.types';
 import { router, useForm } from '@inertiajs/react';
-import { Calendar, DollarSign, FileText, Save, User } from 'lucide-react';
 import type React from 'react';
 
-interface LeaseFormData {
-    tenant_id: string;
-    unit_id: string;
-    start_date: string;
-    end_date: string;
-    monthly_rent: string;
-    deposit_amount: string;
-    lease_term: string;
-    lease_status: string;
-    terms_and_conditions: string;
-    [key: string]: string | number | boolean | File | null | undefined | (string | number | boolean | File | null | undefined)[];
-}
-
-interface Tenant {
-    id: number;
-    user_name: string;
-    email: string;
-}
-
-interface RentalUnit {
-    id: number;
-    address: string;
-    unit_number: string;
-    rent_price: number;
-}
-
-interface AddLeaseProps {
-    tenants: Tenant[];
-    available_units: RentalUnit[];
-}
-
-export default function AddLease({ tenants = [], available_units = [] }: AddLeaseProps) {
+export default function AddLease({ tenants, available_units }: AddLeaseProps) {
     const { data, setData, post, processing, errors, reset } = useForm<LeaseFormData>({
         tenant_id: '',
         unit_id: '',
@@ -54,6 +22,10 @@ export default function AddLease({ tenants = [], available_units = [] }: AddLeas
         terms_and_conditions: '',
     });
 
+    console.log(data);
+    console.log(tenants);
+    console.log(available_units);
+
     const handleInputChange = (field: keyof LeaseFormData, value: string) => {
         setData(field, value);
     };
@@ -61,7 +33,7 @@ export default function AddLease({ tenants = [], available_units = [] }: AddLeas
     const handleUnitChange = (unitId: string) => {
         setData('unit_id', unitId);
 
-        // Auto-fill rent amount based on selected unit
+        // Autofill rent amount based on selected unit
         const selectedUnit = available_units.find((unit) => unit.id.toString() === unitId);
         if (selectedUnit) {
             setData('monthly_rent', selectedUnit.rent_price.toString());
@@ -117,214 +89,41 @@ export default function AddLease({ tenants = [], available_units = [] }: AddLeas
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Tenant and Property Selection */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <User className="h-5 w-5" />
-                                Tenant & Property Selection
-                            </CardTitle>
-                            <CardDescription>Select the tenant and rental unit for this lease</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                <div className="space-y-2">
-                                    <Label htmlFor="tenant_id">Tenant *</Label>
-                                    <Select value={data.tenant_id} onValueChange={(value) => handleInputChange('tenant_id', value)}>
-                                        <SelectTrigger className={errors.tenant_id ? 'border-red-500' : ''}>
-                                            <SelectValue placeholder="Select a tenant" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {tenants.map((tenant) => (
-                                                <SelectItem key={tenant.id} value={tenant.id.toString()}>
-                                                    {tenant.user_name} ({tenant.email})
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    {errors.tenant_id && <p className="text-sm text-red-500">{errors.tenant_id}</p>}
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="unit_id">Rental Unit *</Label>
-                                    <Select value={data.unit_id} onValueChange={handleUnitChange}>
-                                        <SelectTrigger className={errors.unit_id ? 'border-red-500' : ''}>
-                                            <SelectValue placeholder="Select a rental unit" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {available_units.map((unit) => (
-                                                <SelectItem key={unit.id} value={unit.id.toString()}>
-                                                    {unit.address} {unit.unit_number && `- Unit ${unit.unit_number}`} (${unit.rent_price}/month)
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    {errors.unit_id && <p className="text-sm text-red-500">{errors.unit_id}</p>}
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <TenantPropertyCard
+                        tenant_id={data.tenant_id}
+                        tenants={tenants}
+                        availableUnits={available_units}
+                        unit_id={data.unit_id}
+                        onInputChange={handleInputChange}
+                        onUnitChange={handleUnitChange}
+                        errors={errors}
+                    />
 
                     {/* Lease Terms */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Calendar className="h-5 w-5" />
-                                Lease Terms
-                            </CardTitle>
-                            <CardDescription>Define the lease duration and dates</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                                <div className="space-y-2">
-                                    <Label htmlFor="start_date">Start Date *</Label>
-                                    <Input
-                                        id="start_date"
-                                        type="date"
-                                        value={data.start_date}
-                                        onChange={(e) => handleStartDateChange(e.target.value)}
-                                        className={errors.start_date ? 'border-red-500' : ''}
-                                    />
-                                    {errors.start_date && <p className="text-sm text-red-500">{errors.start_date}</p>}
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="lease_term">Lease Term (Months) *</Label>
-                                    <Select value={data.lease_term} onValueChange={handleLeaseTermChange}>
-                                        <SelectTrigger className={errors.lease_term ? 'border-red-500' : ''}>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="6">6 Months</SelectItem>
-                                            <SelectItem value="12">12 Months</SelectItem>
-                                            <SelectItem value="18">18 Months</SelectItem>
-                                            <SelectItem value="24">24 Months</SelectItem>
-                                            <SelectItem value="36">36 Months</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    {errors.lease_term && <p className="text-sm text-red-500">{errors.lease_term}</p>}
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="end_date">End Date *</Label>
-                                    <Input
-                                        id="end_date"
-                                        type="date"
-                                        value={data.end_date}
-                                        onChange={(e) => handleInputChange('end_date', e.target.value)}
-                                        className={errors.end_date ? 'border-red-500' : ''}
-                                    />
-                                    {errors.end_date && <p className="text-sm text-red-500">{errors.end_date}</p>}
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <LeaseTermsCard
+                        start_date={data.start_date}
+                        lease_term={data.lease_term}
+                        end_date={data.end_date}
+                        onInputChange={handleInputChange}
+                        onLeaseTermChange={handleLeaseTermChange}
+                        onStartDateChange={handleStartDateChange}
+                        errors={errors}
+                    />
 
                     {/* Financial Terms */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <DollarSign className="h-5 w-5" />
-                                Financial Terms
-                            </CardTitle>
-                            <CardDescription>Set the rent amount and security deposit</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                                <div className="space-y-2">
-                                    <Label htmlFor="monthly_rent">Monthly Rent *</Label>
-                                    <div className="relative">
-                                        <DollarSign className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-                                        <Input
-                                            id="monthly_rent"
-                                            type="number"
-                                            placeholder="1800"
-                                            value={data.monthly_rent}
-                                            onChange={(e) => handleInputChange('monthly_rent', e.target.value)}
-                                            className={`pl-10 ${errors.monthly_rent ? 'border-red-500' : ''}`}
-                                        />
-                                    </div>
-                                    {errors.monthly_rent && <p className="text-sm text-red-500">{errors.monthly_rent}</p>}
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="deposit_amount">Security Deposit *</Label>
-                                    <div className="relative">
-                                        <DollarSign className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-                                        <Input
-                                            id="deposit_amount"
-                                            type="number"
-                                            placeholder="1800"
-                                            value={data.deposit_amount}
-                                            onChange={(e) => handleInputChange('deposit_amount', e.target.value)}
-                                            className={`pl-10 ${errors.deposit_amount ? 'border-red-500' : ''}`}
-                                        />
-                                    </div>
-                                    {errors.deposit_amount && <p className="text-sm text-red-500">{errors.deposit_amount}</p>}
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="lease_status">Lease Status</Label>
-                                    <Select value={data.lease_status} onValueChange={(value) => handleInputChange('lease_status', value)}>
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="pending">Pending</SelectItem>
-                                            <SelectItem value="active">Active</SelectItem>
-                                            <SelectItem value="expired">Expired</SelectItem>
-                                            <SelectItem value="terminated">Terminated</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    {errors.lease_status && <p className="text-sm text-red-500">{errors.lease_status}</p>}
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <FinancialTermsCard
+                        monthly_rent={data.monthly_rent}
+                        lease_status={data.lease_status}
+                        deposit_amount={data.deposit_amount}
+                        onInputChange={handleInputChange}
+                        errors={errors}
+                    />
 
                     {/* Terms and Conditions */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <FileText className="h-5 w-5" />
-                                Terms and Conditions
-                            </CardTitle>
-                            <CardDescription>Additional lease terms and conditions</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-2">
-                                <Label htmlFor="terms_and_conditions">Terms and Conditions</Label>
-                                <Textarea
-                                    id="terms_and_conditions"
-                                    placeholder="Enter specific lease terms, rules, and conditions..."
-                                    value={data.terms_and_conditions}
-                                    onChange={(e) => handleInputChange('terms_and_conditions', e.target.value)}
-                                    rows={6}
-                                    className={errors.terms_and_conditions ? 'border-red-500' : ''}
-                                />
-                                {errors.terms_and_conditions && <p className="text-sm text-red-500">{errors.terms_and_conditions}</p>}
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <TermsAndConditionCard terms_and_conditions={data.terms_and_conditions} onInputChange={handleInputChange} errors={errors} />
 
                     {/* Submit Buttons */}
-                    <div className="flex justify-end gap-4">
-                        <Button type="button" variant="outline" onClick={handleCancel} disabled={processing}>
-                            Cancel
-                        </Button>
-                        <Button type="submit" disabled={processing} className="min-w-32">
-                            {processing ? (
-                                <div className="flex items-center gap-2">
-                                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                                    Creating...
-                                </div>
-                            ) : (
-                                <div className="flex items-center gap-2">
-                                    <Save className="h-4 w-4" />
-                                    Create Lease
-                                </div>
-                            )}
-                        </Button>
-                    </div>
+                    <LeaseFormAction onCancel={handleCancel} processing={processing} />
                 </form>
             </div>
         </LandlordLayout>

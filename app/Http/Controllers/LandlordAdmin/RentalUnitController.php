@@ -49,7 +49,6 @@ class RentalUnitController extends Controller
             }
         }
 
-
         $data = [
             'landlord_id' => $validated['landlord_id'],
             'address' => $validated['address'],

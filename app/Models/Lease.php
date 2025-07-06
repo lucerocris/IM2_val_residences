@@ -10,12 +10,15 @@ class Lease extends Model
     use HasFactory;
 
     protected $fillable = [
+        'tenant_id',
+        'unit_id',
         'start_date',
         'end_date',
         'monthly_rent',
         'deposit_amount',
         'lease_term',
         'lease_status',
+        'terms_and_conditions',
     ];
 
     protected $casts = [

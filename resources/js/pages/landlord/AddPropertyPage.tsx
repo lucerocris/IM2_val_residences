@@ -69,7 +69,7 @@ export default function AddProperty({ landlord_id = 1 }: AddPropertyProps) {
         formData.append('availability_status', data.availability_status);
         formData.append('description', data.description);
 
-        // Append amenities as array
+        // Append amenities as an array
         data.amenities.forEach((amenity, index) => {
             formData.append(`amenities[${index}]`, amenity);
         });
@@ -83,7 +83,7 @@ export default function AddProperty({ landlord_id = 1 }: AddPropertyProps) {
         router.post('/landlord/properties', formData, {
             forceFormData: true,
             onSuccess: () => {
-                // Navigate back to properties list
+                // Navigate back to a property list
                 router.visit('/landlord/properties');
             },
             onError: (errors) => {
@@ -93,7 +93,7 @@ export default function AddProperty({ landlord_id = 1 }: AddPropertyProps) {
     };
 
     const handleCancel = () => {
-        // Navigate back to properties list
+        // Navigate back to a property list
         router.visit('/landlord/properties');
     };
 
