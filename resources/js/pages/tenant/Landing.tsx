@@ -1,27 +1,8 @@
 import { useState } from "react";
-import MainLayout from "@/layout/MainLayout";
 import Header from "@/components/main/ui/Header";
-import CarouselText from "@/components/main/ui/CarouselText";
-import Btn from "@/components/main/ui/Button";
 import TenantLayout from "@/layout/TenantLayout";
 import TenantProfileModal from "@/components/tenants/tenantsDashboard/tenant-profile-modal";
-import {
-  CreditCard,
-  Wrench,
-  Home,
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
-  DollarSign,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  LogOut,
-  Eye,
-  Contact,
-  User,
-} from "lucide-react";
+import { User } from "lucide-react";
 import CurrentBill from "@/components/tenants/tenantsDashboard/current-bill";
 import LeaseDetails from '@/components/tenants/tenantsDashboard/lease-details';
 import MaintenanceRequestComponent from "@/components/tenants/tenantsDashboard/maintenance-request";
@@ -30,13 +11,8 @@ import ContactLandlord from "@/components/tenants/tenantsDashboard/contact-landl
 
 
 const TenantDashboard = () => {   
-  const [paymentModalOpen, setPaymentModalOpen] = useState(false)
-  const [maintenanceModalOpen, setMaintenanceModalOpen] = useState(false)
   const [profileModalOpen, setProfileModalOpen] = useState(false)
-  const [paymentMethod, setPaymentMethod] = useState("")
-  const [priorityLevel, setPriorityLevel] = useState("")
 
-  // Mock data following the exact schema
   const tenantData = {
     user_name: "Jose Rivera",
     email: "jose.rivera@email.com",
