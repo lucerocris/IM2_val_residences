@@ -59,7 +59,6 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                                     input = 
                                     {<Input 
                                         id = "Full Name" 
-                                        value = {formData.fullName} 
                                         onChange={(e) => handleInputChange("Full Name", e.target.value)} 
                                         required 
                                     />} 
@@ -73,7 +72,6 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                                     {<Input 
                                         id = "Email"
                                         type = "email"
-                                        value = {formData.email}
                                         onChange = {(e) => handleInputChange("Email", e.target.value)}
                                         required
                                     />}
@@ -89,7 +87,6 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                                     input = 
                                     {<Input 
                                         id = "Phone Number"
-                                        value = {formData.phone}
                                         onChange = {(e) => handleInputChange("Phone Number", e.target.value)}
                                         required
                                     />}
@@ -102,7 +99,6 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                                     input = 
                                     {<Input 
                                         id = "Occupation"
-                                        value = {formData.occupation}
                                         onChange = {(e) => handleInputChange("Occupation", e.target.value)}
                                         required
                                     />}
@@ -118,7 +114,6 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                                     {<Input 
                                         id = "Annual Income"
                                         type = "number"
-                                        value = {formData.annualIncome}
                                         onChange = {(e) => handleInputChange("Annual Income", e.target.value)}
                                         required
                                     />}
@@ -132,7 +127,6 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                                     {<Input 
                                         id = "Preferred Move In Date"
                                         type = "date"
-                                        value = {formData.moveInDate}
                                         onChange = {(e) => handleInputChange("Preferred Move In Date", e.target.value)}
                                         required
                                     />}
@@ -146,7 +140,6 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                                 input = 
                                 {<Textarea 
                                     id = "Additional Message"
-                                    value = {formData.message}
                                     onChange = {(e) => handleInputChange("AdditionalMessage", e.target.value)}
                                     placeholder = "Tell us why you'd be a great tenant..."
                                     rows = {3}
