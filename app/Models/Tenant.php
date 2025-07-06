@@ -33,8 +33,14 @@ class Tenant extends User
             ->get()->count();
     }
 
-    public static function getTableData() {
+    public static function getTableData()
+    {
         return Tenant::with(['leases:id,unit_id', 'currentLease.units:id,address,unit_number'])->withCount(['leases as total_leases', 'maintenanceRequests'])->get();
+    }
+
+    public static function getTenantInfo()
+    {
+        return DB::table('users')->where('user_type', '=', 'tenant')->select('id', 'user_name', 'email')->get();
     }
 
 }

@@ -100,4 +100,8 @@ class RentalUnit extends Model
         return RentalUnit::all()->count();
     }
 
+    public static function getAvailableUnits() {
+        return DB::table('rental_units')->where('availability_status', '=', 'available')->select('id', 'address', 'unit_number', 'rent_price')->get()->toArray();
+    }
+
 }
