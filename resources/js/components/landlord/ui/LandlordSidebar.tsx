@@ -160,7 +160,7 @@ const LandlordSidebar = () => {
             const IconComponent = item.icon;
             if (item.submenu && hasSubmenu) {
                 return (
-                    <Collapsible key={item.name} asChild defaultOpen className="group/collapsible">
+                    <Collapsible key={item.name} asChild className="group/collapsible">
                         <SidebarMenuItem>
                             <CollapsibleTrigger asChild>
                                 <SidebarMenuButton tooltip={item.name}>
