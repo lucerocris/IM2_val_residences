@@ -97,7 +97,7 @@ const [paymentModalOpen, setPaymentModalOpen] = useState(false)
         <>
             <Header links = {[ 
                 {label: "VIEW LISTINGS", href: "/tenant/listings"},
-                {label: "TENANT DASHBOARD", href: "/tenant"},
+                {label: "TENANT DASHBOARD", href: "/tenant/dashboard"},
                 {label: "LOG OUT", href: "/"}
             ]}
             />
