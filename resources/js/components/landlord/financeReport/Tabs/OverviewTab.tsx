@@ -45,7 +45,7 @@ const MonthlyRevenueTrend = ({ monthlyRevenue }: { monthlyRevenue: MonthlyRevenu
                             const isPositive = monthly.profit > 0;
 
                             return (
-                                <div key={idx} className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border">
+                                <div key={idx} className="flex items-center justify-between p-4 rounded-lg border">
                                     <div className="flex-1">
                                         <div className="font-semibold text-lg">{monthly.month}</div>
                                         <div className="text-sm text-gray-600 mt-1">
@@ -106,7 +106,7 @@ const TopPerformingProperties = ({ propertyPerformance }: { propertyPerformance:
                                 ((property.netIncome / property.yearlyRevenue) * 100) : 0;
 
                             return (
-                                <div key={idx} className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border">
+                                <div key={idx} className="flex items-center justify-between p-4 rounded-lg border">
                                     <div className="flex-1">
                                         <div className="font-semibold text-lg">{property.address}</div>
                                         <div className="text-sm text-gray-600 mt-1">
@@ -163,7 +163,7 @@ const FinancialSummary = ({ monthlyRevenue }: { monthlyRevenue: MonthlyRevenue[]
                 {currentMonth ? (
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="p-3 bg-green-50 rounded-lg">
+                            <Card className="p-3 rounded-lg">
                                 <div className="text-sm text-green-700 font-medium">Revenue</div>
                                 <div className="text-xl font-bold text-green-800">
                                     ₱{currentMonth.revenue.toLocaleString()}
@@ -174,9 +174,9 @@ const FinancialSummary = ({ monthlyRevenue }: { monthlyRevenue: MonthlyRevenue[]
                                         {Math.abs(revenueChange).toFixed(1)}% vs last month
                                     </div>
                                 )}
-                            </div>
+                            </Card>
 
-                            <div className="p-3 bg-red-50 rounded-lg">
+                            <Card className="p-3 rounded-lg">
                                 <div className="text-sm text-red-700 font-medium">Expenses</div>
                                 <div className="text-xl font-bold text-red-800">
                                     ₱{currentMonth.expenses.toLocaleString()}
@@ -187,10 +187,10 @@ const FinancialSummary = ({ monthlyRevenue }: { monthlyRevenue: MonthlyRevenue[]
                                         {Math.abs(expenseChange).toFixed(1)}% vs last month
                                     </div>
                                 )}
-                            </div>
+                            </Card>
                         </div>
 
-                        <div className="p-4 bg-blue-50 rounded-lg">
+                        <Card className="p-4 rounded-lg">
                             <div className="text-sm text-blue-700 font-medium">Net Profit</div>
                             <div className="text-2xl font-bold text-blue-800">
                                 ₱{currentMonth.profit.toLocaleString()}
@@ -198,7 +198,7 @@ const FinancialSummary = ({ monthlyRevenue }: { monthlyRevenue: MonthlyRevenue[]
                             <div className="text-xs text-blue-600 mt-1">
                                 {currentMonth.revenue > 0 ? ((currentMonth.profit / currentMonth.revenue) * 100).toFixed(1) : '0'}% profit margin
                             </div>
-                        </div>
+                        </Card>
                     </div>
                 ) : (
                     <div className="p-8 text-center text-gray-500">
@@ -232,27 +232,27 @@ const PropertySummary = ({ propertyPerformance }: { propertyPerformance: Propert
                 {totalProperties > 0 ? (
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="p-3 bg-purple-50 rounded-lg">
+                            <Card className="p-3 rounded-lg">
                                 <div className="text-sm text-purple-700 font-medium">Properties</div>
                                 <div className="text-xl font-bold text-purple-800">{totalProperties}</div>
                                 <div className="text-xs text-purple-600">{totalUnits} total units</div>
-                            </div>
+                            </Card>
 
-                            <div className="p-3 bg-orange-50 rounded-lg">
+                            <Card className="p-3 rounded-lg">
                                 <div className="text-sm text-orange-700 font-medium">Occupancy</div>
                                 <div className="text-xl font-bold text-orange-800">{averageOccupancy.toFixed(1)}%</div>
                                 <div className="text-xs text-orange-600">Average rate</div>
-                            </div>
+                            </Card>
                         </div>
 
                         {bestPerformer && (
-                            <div className="p-4 bg-yellow-50 rounded-lg">
+                            <Card className="p-4 rounded-lg">
                                 <div className="text-sm text-yellow-700 font-medium">Best Performer</div>
                                 <div className="text-lg font-bold text-yellow-800">{bestPerformer.address}</div>
                                 <div className="text-xs text-yellow-600 mt-1">
                                     ₱{bestPerformer.netIncome.toLocaleString()} net income
                                 </div>
-                            </div>
+                            </Card>
                         )}
                     </div>
                 ) : (

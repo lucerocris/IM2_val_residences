@@ -13,23 +13,48 @@ const Rent = ({ rents }: RentProps) => {
     const rentalBills = Array.isArray(rents) ? rents : [];
 
     // Calculate metrics from actual data
-    const totalRent = rentalBills.reduce((sum, bill) => sum + bill.rent_amount, 0);
-    const totalPaid = rentalBills.reduce((sum, bill) => sum + bill.amount_paid, 0);
-    const totalOutstanding = totalRent - totalPaid;
-    const collectionRate = totalRent > 0 ? (totalPaid / totalRent) * 100 : 0;
+    const now = new Date();
+    const availableMonths = rentalBills
+        .map(bill => new Date(bill.billing_date))
+        .sort((a, b) => b.getTime() - a.getTime());
+
+    const targetMonth = availableMonths.length > 0 ? availableMonths[0] : new Date();
+
+    const thisMonthBills = rentalBills.filter(bill => {
+        const billDate = new Date(bill.due_date);
+        return (
+            billDate.getFullYear() === targetMonth.getFullYear() &&
+            billDate.getMonth() === targetMonth.getMonth()
+        );
+    });
+
+    const totalMonthlyRent = thisMonthBills.reduce(
+        (sum, bill) => sum + bill.rent_amount, 0
+    );
+
+    const totalMonthlyPaid = thisMonthBills.reduce(
+        (sum, bill) => sum + Math.min(bill.amount_paid, bill.rent_amount), 0
+    );
+
+    const totalOutstanding = Math.max(
+        0, totalMonthlyRent - totalMonthlyPaid
+    );
+
+    const collectionRate = totalMonthlyRent ?
+        Math.min(100, (totalMonthlyPaid / totalMonthlyRent) * 100) : 0;
 
     // Prepare metrics data for LandlordPageHeaderSection
     const metrics = [
         {
             title: "Total Rent Due",
-            metric: `₱${totalRent.toLocaleString()}`,
-            metricDescription: "This month",
+            metric: `₱${totalMonthlyRent.toLocaleString()}`,
+            metricDescription: "Due this month",
             icon: <DollarSign className="h-4 w-4 text-muted-foreground" />
         },
         {
             title: "Amount Collected",
-            metric: `₱${totalPaid.toLocaleString()}`,
-            metricDescription: "Paid in full",
+            metric: `₱${totalMonthlyPaid.toLocaleString()}`,
+            metricDescription: "Paid this month",
             icon: <CheckCircle className="h-4 w-4 text-green-600" />
         },
         {
