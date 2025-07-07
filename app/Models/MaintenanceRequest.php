@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class MaintenanceRequest extends Model
 {
@@ -19,8 +20,14 @@ class MaintenanceRequest extends Model
         'completion_date',
         'tenants_remarks',
         'landlord_notes',
-        'estimated_costs',
-        'actual_costs'
+        'estimated_cost',
+        'actual_cost'
+    ];
+
+    protected $casts = [
+        'request_date' => 'date',
+        'scheduled_date' => 'date',
+        'completion_date' => 'date',
     ];
 
     public function tenant()
@@ -36,6 +43,102 @@ class MaintenanceRequest extends Model
     public function units()
     {
         return $this->belongsTo(RentalUnit::class, 'unit_id');
+    }
+
+    public static function getMonthlyExpenses($monthsBack = 6) {
+        $data = [];
+
+        for($i = $monthsBack - 1; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+
+            $expenses = self::whereMonth('completion_date', $date->month)
+                ->whereYear('completion_date', $date->year)
+                ->where('request_status', 'completed')
+                ->sum('actual_cost');
+
+            $data[] = [
+                'month' => $date->format('M Y'),
+                'expenses' => (float) $expenses,
+                'date' => $date
+            ];
+        }
+        return $data;
+    }
+
+    public static function getFinancialReportExpenses() {
+        return self::with([
+            'units:id,address,unit_number'
+        ])
+        ->where('request_status', 'completed')
+        ->whereNotNull('actual_cost')
+        ->whereYear('completion_date', Carbon::now()->year)
+        ->get()
+        ->map(function ($request) {
+            if (!$request->units) {
+                return null;
+            }
+
+            return [
+                'id' => $request->id,
+                'date' => $request->completion_date->format('Y-m-d'),
+                'property' => $request->units->address,
+                'unit_number' => $request->units->unit_number,
+                'description' => $request->maintenance_description,
+                'cost' => (float) $request->actual_cost,
+                'category' => ucfirst($request->priority_level),
+                'completion_date' => $request->completion_date->format('Y-m-d'),
+            ];
+        })
+        ->filter()
+        ->values()
+        ->sortByDesc('completion_date')
+        ->toArray();
+    }
+
+    public static function getYearlyExpensesByProperty($year = null) {
+        $year = $year ?: Carbon::now()->year;
+
+        return self::with('units:id,address')
+            ->whereYear('completion_date', $year)
+            ->where('request_status', 'completed')
+            ->whereNotNull('actual_cost')
+            ->get()
+            ->groupBy(function($request) {
+                return $request->units ? $request->units->address : 'Unknown Property';
+            })
+            ->map(function($requests, $address) {
+                return [
+                    'address' => $address,
+                    'yearly_expenses' => (float) $requests->sum('actual_cost')
+                ];
+            })
+            ->values()
+            ->toArray();
+    }
+
+    public static function getRecentExpenses($limit = 20) {
+        return self::with('units:id,address,unit_number')
+            ->where('request_status', 'completed')
+            ->whereNotNull('actual_cost')
+            ->orderBy('completion_date', 'desc')
+            ->limit($limit)
+            ->get()
+            ->map(function ($expense) {
+                if (!$expense->units) {
+                    return null;
+                }
+
+                return [
+                    'date' => $expense->completion_date->format('Y-m-d'),
+                    'property' => $expense->units->address,
+                    'description' => $expense->maintenance_description,
+                    'cost' => (float) $expense->actual_cost,
+                    'category' => ucfirst($expense->priority_level),
+                ];
+            })
+            ->filter()
+            ->values()
+            ->toArray();
     }
 
     public static function getLimitedMaintenanceRequestsWithUnits($limit) {

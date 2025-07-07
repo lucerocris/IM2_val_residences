@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class RentalUnit extends Model
 {
@@ -56,6 +57,69 @@ class RentalUnit extends Model
 
     public function applications() {
         return $this->hasMany(RentalApplication::class, 'unit_id');
+    }
+
+    public static function getPropertyPerformanceData() {
+        return self::with([
+            'leases:id,unit_id,lease_status',
+            'leases.rentalBills:id,lease_id,amount_paid,payment_status,paid_date',
+            'maintenanceRequests:id,unit_id,actual_cost,request_status,completion_date'
+        ])
+        ->selectRaw('id, address, unit_number, rent_price, availability_status')
+        ->get()
+        ->groupBy('address')
+        ->map(function ($units, $address) {
+            $totalUnits = $units->count();
+            $occupiedUnits = $units->where('availability_status', 'occupied')->count();
+            $occupancy = $totalUnits > 0 ? ($occupiedUnits / $totalUnits) * 100 : 0;
+
+            // Calculate average monthly rent for this address
+            $avgMonthlyRent = $units->avg('rent_price');
+
+            // Get yearly revenue from all units at this address
+            $monthlyRevenue = $units->flatMap(function($unit) {
+                return $unit->leases->flatMap->rentalBills;
+            })
+            ->where('payment_status', 'paid')
+            ->whereNotNull('paid_date')
+            ->filter(function($bill){
+                return $bill->paid_date &&
+                       $bill->paid_date->year === Carbon::now()->year &&
+                       $bill->paid_date->month === Carbon::now()->month;
+            })
+            ->sum('amount_paid');
+
+            $yearlyRevenue = $monthlyRevenue * 12;
+
+            // Get maintenance costs for all units at this address
+            $maintenanceCosts = $units->flatMap->maintenanceRequests
+                ->where('request_status', 'completed')
+                ->whereNotNull('actual_cost')
+                ->filter(function($request) {
+                    return $request->completion_date && $request->completion_date->year === Carbon::now()->year;
+                })
+                ->sum('actual_cost');
+
+            $netIncome = $monthlyRevenue - $maintenanceCosts;
+
+            return [
+                'address' => $address,
+                'units' => (int) $totalUnits,
+                'occupancy' => (float) round($occupancy, 1),
+                'monthlyRent' => (float) $avgMonthlyRent,
+                'monthlyRevenue' => (float) $monthlyRevenue,
+                'yearlyRevenue' => (float) $yearlyRevenue,
+                'maintenanceCosts' => (float) $maintenanceCosts,
+                'netIncome' => (float) $netIncome,
+            ];
+        })
+        ->values()
+        ->toArray();
+    }
+
+    // Keep the original method for backward compatibility
+    public static function getPropertyPerformance() {
+        return collect(self::getPropertyPerformanceData());
     }
 
     public static function getNumberOfAvailableUnits() {

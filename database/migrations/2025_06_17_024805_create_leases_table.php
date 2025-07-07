@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->date('terminated_date')->nullable();
             $table->string('termination_reason')->nullable();
             $table->timestamps();
-            $table->decimal('advance_deposit', 10, 2);
+            // $table->decimal('advance_deposit', 10, 2);
 
             // Indexes
             $table->index(['tenant_id', 'lease_status']);

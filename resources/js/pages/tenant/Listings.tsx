@@ -17,7 +17,6 @@ const TenantListings = () => {
         {label: "LOG OUT", href: "/"}
     ];
 
-    // Mock data following the exact schema
     const tenantData = {
         user_name: "Jose Rivera",
         email: "jose.rivera@email.com",

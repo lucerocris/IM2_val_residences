@@ -1,18 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
-interface PropertyPerformance {
-    address: string;
-    units: number;
-    occupancy: number;
-    monthlyRent: number;
-    yearlyRevenue: number;
-    maintenanceCosts: number;
-    netIncome: number;
-}
+import { PropertyPerformance } from '@/types/financialReport.types';
 
 interface PropertiesTableProps {
-    propertyPerformance: PropertyPerformance[]
+    propertyPerformance: PropertyPerformance[];
 }
 
 const PropertiesTable = ( { propertyPerformance }:PropertiesTableProps) => {

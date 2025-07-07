@@ -1,12 +1,7 @@
 import MainLayout from "@/layout/MainLayout";
 import Header from "@/components/main/ui/Header";
-import CarouselText from "@/components/main/ui/CarouselText";
-
 
 const tenantHome = () => {   
-    const title = "Welcome, Cris"
-    const subtitle = "Signed in as User"
-
     return(
         <>
             <Header links = {[
