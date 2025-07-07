@@ -14,11 +14,8 @@ const Rent = ({ rents }: RentProps) => {
 
     // Calculate metrics from actual data
     const now = new Date();
-    const availableMonths = rentalBills
-        .map(bill => new Date(bill.billing_date))
-        .sort((a, b) => b.getTime() - a.getTime());
 
-    const targetMonth = availableMonths.length > 0 ? availableMonths[0] : new Date();
+    const targetMonth = now;
 
     const thisMonthBills = rentalBills.filter(bill => {
         const billDate = new Date(bill.due_date);
