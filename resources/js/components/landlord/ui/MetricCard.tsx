@@ -19,7 +19,7 @@ const MetricCard = ({ title, metric, metricDescription, Icon, className }: Metri
             </CardHeader>
             <CardContent>
                 <div className="text-2xl font-bold">{metric}</div>
-                <p className="text-xs text-muted-foreground">{metricDescription}</p>
+                <div className="text-xs text-muted-foreground">{metricDescription}</div>
             </CardContent>
         </Card>
     );

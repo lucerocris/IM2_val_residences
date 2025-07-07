@@ -2,58 +2,22 @@ import DashboardCardContent from '@/components/landlord/dashboard/ui/DashboardCa
 import DashboardCardHeader from '@/components/landlord/dashboard/ui/DashboardCardHeader';
 import QuickActionsButtons from '@/components/landlord/dashboard/ui/QuickActionsButtons';
 import LandlordPageHeader from '@/components/landlord/ui/LandlordPageHeader';
-import LandlordTextHeader from '@/components/landlord/ui/LandlordTextHeader';
-import MetricCard from '@/components/landlord/ui/MetricCard';
+import MetricGrid from '@/components/landlord/ui/MetricGrid';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import LandlordLayout from '@/layout/LandlordLayout';
+import { Link } from '@inertiajs/react';
 import { AlertCircle, Building2, Calendar, DollarSign, Eye, FileText, Plus, TrendingUp, Users, Wrench } from 'lucide-react';
-import MetricGrid from '@/components/landlord/ui/MetricGrid';
 
 type MaintenanceRequest = {
     id: number;
-    unit: string;
-    issue: string;
-    priority: string;
-    status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
-    requestDate: string;
+    unit_number: string;
+    request_status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+    priority_level: string;
+    maintenance_description: string;
+    request_date: string;
 };
-
-const maintenanceRequests: MaintenanceRequest[] = [
-    {
-        id: 1,
-        unit: 'Unit 6B',
-        issue: 'Leaky faucet in kitchen',
-        priority: 'medium',
-        status: 'pending',
-        requestDate: '2024-01-25',
-    },
-    {
-        id: 2,
-        unit: 'Unit 11A',
-        issue: 'Heating system not working',
-        priority: 'high',
-        status: 'in_progress',
-        requestDate: '2024-01-24',
-    },
-    {
-        id: 3,
-        unit: 'Unit 2C',
-        issue: 'Broken window lock',
-        priority: 'low',
-        status: 'pending',
-        requestDate: '2024-01-23',
-    },
-    {
-        id: 4,
-        unit: 'Unit 14B',
-        issue: 'Electrical outlet not working',
-        priority: 'urgent',
-        status: 'pending',
-        requestDate: '2024-01-26',
-    },
-];
 
 type RecentActivities = {
     id: number;
@@ -111,19 +75,6 @@ const upcomingExpirations: UpcomingExpirations[] = [
     { id: 4, unit: 'Unit 9A', tenant: 'Emma Davis', endDate: '2024-03-22', daysLeft: 53 },
 ];
 
-const mockData = {
-    metrics: {
-        totalUnits: 24,
-        occupiedUnits: 18,
-        availableUnits: 6,
-        monthlyRevenue: 20000,
-    },
-    financialData: {
-        monthlyRevenue: [38000, 42000, 45600, 44200, 46800, 45600],
-        months: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
-    },
-};
-
 const getPriorityColor = (priority: string) => {
     switch (priority) {
         case 'urgent':
@@ -152,35 +103,50 @@ const getStatusColor = (status: string) => {
     }
 };
 
-const metricData = [
-    {
-        title: "Total Units",
-        metric: mockData.metrics.totalUnits,
-        metricDescription: `${mockData.metrics.occupiedUnits} occupied, ${mockData.metrics.availableUnits} available`,
-        icon: <Building2 className="h-4 w-4 text-muted-foreground" />,
-    },
-    {
-        title: "Monthly Revenue",
-        metric: `₱${mockData.metrics.monthlyRevenue.toLocaleString()}`,
-        metricDescription: (
-            <p className="mt-1 flex items-center text-xs text-green-600">
-                <TrendingUp className="mr-1 h-3 w-3" />
-                +8.2% from last month
-            </p>
-        ),
-        icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
-    },
-    {
-        title: "Pending Requests",
-        metric: maintenanceRequests.filter((req) => req.status === "pending").length,
-        metricDescription: "Maintenance requests",
-        icon: <AlertCircle className="h-4 w-4 text-muted-foreground" />,
-    },
-]
+interface DashboardPageProps {
+    numberOfUnits: number;
+    numberOfOccupiedUnits: number;
+    numberOfAvailableUnits: number;
+    paidRentalBillsThisMonth: number;
+    numberOfMaintenanceRequest: number;
+    maintenanceRequests: MaintenanceRequest[];
+}
 
+const DashboardPage = ({
+    numberOfUnits,
+    numberOfAvailableUnits,
+    numberOfOccupiedUnits,
+    paidRentalBillsThisMonth,
+    numberOfMaintenanceRequest,
+    maintenanceRequests,
+}: DashboardPageProps) => {
+    const metricData = [
+        {
+            title: 'Total Units',
+            metric: numberOfUnits,
+            metricDescription: `${numberOfOccupiedUnits} occupied, ${numberOfAvailableUnits} available`,
+            icon: <Building2 className="h-4 w-4 text-muted-foreground" />,
+        },
+        {
+            title: 'Monthly Revenue',
+            metric: paidRentalBillsThisMonth,
+            metricDescription: (
+                <p className="mt-1 flex items-center text-xs text-green-600">
+                    <TrendingUp className="mr-1 h-3 w-3" />
+                    +8.2% from last month
+                </p>
+            ),
+            icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
+        },
 
+        {
+            title: 'Pending Requests',
+            metric: numberOfMaintenanceRequest,
+            metricDescription: 'Maintenance requests',
+            icon: <AlertCircle className="h-4 w-4 text-muted-foreground" />,
+        },
+    ];
 
-const DashboardPage = () => {
     return (
         <>
             <LandlordLayout>
@@ -190,16 +156,18 @@ const DashboardPage = () => {
                         title={'Dashboard'}
                         subtitle={'Overview of your rental properties and operations'}
                         actions={
-                            <Button size="sm">
-                                <Plus className="mr-2 h-4 w-4" />
-                                Add Unit
+                            <Button size="sm" asChild>
+                                <Link href="/landlord/properties/create">
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Add Property
+                                </Link>
                             </Button>
                         }
                     />
 
                     {/* Key Metrics */}
                     <div className="flex w-full gap-5">
-                        <MetricGrid metrics={metricData} className={"grid flex-1 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1"} />
+                        <MetricGrid metrics={metricData} className={'grid flex-1 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1'} />
                         {/* Recent Activities */}
                         <div className="flex-1">
                             <Card>
@@ -262,18 +230,18 @@ const DashboardPage = () => {
                                 items={maintenanceRequests}
                                 renderItems={(request: MaintenanceRequest) => (
                                     <div key={request.id} className="flex items-start gap-3 rounded-lg border p-3">
-                                        <div className={`mt-1 h-3 w-3 rounded-full ${getPriorityColor(request.priority)}`}></div>
+                                        <div className={`mt-1 h-3 w-3 rounded-full ${getPriorityColor(request.priority_level)}`}></div>
                                         <div className="flex-1">
                                             <div className="flex items-center justify-between">
-                                                <p className="font-medium">{request.unit}</p>
-                                                <Badge className={getStatusColor(request.status)}>
-                                                    {request.status.replace('_', ' ').charAt(0).toUpperCase() +
-                                                        request.status.replace('_', ' ').slice(1)}
+                                                <p className="font-medium">{request.unit_number}</p>
+                                                <Badge className={getStatusColor(request.request_status)}>
+                                                    {request.request_status.replace('_', ' ').charAt(0).toUpperCase() +
+                                                        request.request_status.replace('_', ' ').slice(1)}
                                                 </Badge>
                                             </div>
-                                            <p className="mt-1 text-sm text-gray-600">{request.issue}</p>
+                                            <p className="mt-1 text-sm text-gray-600">{request.maintenance_description}</p>
                                             <p className="mt-1 text-xs text-gray-500">
-                                                Priority: {request.priority} • {request.requestDate}
+                                                Priority: {request.priority_level} • {request.request_date}
                                             </p>
                                         </div>
                                     </div>

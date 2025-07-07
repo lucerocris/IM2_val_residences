@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 
 class RentalBill extends Model
@@ -21,5 +22,12 @@ class RentalBill extends Model
 
     public function leases() {
         return $this->belongsTo(Lease::class);
+    }
+
+    public static function getPaidRevenueThisMonth($startOfMonth, $endOfMonth) {
+        return DB::table('rental_bills')
+            ->whereIn('payment_status', ['partial', 'paid'])
+            ->whereBetween('paid_date', [$startOfMonth, $endOfMonth])
+            ->sum('rent_amount');
     }
 }

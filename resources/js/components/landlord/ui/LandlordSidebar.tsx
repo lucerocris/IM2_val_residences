@@ -24,16 +24,10 @@ import {
     User,
     Home,
     Users,
-    FileText,
     DollarSign,
     Wrench,
     HelpCircle,
-    UserCheck,
-    FileCheck,
-    Receipt,
-    BarChart3,
-    ClipboardList,
-    History
+    File
 } from 'lucide-react';
 import React from 'react';
 
@@ -92,12 +86,30 @@ const tenantsNavigation: NavigationType[] = [
                 href: '/landlord/applications',
             },
             {
-                name: 'Lease Management',
-                href: '/landlord/leases',
+                name: 'Add Tenant',
+                href: '/landlord/tenants/create',
             },
         ],
     },
 ];
+
+const leaseNavigation: NavigationType[] = [
+    {
+        name: 'Leases',
+        href: 'leases',
+        icon: File,
+        submenu: [
+            {
+                name: 'Leases',
+                href: '/landlord/leases',
+            },
+            {
+                name: 'Add Lease',
+                href: '/landlord/leases/create',
+            },
+        ]
+    }
+]
 
 
 const paymentsNavigation: NavigationType[] = [
@@ -148,7 +160,7 @@ const LandlordSidebar = () => {
             const IconComponent = item.icon;
             if (item.submenu && hasSubmenu) {
                 return (
-                    <Collapsible key={item.name} asChild defaultOpen className="group/collapsible">
+                    <Collapsible key={item.name} asChild className="group/collapsible">
                         <SidebarMenuItem>
                             <CollapsibleTrigger asChild>
                                 <SidebarMenuButton tooltip={item.name}>
@@ -221,6 +233,7 @@ const LandlordSidebar = () => {
                         <SidebarMenu>
                             {renderNavigationGroup(propertiesNavigation)}
                             {renderNavigationGroup(tenantsNavigation)}
+                            {renderNavigationGroup(leaseNavigation)}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
