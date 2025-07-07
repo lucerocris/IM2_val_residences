@@ -89,6 +89,8 @@ class RentalUnit extends Model
             })
             ->sum('amount_paid');
 
+            $yearlyRevenue = $monthlyRevenue * 12;
+
             // Get maintenance costs for all units at this address
             $maintenanceCosts = $units->flatMap->maintenanceRequests
                 ->where('request_status', 'completed')
@@ -106,6 +108,7 @@ class RentalUnit extends Model
                 'occupancy' => (float) round($occupancy, 1),
                 'monthlyRent' => (float) $avgMonthlyRent,
                 'monthlyRevenue' => (float) $monthlyRevenue,
+                'yearlyRevenue' => (float) $yearlyRevenue,
                 'maintenanceCosts' => (float) $maintenanceCosts,
                 'netIncome' => (float) $netIncome,
             ];
