@@ -4,11 +4,19 @@ namespace App\Http\Controllers\LandlordAdmin;
 
 use App\Http\Controllers\Controller; 
 use Inertia\Inertia;
+use App\Models\RentalBill;
 
 class FinanceController extends Controller
 {
     public function rent() {
-        return Inertia::render('landlord/RentCollection');
+        $rentData = RentalBill::getTableData();
+
+            
+
+        return Inertia::render('landlord/RentCollection', [
+            'rentData' => $rentData,
+            'rents' => $rentData,
+        ]);
     }
 
     public function report() {
