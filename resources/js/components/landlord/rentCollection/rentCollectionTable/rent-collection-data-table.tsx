@@ -27,7 +27,7 @@ interface RentCollectionDataTableProps<TData, TValue> {
 
 export function RentCollectionDataTable<TData, TValue>({
     columns,
-    data = [], 
+    data = [],
 }: RentCollectionDataTableProps<TData, TValue>) {
     // Add comprehensive safety checks
     const safeData = (() => {
@@ -35,7 +35,7 @@ export function RentCollectionDataTable<TData, TValue>({
             console.warn('Data is null or undefined, using empty array');
             return [];
         }
-        
+
         if (!Array.isArray(data)) {
             console.warn('Data is not an array, attempting to convert or using empty array');
             // If it's an object, try to extract an array property
@@ -47,14 +47,10 @@ export function RentCollectionDataTable<TData, TValue>({
             }
             return [];
         }
-        
+
         return data;
     })();
 
-    console.log('RentCollectionDataTable received data:', data);
-    console.log('Safe data being used:', safeData);
-    console.log('Safe data length:', safeData.length);
-    
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -94,12 +90,12 @@ export function RentCollectionDataTable<TData, TValue>({
             const bill = row.original as RentalBill;
             return bill.payment_status !== 'paid';
         });
-        
+
         if (unpaidBills.length === 0) {
             alert('No unpaid bills selected');
             return;
         }
-        
+
         console.log(`Sending reminders to ${unpaidBills.length} unpaid bills`);
         // Implementation for sending reminders
     }
@@ -158,9 +154,9 @@ export function RentCollectionDataTable<TData, TValue>({
 
                 <div className="flex items-center space-x-2">
                     {selectedUnpaidCount > 0 && (
-                        <Button 
-                            variant="outline" 
-                            size="sm" 
+                        <Button
+                            variant="outline"
+                            size="sm"
                             className="h-8"
                             onClick={handleSendAllReminders}
                         >
@@ -168,10 +164,10 @@ export function RentCollectionDataTable<TData, TValue>({
                             Send Reminders ({selectedUnpaidCount})
                         </Button>
                     )}
-                    
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
+
+                    <Button
+                        variant="outline"
+                        size="sm"
                         className="h-8"
                         onClick={handleExportData}
                     >
@@ -220,14 +216,14 @@ export function RentCollectionDataTable<TData, TValue>({
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
                                     <div className="flex flex-col items-center justify-center space-y-2">
                                         <div className="text-muted-foreground">
-                                            {safeData.length === 0 
+                                            {safeData.length === 0
                                                 ? "No rental bills found. Generate bills to get started."
                                                 : "No bills match your current filters."
                                             }
                                         </div>
                                         {safeData.length === 0 && (
-                                            <Button 
-                                                variant="outline" 
+                                            <Button
+                                                variant="outline"
                                                 size="sm"
                                                 onClick={handleGenerateBills}
                                             >

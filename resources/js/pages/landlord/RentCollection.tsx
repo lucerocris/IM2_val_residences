@@ -11,7 +11,7 @@ interface RentProps {
 const Rent = ({ rents }: RentProps) => {
     // Add error handling and default to empty array
     const rentalBills = Array.isArray(rents) ? rents : [];
-    
+
     // Calculate metrics from actual data
     const totalRent = rentalBills.reduce((sum, bill) => sum + bill.rent_amount, 0);
     const totalPaid = rentalBills.reduce((sum, bill) => sum + bill.amount_paid, 0);
@@ -49,7 +49,7 @@ const Rent = ({ rents }: RentProps) => {
     return (
         <LandlordLayout>
             <div className="space-y-6">
-                <div className="container mx-auto px-4 py-8">
+                <div className="container mx-auto px-4">
                     {/* Header Section with Data Summary */}
                     <LandlordPageHeaderSection
                         title="Rent Collection"
@@ -59,9 +59,9 @@ const Rent = ({ rents }: RentProps) => {
 
                     {/* Rental Bills Table */}
                     <div className="mt-8">
-                        <RentCollectionDataTable 
-                            columns={rentCollectionColumns} 
-                            data={rents} 
+                        <RentCollectionDataTable
+                            columns={rentCollectionColumns}
+                            data={rents}
                         />
                     </div>
                 </div>

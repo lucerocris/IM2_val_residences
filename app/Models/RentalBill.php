@@ -40,21 +40,21 @@ class RentalBill extends Model
 
     public static function getTableData() {
         return RentalBill::with([
-            'lease:id,tenant_id,unit_id',           
-            'lease.units:id,address,unit_number',   
-            'lease.tenant:id,user_name,user_contact_number' 
+            'lease:id,tenant_id,unit_id',
+            'lease.units:id,address,unit_number',
+            'lease.tenant:id,user_name,user_contact_number'
         ])
-        ->whereHas('lease') // Only get bills that have an associated lease
+        ->whereHas('lease')
         ->get()
         ->map(function ($bill) {
-            // Add null checks for safety
+
             if (!$bill->lease || !$bill->lease->tenant || !$bill->lease->units) {
-                return null; // Skip this bill if relationships are missing
+                return null; // Null check, skip this if empty
             }
 
             return [
                 'id' => $bill->id,
-                'lease' => [ // Changed from 'leases' to 'lease' to match frontend interface
+                'lease' => [
                     'id' => $bill->lease->id,
                     'tenant' => [
                         'id' => $bill->lease->tenant->id,
@@ -75,8 +75,8 @@ class RentalBill extends Model
                 'payment_status' => $bill->payment_status,
             ];
         })
-        ->filter() // Remove null entries
-        ->values() // Re-index the array
+        ->filter()
+        ->values()
         ->toArray();
     }
 }

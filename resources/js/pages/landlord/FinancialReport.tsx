@@ -136,7 +136,7 @@ const FinanceReport = () => {
   return (
     <LandlordLayout>
       <div className="space-y-6">
-        <div className="w-full px-6 py-8">
+        <div className="w-full px-6">
           {/* Header Section with Data Summary */}
           <LandlordPageHeaderSection
             title="Financial Reports"
