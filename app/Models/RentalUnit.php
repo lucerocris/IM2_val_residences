@@ -77,13 +77,15 @@ class RentalUnit extends Model
             $avgMonthlyRent = $units->avg('rent_price');
 
             // Get yearly revenue from all units at this address
-            $yearlyRevenue = $units->flatMap(function($unit) {
+            $monthlyRevenue = $units->flatMap(function($unit) {
                 return $unit->leases->flatMap->rentalBills;
             })
             ->where('payment_status', 'paid')
             ->whereNotNull('paid_date')
-            ->filter(function($bill) {
-                return $bill->paid_date && $bill->paid_date->year === Carbon::now()->year;
+            ->filter(function($bill){
+                return $bill->paid_date &&
+                       $bill->paid_date->year === Carbon::now()->year &&
+                       $bill->paid_date->month === Carbon::now()->month;
             })
             ->sum('amount_paid');
 
@@ -96,14 +98,14 @@ class RentalUnit extends Model
                 })
                 ->sum('actual_cost');
 
-            $netIncome = $yearlyRevenue - $maintenanceCosts;
+            $netIncome = $monthlyRevenue - $maintenanceCosts;
 
             return [
                 'address' => $address,
                 'units' => (int) $totalUnits,
                 'occupancy' => (float) round($occupancy, 1),
                 'monthlyRent' => (float) $avgMonthlyRent,
-                'yearlyRevenue' => (float) $yearlyRevenue,
+                'monthlyRevenue' => (float) $monthlyRevenue,
                 'maintenanceCosts' => (float) $maintenanceCosts,
                 'netIncome' => (float) $netIncome,
             ];

@@ -63,7 +63,7 @@ class FinanceController extends Controller
 
     private function calculateMetrics($monthlyRevenue, $propertyPerformance)
     {
-        $totalYearlyRevenue = collect($propertyPerformance)->sum('yearlyRevenue');
+        $totalMonthlyRevenue = collect($propertyPerformance)->sum('monthlyRevenue');
         $totalMaintenanceCosts = collect($propertyPerformance)->sum('maintenanceCosts');
         $totalNetIncome = collect($propertyPerformance)->sum('netIncome');
         $averageOccupancy = collect($propertyPerformance)->avg('occupancy');
@@ -80,7 +80,7 @@ class FinanceController extends Controller
         }
 
         return [
-            'totalYearlyRevenue' => (float) $totalYearlyRevenue,
+            'totalMonthlyRevenue' => (float) $totalMonthlyRevenue,
             'totalMaintenanceCosts' => (float) $totalMaintenanceCosts,
             'totalNetIncome' => (float) $totalNetIncome,
             'averageOccupancy' => (float) round($averageOccupancy ?: 0, 1),

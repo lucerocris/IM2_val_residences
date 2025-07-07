@@ -14,7 +14,7 @@ interface FinancialReportProps {
     propertyPerformance: PropertyPerformance[];
     maintenanceExpenses: MaintenanceExpense[];
     metrics: {
-        totalYearlyRevenue: number;
+        totalMonthlyRevenue: number;
         totalMaintenanceCosts: number;
         totalNetIncome: number;
         averageOccupancy: number;
@@ -27,7 +27,7 @@ const FinanceReport = ({
                            propertyPerformance = [],
                            maintenanceExpenses = [],
                            metrics = {
-                               totalYearlyRevenue: 0,
+                               totalMonthlyRevenue: 0,
                                totalMaintenanceCosts: 0,
                                totalNetIncome: 0,
                                averageOccupancy: 0,
@@ -40,7 +40,7 @@ const FinanceReport = ({
     const metricsData = [
         {
             title: "Total Revenue",
-            metric: `₱${metrics.totalYearlyRevenue.toLocaleString()}`,
+            metric: `₱${metrics.totalMonthlyRevenue.toLocaleString()}`,
             metricDescription: (
                 <span className="flex items-center text-sm text-muted-foreground">
           <TrendingUp className="w-3 h-3 mr-1" />
@@ -54,7 +54,7 @@ const FinanceReport = ({
             metric: `₱${metrics.totalNetIncome.toLocaleString()}`,
             metricDescription: (
                 <span className="flex items-center text-sm text-muted-foreground">
-          {metrics.totalYearlyRevenue > 0 ? ((metrics.totalNetIncome / metrics.totalYearlyRevenue) * 100).toFixed(1) : '0'}% profit margin
+          {metrics.totalMonthlyRevenue > 0 ? ((metrics.totalNetIncome / metrics.totalMonthlyRevenue) * 100).toFixed(1) : '0'}% profit margin
         </span>
             ),
             icon: <TrendingUp className="h-4 w-4 text-green-600" />
@@ -64,7 +64,7 @@ const FinanceReport = ({
             metric: `₱${metrics.totalMaintenanceCosts.toLocaleString()}`,
             metricDescription: (
                 <span className="flex items-center text-sm text-muted-foreground">
-          {metrics.totalYearlyRevenue > 0 ? ((metrics.totalMaintenanceCosts / metrics.totalYearlyRevenue) * 100).toFixed(1) : '0'}% of revenue
+          {metrics.totalMonthlyRevenue > 0 ? ((metrics.totalMaintenanceCosts / metrics.totalMonthlyRevenue) * 100).toFixed(1) : '0'}% of revenue
         </span>
             ),
             icon: <Wrench className="h-4 w-4 text-orange-600" />
