@@ -26,6 +26,10 @@ Route::get('/tenant/dashboard', [TenantController::class, 'index']);
 
 Route::get('/tenant/listings', [TenantController::class, 'listings']);
 
+Route::get('/tenant/payments/gcash', [TenantController::class, 'gcash']);
+Route::get('/tenant/payments/paymaya', [TenantController::class, 'paymaya']);
+Route::get('/tenant/payments/bankTransfer', [TenantController::class, 'bank']);
+
 // Prospective Tenant
 Route::get('/user',[UserController::class, 'index'])->name('user.dashboard');
 Route::get('/user/listings', [UserController::class, 'listings']);

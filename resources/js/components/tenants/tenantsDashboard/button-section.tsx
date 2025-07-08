@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -140,7 +141,6 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
                             <SelectItem value = "gcash">GCash</SelectItem>
                             <SelectItem value = "paymaya">PayMaya</SelectItem>
                             <SelectItem value = "bank-transfers">Bank Transfer</SelectItem>
-                            <SelectItem value = "credit-card">Credit Card</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -153,7 +153,19 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
                     <InputLabel label = "Reference Number" input = {<Input id = "reference" placeholder = "Enter reference number" value = {referenceNumber} onChange = {(e) => setReferenceNumber(e.target.value)} />} />
                 </div>
 
-                <Button className = "w-full" disabled = {!paymentMethod || !referenceNumber.trim()}>
+                <Button 
+                    className = "w-full" 
+                    disabled = {!paymentMethod || !referenceNumber.trim()}
+                    onClick = {() => {
+                        if(paymentMethod === "gcash") {
+                            router.visit("/tenant/payments/gcash");
+                        } else if (paymentMethod === "paymaya") {
+                            router.visit("/tenant/payments/paymaya");
+                        } else if (paymentMethod === "bank-transfers") {
+                            router.visit("/tenant/payments/bankTransfer");
+                        }
+                    }}
+                    >
                     <CreditCard className = "w-4 h-4 mr-2"/>
                     Proceed to Payment
                 </Button>
