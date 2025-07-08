@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 // COMPONENTS HERE ( TO BE MADE )
 import ListingsFilter from "./Filter";
-import SubscriptionModal from "./subscription-modal";
 import ListingsGrid from "./listing-grid";
 import { ViewDetailsModal } from "./view-details-modal";
 import ApplyModal from "./apply-modal";
@@ -177,9 +176,6 @@ const ListingsMain = () => {
               onApply={handleApply}
             />
 
-              <SubscriptionModal 
-                open = {subscriptionModalOpen} onOpenChange = {setSubscriptionModalOpen}
-              />
               <ViewDetailsModal
                 open = {viewDetailsModalOpen} onOpenChange = {setViewDetailsModalOpen} listing = {selectedListing}
               />

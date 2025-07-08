@@ -24,13 +24,6 @@ const ListingsFilter = ({ propertyTypeFilter, setPropertyTypeFilter, maxRentFilt
                     <h1 className = "text-3xl font-bold text-gray-900">Available Units</h1>
 
                     <div className = "flex items-center gap-3">
-                        <Button
-                          variant = "outline"
-                          onClick = {onSubscriptionClick}
-                          className = "flex items-center gap-2">
-                            <Bell className = "size-4"/>
-                            Get Notified
-                        </Button>
                         <Badge
                           variant = "secondary"
                           className = "text-sm">
