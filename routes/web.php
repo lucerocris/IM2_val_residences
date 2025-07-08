@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Http\Controllers\MainSection;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\UserController;
@@ -12,6 +11,8 @@ use App\Http\Controllers\LandlordAdmin\FinanceController;
 use App\Http\Controllers\LandlordAdmin\MaintenanceController;
 use App\Http\Controllers\LandlordAdmin\RentalApplicationController;
 use App\Http\Controllers\LandlordAdmin\LeaseController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 
 //landing section
@@ -19,7 +20,11 @@ Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
 Route::get('/contact', [MainSection::class, 'contact']);
 
-
+//Auth pages
+Route::get('/login', [AuthenticatedSessionController::class, 'create']);
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::get('/register', [RegisteredUserController::class, 'create']);
+Route::post('/register', [RegisteredUserController::class, 'store']);
 
 // Tenant User
 Route::get('/tenant/dashboard', [TenantController::class, 'index']);

@@ -81,6 +81,19 @@ class User extends Authenticatable
         'monthly_income' => 'decimal:2',
     ];
 
+    /**
+     * Get the user's dashboard URL based on their type.
+     */
+    public function getDashboardUrl(): string
+    {
+        return match ($this->user_type) {
+            'landlord' => '/landlord/dashboard',
+            'tenant' => '/tenant/dashboard',
+            'prospective_tenant' => '/user',
+            default => '/'
+        };
+    }
+
     public function ownedUnits() {
         return $this->hasMany(RentalUnit::class, 'landlord_id');
     }
