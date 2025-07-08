@@ -13,6 +13,8 @@ use App\Http\Controllers\LandlordAdmin\MaintenanceController;
 use App\Http\Controllers\LandlordAdmin\RentalApplicationController;
 use App\Http\Controllers\LandlordAdmin\LeaseController;
 
+
+//landing section
 Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
 Route::get('/contact', [MainSection::class, 'contact']);
@@ -20,10 +22,7 @@ Route::get('/contact', [MainSection::class, 'contact']);
 
 
 // Tenant User
-
-
 Route::get('/tenant/dashboard', [TenantController::class, 'index']);
-
 Route::get('/tenant/listings', [TenantController::class, 'listings']);
 
 // Prospective Tenant
@@ -57,3 +56,7 @@ Route::get('/landlord/payments/report', [FinanceController::class, 'report']);
 
 // Landlord maintenance requests
 Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index']);
+
+
+//
+

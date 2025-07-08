@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { DollarSign, MapPin } from 'lucide-react';
+import { PhilippinePeso, MapPin } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -68,7 +68,7 @@ const PropertyInfoCard = ({data, errors, onInputChange}: PropertyFormProps) => {
                         <div className="space-y-2">
                             <Label htmlFor="rent_price">Monthly Rent *</Label>
                             <div className="relative">
-                                <DollarSign className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+                                <PhilippinePeso className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
                                 <Input
                                     id="rent_price"
                                     type="number"

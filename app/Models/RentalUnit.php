@@ -170,7 +170,7 @@ class RentalUnit extends Model
 
 
     public static function getListingsData() {
-        return DB::table('rental_units')->select('id','address','unit_number','available_status', 'floor_area', 'rent_price','property_type', 'description', 'amenities', 'unit_photos')->get()->toArray();
+        return DB::table('rental_units')->select('id','address','unit_number','availability_status', 'floor_area', 'rent_price','property_type', 'description', 'amenities', 'unit_photos')->get()->toArray();
     }
 }
 
