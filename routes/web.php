@@ -14,6 +14,8 @@ use App\Http\Controllers\LandlordAdmin\LeaseController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
+
+//landing section
 Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
 Route::get('/contact', [MainSection::class, 'contact']);
@@ -59,3 +61,7 @@ Route::get('/landlord/payments/report', [FinanceController::class, 'report']);
 
 // Landlord maintenance requests
 Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index']);
+
+
+//
+

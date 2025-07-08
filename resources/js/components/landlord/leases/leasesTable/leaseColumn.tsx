@@ -1,5 +1,5 @@
     import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2, User, Building, Calendar, DollarSign, FileText } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2, User, Building, Calendar, PhilippinePeso, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -94,6 +94,8 @@ const propertyTypeConfig = {
 };
 
 export const leaseColumns: ColumnDef<Lease>[] = [
+
+
     {
         id: 'select',
         header: ({ table }) => (
@@ -240,7 +242,7 @@ export const leaseColumns: ColumnDef<Lease>[] = [
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    <DollarSign className="mr-2 h-4 w-4" />
+                    <PhilippinePeso className="mr-2 h-4 w-4" />
                     Financial
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
@@ -252,10 +254,10 @@ export const leaseColumns: ColumnDef<Lease>[] = [
             return (
                 <div className="flex flex-col">
                     <span className="font-medium text-sm">
-                        ${lease.monthly_rent.toLocaleString()}/month
+                        ₱{lease.monthly_rent.toLocaleString()}/month
                     </span>
                     <span className="text-xs text-muted-foreground">
-                        Deposit: ${lease.deposit_amount.toLocaleString()}
+                        Deposit: ₱{lease.deposit_amount.toLocaleString()}
                     </span>
                 </div>
             );
@@ -343,7 +345,7 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                             <FileText className="mr-2 h-4 w-4" /> View contract
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                            <DollarSign className="mr-2 h-4 w-4" /> Manage bills
+                            <PhilippinePeso className="mr-2 h-4 w-4" /> Manage bills
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <User className="mr-2 h-4 w-4" /> Contact tenant

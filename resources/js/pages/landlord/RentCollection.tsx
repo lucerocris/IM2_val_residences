@@ -4,129 +4,59 @@ import { DollarSign, AlertCircle, CheckCircle, Clock } from "lucide-react"
 import { RentCollectionDataTable } from '@/components/landlord/rentCollection/rentCollectionTable/rent-collection-data-table'
 import { rentCollectionColumns, type RentalBill } from '@/components/landlord/rentCollection/rentCollectionTable/rent-collection-columns'
 
-const mockRentalBills: RentalBill[] = [
-  {
-    id: 1,
-    lease_id: 1,
-    tenant_name: "John Smith",
-    unit_address: "123 Oak Street",
-    unit_number: "A",
-    billing_date: "2024-01-01",
-    rent_amount: 1500.0,
-    due_date: "2024-01-05",
-    paid_date: "2024-01-03",
-    amount_paid: 1500.0,
-    payment_status: "paid",
-    tenant_contact: "john.smith@email.com",
-  },
-  {
-    id: 2,
-    lease_id: 2,
-    tenant_name: "Sarah Johnson",
-    unit_address: "456 Pine Avenue",
-    unit_number: "B",
-    billing_date: "2024-01-01",
-    rent_amount: 1800.0,
-    due_date: "2024-01-05",
-    paid_date: undefined,
-    amount_paid: 0,
-    payment_status: "overdue",
-    tenant_contact: "sarah.johnson@email.com",
-  },
-  {
-    id: 3,
-    lease_id: 3,
-    tenant_name: "Mike Davis",
-    unit_address: "789 Elm Drive",
-    unit_number: "C",
-    billing_date: "2024-01-01",
-    rent_amount: 1600.0,
-    due_date: "2024-01-05",
-    paid_date: undefined,
-    amount_paid: 800.0,
-    payment_status: "partial",
-    tenant_contact: "mike.davis@email.com",
-  },
-  {
-    id: 4,
-    lease_id: 4,
-    tenant_name: "Emily Wilson",
-    unit_address: "321 Maple Court",
-    unit_number: "D",
-    billing_date: "2024-01-01",
-    rent_amount: 1400.0,
-    due_date: "2024-01-05",
-    paid_date: undefined,
-    amount_paid: 0,
-    payment_status: "pending",
-    tenant_contact: "emily.wilson@email.com",
-  },
-  {
-    id: 5,
-    lease_id: 5,
-    tenant_name: "David Brown",
-    unit_address: "654 Cedar Lane",
-    unit_number: "E",
-    billing_date: "2024-01-01",
-    rent_amount: 1700.0,
-    due_date: "2024-01-05",
-    paid_date: "2024-01-04",
-    amount_paid: 1700.0,
-    payment_status: "paid",
-    tenant_contact: "david.brown@email.com",
-  },
-  {
-    id: 6,
-    lease_id: 6,
-    tenant_name: "Lisa Martinez",
-    unit_address: "987 Birch Street",
-    billing_date: "2024-01-01",
-    rent_amount: 1550.0,
-    due_date: "2023-12-25",
-    paid_date: undefined,
-    amount_paid: 0,
-    payment_status: "overdue",
-    tenant_contact: "lisa.martinez@email.com",
-  },
-  {
-    id: 7,
-    lease_id: 7,
-    tenant_name: "Robert Chen",
-    unit_address: "234 Spruce Avenue",
-    unit_number: "F",
-    billing_date: "2024-01-01",
-    rent_amount: 1650.0,
-    due_date: "2024-01-08",
-    paid_date: undefined,
-    amount_paid: 0,
-    payment_status: "pending",
-    tenant_contact: "robert.chen@email.com",
-  },
-]
+interface RentProps {
+    rents: RentalBill[];
+}
 
-const Rent = () => {
-    const totalRent = mockRentalBills.reduce((sum, bill) => sum + bill.rent_amount, 0)
-    const totalPaid = mockRentalBills.reduce((sum, bill) => sum + bill.amount_paid, 0)
-    const totalPending = totalRent - totalPaid
-    const collectionRate = totalRent > 0 ? ((totalPaid / totalRent) * 100) : 0
+const Rent = ({ rents }: RentProps) => {
+    // Add error handling and default to empty array
+    const rentalBills = Array.isArray(rents) ? rents : [];
+
+    // Calculate metrics from actual data
+    const now = new Date();
+
+    const targetMonth = now;
+
+    const thisMonthBills = rentalBills.filter(bill => {
+        const billDate = new Date(bill.due_date);
+        return (
+            billDate.getFullYear() === targetMonth.getFullYear() &&
+            billDate.getMonth() === targetMonth.getMonth()
+        );
+    });
+
+    const totalMonthlyRent = thisMonthBills.reduce(
+        (sum, bill) => sum + bill.rent_amount, 0
+    );
+
+    const totalMonthlyPaid = thisMonthBills.reduce(
+        (sum, bill) => sum + Math.min(bill.amount_paid, bill.rent_amount), 0
+    );
+
+    const totalOutstanding = Math.max(
+        0, totalMonthlyRent - totalMonthlyPaid
+    );
+
+    const collectionRate = totalMonthlyRent ?
+        Math.min(100, (totalMonthlyPaid / totalMonthlyRent) * 100) : 0;
 
     // Prepare metrics data for LandlordPageHeaderSection
     const metrics = [
         {
             title: "Total Rent Due",
-            metric: `₱${totalRent.toLocaleString()}`,
-            metricDescription: "This month",
+            metric: `₱${totalMonthlyRent.toLocaleString()}`,
+            metricDescription: "Due this month",
             icon: <DollarSign className="h-4 w-4 text-muted-foreground" />
         },
         {
             title: "Amount Collected",
-            metric: `₱${totalPaid.toLocaleString()}`,
-            metricDescription: "Paid in full",
+            metric: `₱${totalMonthlyPaid.toLocaleString()}`,
+            metricDescription: "Paid this month",
             icon: <CheckCircle className="h-4 w-4 text-green-600" />
         },
         {
             title: "Outstanding",
-            metric: `₱${totalPending.toLocaleString()}`,
+            metric: `₱${totalOutstanding.toLocaleString()}`,
             metricDescription: "Pending payment",
             icon: <AlertCircle className="h-4 w-4 text-red-600" />
         },
@@ -141,7 +71,7 @@ const Rent = () => {
     return (
         <LandlordLayout>
             <div className="space-y-6">
-                <div className="container mx-auto px-4 py-8">
+                <div className="container mx-auto px-4">
                     {/* Header Section with Data Summary */}
                     <LandlordPageHeaderSection
                         title="Rent Collection"
@@ -151,9 +81,9 @@ const Rent = () => {
 
                     {/* Rental Bills Table */}
                     <div className="mt-8">
-                        <RentCollectionDataTable 
-                            columns={rentCollectionColumns} 
-                            data={mockRentalBills} 
+                        <RentCollectionDataTable
+                            columns={rentCollectionColumns}
+                            data={rents}
                         />
                     </div>
                 </div>
@@ -163,5 +93,3 @@ const Rent = () => {
 };
 
 export default Rent;
-
-

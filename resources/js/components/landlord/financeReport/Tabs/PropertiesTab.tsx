@@ -1,16 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 import PropertiesTable from "../Tables/PropertiesTable";
-
-interface PropertyPerformance {
-    address: string;
-    units: number;
-    occupancy: number;
-    monthlyRent: number;
-    yearlyRevenue: number;
-    maintenanceCosts: number;
-    netIncome: number;
-}
+import { PropertyPerformance} from '@/types/financialReport.types';
 
 interface PropertiesTabProps {
     propertyPerformance: PropertyPerformance[]

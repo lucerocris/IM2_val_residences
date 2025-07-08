@@ -1,5 +1,4 @@
 import MainLayout from '@/layout/MainLayout'
-import CarouselText from '@/components/main/ui/CarouselText';
 import Btn from '@/components/main/ui/Button';
 import Header from '@/components/main/ui/Header';
 import LoginModal from '@/components/main/ui/LoginModal';
@@ -7,10 +6,6 @@ import SignUpModal from '@/components/main/ui/SignUpModal';
 import { MapPinned, Phone, Mail } from 'lucide-react'
 
 const landing = () => {
-    const desc = "Have questions or need more details about our apartments? Contact us today!";
-    const btnLabel = "Get in Touch";
-    const title = "Contact Us";
-
     return(
         <>
             <Header links = {[
@@ -25,13 +20,11 @@ const landing = () => {
                 </>
             }
             />
-            <MainLayout carouselText = {<CarouselText description= {desc} buttonLabel = {btnLabel} title = {title} />} >
+            <MainLayout>
                 <div className = "pt-[4.3rem] pb-[4.3rem]">
                     <div className = "p-[4.3rem] flex items-center justify-center">
                         <div className = "w-[80%] max-w-[1000px] p-[20px] h-auto bg-[#e8e8e8] flex">
-                            {/* Contact Info part */}
                             <ContactInfo />
-                            {/* Form part */}
                             <Form />
                         </div>
                     </div>
