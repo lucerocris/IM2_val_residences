@@ -5,10 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+use App\Models\RentalUnit;
+
+
 class MainSection extends Controller
 {
     public function home() {
-        return Inertia::render('main/landing');
+        $Listings = RentalUnit::getListingsData();
+        dd($Listings);
+        return Inertia::render('main/landing',[
+            'ListingsData' => $Listings
+
+        ]);
+
     }
 
     public function about() {
@@ -19,5 +28,5 @@ class MainSection extends Controller
         return Inertia::render('main/ContactUs');
     }
 
-    
-}  
+
+}
