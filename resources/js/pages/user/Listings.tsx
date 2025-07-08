@@ -1,30 +1,27 @@
-import MainLayout from "@/layout/MainLayout";
-import Header from "@/components/main/ui/Header";
-import { CardContent } from "../main/landing";
-import CarouselText from "@/components/main/ui/CarouselText";
+import ListingsLayout from "@/layout/ListingsLayout";
 import ListingsMain from "@/components/main/ui/Listings/main";
 
-const TenantListings = () => {
+const UserListings = () => {
     const title = "Welcome, Cris"
-    const subtitle = "Signed in as User"
-    const desc = "Wake up to refreshing mornings in our apartments at Corona del Mar, a Spanish Mediterranean-inspired seaside community in Cebu."
-    const btnLabel = "VIEW LISTINGS"
+    const subtitle = "Discover your perfect home among our premium rental collection in the heart of Cebu."
+    const buttonLabel = "VIEW LISTINGS"
+
+    const headerLinks = [
+        {label: "VIEW LISTINGS", href: "/user/listings"},
+        {label: "USER DASHBOARD", href: "/user"},
+        {label: "LOG OUT", href: "/"}
+    ];
 
     return(
-        <>
-            <Header links = {[
-                {label: "VIEW LISTINGS", href: "/user/listings"},
-                {label: "TENANT DASHBOARD", href: "/user"},
-                {label: "LOG OUT", href: "/"}
-            ]}
-            />
-            <MainLayout>
-                <div className = "w-full pt-[4.3rem] pb-[4.3rem] bg-white">
-                    <ListingsMain />
-                </div>    
-            </MainLayout>
-        </>
+        <ListingsLayout
+            title={title}
+            subtitle={subtitle}
+            buttonLabel={buttonLabel}
+            headerLinks={headerLinks}
+        >
+            <ListingsMain />
+        </ListingsLayout>
     );
 }
 
-export default TenantListings;
+export default UserListings;

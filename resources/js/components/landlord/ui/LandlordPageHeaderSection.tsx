@@ -18,13 +18,13 @@ interface LandlordPageHeaderSectionProps {
 
 const LandlordPageHeaderSection = ({title, subtitle, metric, action}: LandlordPageHeaderSectionProps) => {
     return (
-        <>
+        <div className = "space-y-4">
             {/* Header */}
             <LandlordPageHeader title={title} subtitle={subtitle}  actions={action ? action : undefined}  />
 
             {/* Metric Grid Cards */}
             <MetricGrid metrics={metric} />
-        </>
+        </div>
     );
 };
 

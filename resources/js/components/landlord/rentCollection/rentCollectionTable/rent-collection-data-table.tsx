@@ -27,15 +27,37 @@ interface RentCollectionDataTableProps<TData, TValue> {
 
 export function RentCollectionDataTable<TData, TValue>({
     columns,
-    data,
+    data = [],
 }: RentCollectionDataTableProps<TData, TValue>) {
+    // Add comprehensive safety checks
+    const safeData = (() => {
+        if (!data) {
+            console.warn('Data is null or undefined, using empty array');
+            return [];
+        }
+
+        if (!Array.isArray(data)) {
+            console.warn('Data is not an array, attempting to convert or using empty array');
+            // If it's an object, try to extract an array property
+            if (typeof data === 'object') {
+                const arrayValues = Object.values(data).filter(Array.isArray);
+                if (arrayValues.length > 0) {
+                    return arrayValues[0] as TData[];
+                }
+            }
+            return [];
+        }
+
+        return data;
+    })();
+
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
 
     const table = useReactTable({
-        data,
+        data: safeData, // Use the safe data
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -63,14 +85,37 @@ export function RentCollectionDataTable<TData, TValue>({
     const hasActiveFilters = table.getState().columnFilters.length > 0
 
     const handleSendAllReminders = () => {
-        // Implementation for sending reminders to all unpaid bills
-        console.log("Sending reminders to all unpaid bills")
+        const selectedRows = table.getFilteredSelectedRowModel().rows;
+        const unpaidBills = selectedRows.filter(row => {
+            const bill = row.original as RentalBill;
+            return bill.payment_status !== 'paid';
+        });
+
+        if (unpaidBills.length === 0) {
+            alert('No unpaid bills selected');
+            return;
+        }
+
+        console.log(`Sending reminders to ${unpaidBills.length} unpaid bills`);
+        // Implementation for sending reminders
     }
 
     const handleExportData = () => {
+        const dataToExport = table.getFilteredRowModel().rows.map(row => row.original);
+        console.log('Exporting rent collection data:', dataToExport);
         // Implementation for exporting rent collection data
-        console.log("Exporting rent collection data")
     }
+
+    const handleGenerateBills = () => {
+        console.log('Generate new bills clicked');
+        // Implementation for generating new bills
+    }
+
+    // Get count of selected unpaid bills for action buttons
+    const selectedUnpaidCount = table.getFilteredSelectedRowModel().rows.filter(row => {
+        const bill = row.original as RentalBill;
+        return bill.payment_status !== 'paid';
+    }).length;
 
     return (
         <div className="space-y-4">
@@ -108,9 +153,21 @@ export function RentCollectionDataTable<TData, TValue>({
                 </div>
 
                 <div className="flex items-center space-x-2">
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
+                    {selectedUnpaidCount > 0 && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8"
+                            onClick={handleSendAllReminders}
+                        >
+                            <Send className="mr-2 h-4 w-4" />
+                            Send Reminders ({selectedUnpaidCount})
+                        </Button>
+                    )}
+
+                    <Button
+                        variant="outline"
+                        size="sm"
                         className="h-8"
                         onClick={handleExportData}
                     >
@@ -158,11 +215,22 @@ export function RentCollectionDataTable<TData, TValue>({
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
                                     <div className="flex flex-col items-center justify-center space-y-2">
-                                        <div className="text-muted-foreground">No rental bills found.</div>
-                                        <Button variant="outline" size="sm">
-                                            <Plus className="mr-2 h-4 w-4" />
-                                            Generate bills
-                                        </Button>
+                                        <div className="text-muted-foreground">
+                                            {safeData.length === 0
+                                                ? "No rental bills found. Generate bills to get started."
+                                                : "No bills match your current filters."
+                                            }
+                                        </div>
+                                        {safeData.length === 0 && (
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={handleGenerateBills}
+                                            >
+                                                <Plus className="mr-2 h-4 w-4" />
+                                                Generate bills
+                                            </Button>
+                                        )}
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -171,7 +239,8 @@ export function RentCollectionDataTable<TData, TValue>({
                 </Table>
             </div>
 
+            {/* Pagination */}
             <DataTablePagination table={table} />
         </div>
     )
-} 
+}

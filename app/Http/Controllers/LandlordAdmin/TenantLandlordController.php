@@ -22,8 +22,11 @@ class TenantLandlordController extends Controller
         ]);
     }
 
-
    public function create() {
         return Inertia::render('landlord/AddTenantPage');
+   }
+
+   public function store() {
+        
    }
 }

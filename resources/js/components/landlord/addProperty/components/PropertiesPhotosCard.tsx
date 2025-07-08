@@ -19,7 +19,7 @@ const PropertiesPhotosCard = ({ photos, onPhotoUpload, onPhotoRemove, errors }: 
         // Validate files
         const validFiles = files.filter((file) => {
             const isValidType = file.type.startsWith('image/');
-            const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
+            const isValidSize = file.size <= 5 * 1024 * 1024;
             return isValidType && isValidSize;
         });
 

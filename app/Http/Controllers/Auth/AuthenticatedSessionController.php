@@ -39,6 +39,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+
         $redirectUrl = $this->authService->getRedirectUrl($user);
 
         return redirect()->intended($redirectUrl);
@@ -56,4 +57,6 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+
+
 }
