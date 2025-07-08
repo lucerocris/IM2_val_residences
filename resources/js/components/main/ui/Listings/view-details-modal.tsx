@@ -5,7 +5,6 @@ import { MapPin, Home } from "lucide-react"
 
 interface Listing {
   id: number
-  landlord_id: number
   address: string
   unit_number: string
   availability_status: string
@@ -15,7 +14,6 @@ interface Listing {
   description: string
   amenities: string[]
   unit_photos: string[]
-  landlord_name: string
 }
 
 interface ViewDetailsModalProps {
@@ -46,7 +44,7 @@ export function ViewDetailsModal({ open, onOpenChange, listing }: ViewDetailsMod
         <DialogHeader>
           <DialogTitle>Property Details</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           {/* Property Images */}
           <div className="grid grid-cols-2 gap-2">

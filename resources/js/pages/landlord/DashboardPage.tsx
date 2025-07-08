@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import LandlordLayout from '@/layout/LandlordLayout';
 import { Link } from '@inertiajs/react';
-import { AlertCircle, Building2, Calendar, DollarSign, Eye, FileText, Plus, TrendingUp, Users, Wrench } from 'lucide-react';
+import { AlertCircle, Building2, Calendar, PhilippinePeso, Eye, FileText, Plus, TrendingUp, Users, Wrench } from 'lucide-react';
 
 type MaintenanceRequest = {
     id: number;
@@ -136,7 +136,7 @@ const DashboardPage = ({
                     +8.2% from last month
                 </p>
             ),
-            icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
+            icon: <PhilippinePeso className="h-4 w-4 text-muted-foreground" />,
         },
 
         {
@@ -261,7 +261,7 @@ const DashboardPage = ({
                                 <QuickActionsButtons icon={<Plus className="h-5 w-5" />} buttonTitle={'Add Unit'} />
                                 <QuickActionsButtons icon={<Users className="h-5 w-5" />} buttonTitle={'New Tenant'} />
                                 <QuickActionsButtons icon={<FileText className="h-5 w-5" />} buttonTitle={'Create Lease'} />
-                                <QuickActionsButtons icon={<DollarSign className="h-5 w-5" />} buttonTitle={'Record Payment'} />
+                                <QuickActionsButtons icon={<PhilippinePeso className="h-5 w-5" />} buttonTitle={'Record Payment'} />
                                 <QuickActionsButtons icon={<Wrench className="h-5 w-5" />} buttonTitle={'Maintenance'} />
                                 <QuickActionsButtons icon={<Eye className="h-5 w-5" />} buttonTitle={'View Reports'} />
                             </div>
