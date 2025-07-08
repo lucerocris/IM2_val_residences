@@ -18,7 +18,7 @@ class RegisteredUserController extends Controller
 
 
     public function create() {
-        return Inertia::render('Auth/RegisterPage');
+        return Inertia::render('authentication/RegisterPage');
     }
 
     public function store(RegisterRequest $request) {
