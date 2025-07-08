@@ -18,44 +18,59 @@ Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
 Route::get('/contact', [MainSection::class, 'contact']);
 
-//Auth pages
-Route::get('/login', [AuthenticatedSessionController::class, 'create']);
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-Route::get('/register', [RegisteredUserController::class, 'create']);
-Route::post('/register', [RegisteredUserController::class, 'store']);
 
-// Tenant User
-Route::get('/tenant/dashboard', [TenantController::class, 'index']);
-Route::get('/tenant/listings', [TenantController::class, 'listings']);
+//Guest Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('/register', [RegisteredUserController::class, 'store']);
+});
 
-// Prospective Tenant
-Route::get('/user',[UserController::class, 'index'])->name('user.dashboard');
-Route::get('/user/listings', [UserController::class, 'listings']);
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+});
+
+//Tenant Routes
+Route::middleware('auth', 'user.type:tenant')->group(function () {
+    Route::get('/tenant/dashboard', [TenantController::class, 'index']);
+    Route::get('/tenant/listings', [TenantController::class, 'listings']);
+});
 
 
-// Landlord Dashboard
-Route::get('/landlord/dashboard', [DashboardController::class, 'index']);
+Route::middleware('auth', 'user.type:prospective_tenant')->group(function () {
+    // Prospective Tenant
+    Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
+    Route::get('/user/listings', [UserController::class, 'listings']);
+});
+
+
+Route::middleware('auth', 'user.type:landlord')->group(function () {
+    // Landlord Dashboard
+    Route::get('/landlord/dashboard', [DashboardController::class, 'index']);
 
 // Landlord Rental Unit
-Route::get('/landlord/properties', [RentalUnitController::class, 'index'])->name('landlord.properties');
-Route::post('/landlord/properties', [RentalUnitController::class, 'store']);
-Route::get('/landlord/properties/create', [RentalUnitController::class, 'create']);
+    Route::get('/landlord/properties', [RentalUnitController::class, 'index'])->name('landlord.properties');
+    Route::post('/landlord/properties', [RentalUnitController::class, 'store']);
+    Route::get('/landlord/properties/create', [RentalUnitController::class, 'create']);
 
 // Landlord Tenants
-Route::get('/landlord/tenants', [TenantLandlordController::class, 'index']);
-Route::get('/landlord/tenants/create', [TenantLandlordController::class, 'create']);
+    Route::get('/landlord/tenants', [TenantLandlordController::class, 'index']);
+    Route::get('/landlord/tenants/create', [TenantLandlordController::class, 'create']);
 
 // Landlord applications
-Route::get('/landlord/applications', [RentalApplicationController::class, 'index']);
+    Route::get('/landlord/applications', [RentalApplicationController::class, 'index']);
 
 // Landlord leases
-Route::get('/landlord/leases', [LeaseController::class, 'index'])->name('leases.index');
-Route::get('/landlord/leases/create', [LeaseController::class, 'create']);
-Route::post('/landlord/leases', [LeaseController::class, 'store']);
+    Route::get('/landlord/leases', [LeaseController::class, 'index'])->name('leases.index');
+    Route::get('/landlord/leases/create', [LeaseController::class, 'create']);
+    Route::post('/landlord/leases', [LeaseController::class, 'store']);
 
 // Landlord payments
-Route::get('/landlord/payments/rent-collection', [FinanceController::class, 'rent']);
-Route::get('/landlord/payments/report', [FinanceController::class, 'report']);
+    Route::get('/landlord/payments/rent-collection', [FinanceController::class, 'rent']);
+    Route::get('/landlord/payments/report', [FinanceController::class, 'report']);
 
 // Landlord maintenance requests
-Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index']);
+    Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index']);
+});
+
