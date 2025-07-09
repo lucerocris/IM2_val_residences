@@ -19,12 +19,12 @@ class RentalApplication extends Model
         'review_notes',
     ];
 
-    public function prospectiveTenants()
+    public function prospectiveTenant()
     {
-        return $this->belongsTo(User::class, 'prospective_tenant_id');
+        return $this->belongsTo(ProspectiveTenant::class, 'prospective_tenant_id');
     }
 
-    public function rentalUnits()
+    public function rentalUnit()
     {
         return $this->belongsTo(RentalUnit::class, 'unit_id');
     }
@@ -32,9 +32,9 @@ class RentalApplication extends Model
     public static function getApplicationsData()
     {
         return RentalApplication::with(
-            ['prospectiveTenants:id,user_name,email,user_contact_number,monthly_income,current_address,employment_status',
-                'rentalUnits:id,address,unit_number,property_type,rent_price,availability_status,landlord_id',
-            'rentalUnits.landlord:id,user_name'])->get();
+            ['prospectiveTenant:id,user_name,email,user_contact_number,monthly_income,current_address,employment_status',
+                'rentalUnit:id,address,unit_number,property_type,rent_price,availability_status,landlord_id',
+            'rentalUnit.landlord:id,user_name'])->get();
     }
 
     public static function getNumberOfPendingApplications() {

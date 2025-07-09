@@ -68,16 +68,16 @@ const ApplicationModal = ({
                     <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
                             <AvatarFallback className="bg-primary text-primary-foreground">
-                                {application.prospective_tenants.user_name
+                                {application.prospective_tenant.user_name
                                     .split(' ')
                                     .map((n) => n[0])
                                     .join('')}
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
-                            <DialogTitle className="text-xl font-semibold">{application.prospective_tenants.user_name}</DialogTitle>
+                            <DialogTitle className="text-xl font-semibold">{application.prospective_tenant.user_name}</DialogTitle>
                             <DialogDescription className="text-base">
-                                {application.rental_units.address} {application.rental_units.unit_number}
+                                {application.rental_unit.address} {application.rental_unit.unit_number}
                             </DialogDescription>
                         </div>
                         <div className="flex items-center gap-2">
@@ -97,15 +97,15 @@ const ApplicationModal = ({
                                 <CardTitle className="text-base font-medium">Applicant Details</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-2">
-                                <InfoRow icon={Mail} label="Email" value={application.prospective_tenants.email} />
-                                <InfoRow icon={Phone} label="Phone" value={application.prospective_tenants.user_contact_number} />
+                                <InfoRow icon={Mail} label="Email" value={application.prospective_tenant.email} />
+                                <InfoRow icon={Phone} label="Phone" value={application.prospective_tenant.user_contact_number} />
                                 <InfoRow
                                     icon={DollarSign}
                                     label="Monthly Income"
-                                    value={`$${application.prospective_tenants.monthly_income.toLocaleString()}`}
+                                    value={`$${application.prospective_tenant.monthly_income.toLocaleString()}`}
                                 />
-                                <InfoRow icon={Briefcase} label="Employment" value={application.prospective_tenants.employment_status} />
-                                <InfoRow icon={MapPin} label="Current Address" value={application.prospective_tenants.current_address} />
+                                <InfoRow icon={Briefcase} label="Employment" value={application.prospective_tenant.employment_status} />
+                                <InfoRow icon={MapPin} label="Current Address" value={application.prospective_tenant.current_address} />
                             </CardContent>
                         </Card>
 
@@ -117,19 +117,19 @@ const ApplicationModal = ({
                                 <InfoRow
                                     icon={Home}
                                     label="Address"
-                                    value={`${application.rental_units.address} ${application.rental_units.unit_number}`}
+                                    value={`${application.rental_unit.address} ${application.rental_unit.unit_number}`}
                                 />
-                                <InfoRow icon={DollarSign} label="Monthly Rent" value={`$${application.rental_units.rent_price.toLocaleString()}`} />
-                                <InfoRow icon={Home} label="Property Type" value={application.rental_units.property_type} />
+                                <InfoRow icon={DollarSign} label="Monthly Rent" value={`$${application.rental_unit.rent_price.toLocaleString()}`} />
+                                <InfoRow icon={Home} label="Property Type" value={application.rental_unit.property_type} />
                                 <InfoRow icon={CheckCircle} label="Availability">
-                                    {getAvailabilityBadge(application.rental_units.availability_status)}
+                                    {getAvailabilityBadge(application.rental_unit.availability_status)}
                                 </InfoRow>
                                 <InfoRow
                                     icon={CalendarDays}
                                     label="Preferred Move-in"
                                     value={new Date(application.preferred_move_in_date).toLocaleDateString()}
                                 />
-                                <InfoRow icon={User} label="Landlord" value={application.rental_units.landlord.user_name} />
+                                <InfoRow icon={User} label="Landlord" value={application.rental_unit.landlord.user_name} />
                             </CardContent>
                         </Card>
                     </div>

@@ -69,26 +69,23 @@ const ApplicationCard = ({ application, onViewDetails }: ApplicationCardProps) =
                         <CardTitle className="flex items-center gap-2">
                             <Avatar className="h-8 w-8">
                                 <AvatarFallback>
-                                    {application.prospective_tenants.user_name
+                                    {application.prospective_tenant.user_name
                                         .split(' ')
                                         .map((n) => n[0])
                                         .join('')}
                                 </AvatarFallback>
                             </Avatar>
-                            {application.prospective_tenants.user_name}
+                            {application.prospective_tenant.user_name}
                         </CardTitle>
                         <CardDescription className="flex items-center gap-4">
-                                                    <span className="flex items-center gap-1">
-                                                        <Home className="h-4 w-4" />
-                                                        {application.rental_units.address} {application.rental_units.unit_number}
-                                                    </span>
                             <span className="flex items-center gap-1">
-                                                        <CalendarDays className="h-4 w-4" />
-                                                        Applied:{' '}
-                                {application.application_date
-                                    ? new Date(application.application_date).toLocaleDateString()
-                                    : 'N/A'}
-                                                    </span>
+                                <Home className="h-4 w-4" />
+                                {application.rental_unit.address} {application.rental_unit.unit_number}
+                            </span>
+                            <span className="flex items-center gap-1">
+                                <CalendarDays className="h-4 w-4" />
+                                Applied: {application.application_date ? new Date(application.application_date).toLocaleDateString() : 'N/A'}
+                            </span>
                         </CardDescription>
                     </div>
                     <div className="flex items-center gap-2">
@@ -103,11 +100,11 @@ const ApplicationCard = ({ application, onViewDetails }: ApplicationCardProps) =
                 <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-3">
                     <div className="flex items-center gap-2">
                         <DollarSign className="h-4 w-4 text-muted-foreground" />
-                        <span>Income: ${application.prospective_tenants.monthly_income.toLocaleString()}/mo</span>
+                        <span>Income: ${application.prospective_tenant.monthly_income.toLocaleString()}/mo</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <Home className="h-4 w-4 text-muted-foreground" />
-                        <span>Rent: ${application.rental_units.rent_price.toLocaleString()}/mo</span>
+                        <span>Rent: ${application.rental_unit.rent_price.toLocaleString()}/mo</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <CalendarDays className="h-4 w-4 text-muted-foreground" />
@@ -121,7 +118,7 @@ const ApplicationCard = ({ application, onViewDetails }: ApplicationCardProps) =
                 )}
             </CardContent>
         </Card>
-    )
+    );
 }
 
 export default ApplicationCard;

@@ -169,11 +169,7 @@ class RentalBill extends Model
         ->toArray();
     }
 
-    public static function getNumberOfOverdueBills() {
 
-        $currentDate = Carbon::now();
-        return DB::table('rental_bills')->where('due_date', '<', $currentDate)->where('amount_paid', '=', 0)->where('')->get()->count();
-    }
 
 
 }

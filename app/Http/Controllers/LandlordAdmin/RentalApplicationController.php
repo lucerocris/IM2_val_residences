@@ -56,9 +56,16 @@ class RentalApplicationController extends Controller
                 'reviewed_date' => now(),
                 'review_notes' => $request->notes,
             ]);
-
-            return back()->with('success', 'Application rejected successfully.');
         }
+
+
+        $applications = RentalApplication::getApplicationsData()->toArray();
+
+        return back()->with([
+            'success'          => 'Application '.$request->action.' successfully!',
+            'applicationsData' => $applications,
+        ]);
+
     }
 
     public function sendMessage(Request $request, RentalApplication $application)

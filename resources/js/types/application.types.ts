@@ -10,7 +10,7 @@ export interface RentalApplication {
     review_notes: string | null;
     created_at: string;
     updated_at: string;
-    prospective_tenants: {
+    prospective_tenant: {
         id: string;
         user_name: string;
         email: string;
@@ -19,7 +19,7 @@ export interface RentalApplication {
         current_address: string;
         employment_status: string;
     };
-    rental_units: {
+    rental_unit: {
         id: string;
         address: string;
         unit_number: string;

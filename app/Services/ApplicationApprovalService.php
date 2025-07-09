@@ -36,11 +36,19 @@ class ApplicationApprovalService
                 // 5. Create lease record (optional - you might want to do this separately)
                 $lease = $this->createLeaseRecord($application);
 
+                // Reload the user through the Tenant model so that the correct
+                // global scope (user_type = 'tenant') is applied. Using
+                // ProspectiveTenant::fresh() would return null because the row
+                // no longer matches the prospective_tenant scope after the
+                // update above.
+
+                $tenant = \App\Models\Tenant::find($prospectiveTenant->id);
+
                 return [
                     'success' => true,
                     'message' => 'Application approved successfully',
-                    'tenant' => $prospectiveTenant->fresh(),
-                    'lease' => $lease,
+                    'tenant'  => $tenant,
+                    'lease'   => $lease,
                 ];
             });
         } catch (\Exception $e) {
@@ -54,20 +62,28 @@ class ApplicationApprovalService
 
     private function convertProspectiveTenantToTenant(User $prospectiveTenant, RentalApplication $application): void
     {
-        // Update user type from prospective_tenant to tenant
-        $prospectiveTenant->update([
+        Log::info("Converting prospective tenant {$prospectiveTenant->id} to tenant. Current user_type: {$prospectiveTenant->user_type}");
+
+        // Update through the base User model to bypass STI restrictions
+        // that might prevent changing user_type on a subclass instance
+        $updated = User::withoutGlobalScopes()->where('id', $prospectiveTenant->id)->update([
             'user_type' => 'tenant',
             'move_in_date' => $application->preferred_move_in_date,
-            // Keep prospective tenant data but add tenant-specific fields
             'employment_status' => $prospectiveTenant->employment_status,
-            'tenant_occupation' => $prospectiveTenant->employment_status, // Map employment to occupation
+            'tenant_occupation' => $prospectiveTenant->employment_status,
             'emergency_contact' => $prospectiveTenant->emergency_contact ?? null,
         ]);
+
+        Log::info("Update result: {$updated} row(s) affected");
+
+        // Verify the update
+        $verifyUser = User::withoutGlobalScopes()->find($prospectiveTenant->id);
+        Log::info("After update - user_type: {$verifyUser->user_type}");
     }
 
-    private function updateUnitAvailability(RentalUnit $unit): void
+    private function updateUnitAvailability(RentalUnit $rentalUnit): void
     {
-        $unit->update([
+        $rentalUnit->update([
             'availability_status' => 'occupied'
         ]);
     }
