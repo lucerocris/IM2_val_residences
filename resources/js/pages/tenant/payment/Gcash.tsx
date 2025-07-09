@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, QrCode, CheckCircle } from "lucide-react";
+import InputLabel from "@/components/tenants/tenantsDashboard/contact-landlord-inputs";
 
 const GcashPayment = () => {
     const [proofFile, setProofFile] = useState<File | null > (null)
@@ -109,7 +110,101 @@ const GcashPayment = () => {
                             </CardHeader>
                             <CardContent>
                                 <form onSubmit = {handleSubmit}>
-                                    
+                                    <div>
+                                        <InputLabel 
+                                        label = "ref" 
+                                        labelText = "GCash Reference Number"
+                                        input = {<Input 
+                                            id = "ref"
+                                            value = {referenceNumber}
+                                            onChange = {(e) => setReferenceNumber(e.target.value)}
+                                            placeholder = "Enter reference number"
+                                            required
+                                        />}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <Label className = "text-base font-medium flex items-center gap-2 mb-3">
+                                            <Upload className = "size-5" />
+                                            Proof of Payment
+                                        </Label>
+                                        <p className = "text-sm">Upload your GCash transaction screenshot</p>
+
+                                        <div 
+                                        className = "border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors"
+                                        onDrop = {(e) => {
+                                            e.preventDefault()
+                                            const files = e.dataTransfer.files
+                                            if(files.length > 0) {
+                                                setProofFile(files[0])
+                                            }
+                                        }}
+                                        onDragOver = {(e) => e.preventDefault()}
+                                        onDragEnter = {(e) => e.preventDefault()}
+                                        >
+                                            <Input 
+                                                type = "file"
+                                                id = "proof-upload"
+                                                accept = "image/*"
+                                                onChange = {handleFileChange}
+                                                className = "hidden"
+                                                required
+                                            />
+
+                                            {!proofFile ? (
+                                                <label htmlFor="proof-upload" className = "cursor-pointer">
+                                                    <div className = "flex flex-col items-center space-y-4">
+                                                        <div className = "size-16 bg-gray-100 rounded-full flex items-center justify-center">
+                                                            <Upload className = "size-8 text-gray-400"/>
+                                                        </div>
+                                                        
+                                                        <div>
+                                                            <p>Upload Payment</p>
+                                                            <p>Click to browse or drag and drop</p>
+                                                            <p>PNG, JPG</p>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            ) : (
+                                                <div className = "space-y-4"> 
+                                                    <div className = "relative inline-block">
+                                                        <img
+                                                        src = {URL.createObjectURL(proofFile) || "placeholder.svg"}
+                                                        alt = "payment proof preview" 
+                                                        className = "max-w-xs max-h-48 rounded-lg shadow-md"
+                                                        />
+
+                                                        <Button
+                                                        onClick = {() => setProofFile(null)}
+                                                        >
+                                                            x
+                                                        </Button>
+                                                    </div>
+                                                    <p>{proofFile.name}</p>
+                                                    <Label htmlFor ="proof-upoad">
+                                                        Change image
+                                                    </Label>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor = "notes">Additional Notes (Optional)</Label>
+                                        <Textarea 
+                                        id = "notes"
+                                        value = {notes}
+                                        onChange = {(e) => setNotes(e.target.value)}
+                                        placeholder = "Any additional information..."
+                                        rows = {3}
+                                        />
+                                    </div>
+
+                                    <Button type = "submit" className = "w-full"
+                                    disabled = {!proofFile || !referenceNumber}>
+                                        Submit Payment Proof
+                                    </Button>
                                 </form>
                             </CardContent>
                         </Card>
