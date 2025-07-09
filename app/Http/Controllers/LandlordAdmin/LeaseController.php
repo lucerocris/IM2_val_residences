@@ -37,4 +37,12 @@ class LeaseController extends Controller
         Lease::create($request->validated());
         return redirect()->route('leases.index')->with('success', 'Lease created successfully.');
     }
+
+    public function destroy($id)
+    {
+        $lease = Lease::findOrFail($id);
+        $lease->delete();
+
+        return redirect()->back()->with('success', 'Lease deleted successfully.');
+    }
 }
