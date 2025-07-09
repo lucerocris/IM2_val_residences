@@ -4,6 +4,7 @@ namespace App\Http\Controllers\LandlordAdmin;
 
 use App\Http\Requests\StoreTenantRequest;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Lease;
 use App\Models\RentalBill;
 use App\Models\Tenant;
