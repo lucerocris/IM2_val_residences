@@ -86,10 +86,6 @@ export function LeasesDataTable<TData, TValue>({ columns, data, leaseStatuses, p
                 </div>
 
                 <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="sm" className="h-8">
-                        <FileText className="mr-2 h-4 w-4" />
-                        Export
-                    </Button>
                     <LeaseTableViewOptions table={table} />
                 </div>
             </div>

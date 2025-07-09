@@ -1,9 +1,8 @@
-import { useMemo, useState } from 'react';
 
+import { useMemo, useState } from 'react';
 import ApplyModal from './apply-modal';
 import ListingsFilter from './Filter';
 import ListingsGrid from './listing-grid';
-import SubscriptionModal from './subscription-modal';
 import { ViewDetailsModal } from './view-details-modal';
 
 interface Listing {
@@ -84,12 +83,11 @@ const ListingsMain = ({ ListingsData  }: ListingsMainProps) => {
                 onSubscriptionClick={() => setSubscriptionModalOpen(true)}
                 resultCount={filteredAndSortedListings.length}
             />
-
+        
             <ListingsGrid listings={filteredAndSortedListings} onViewDetails={handleViewDetails} onApply={handleApply} />
-
-            <SubscriptionModal open={subscriptionModalOpen} onOpenChange={setSubscriptionModalOpen} />
             <ViewDetailsModal open={viewDetailsModalOpen} onOpenChange={setViewDetailsModalOpen} listing={selectedListing} />
             <ApplyModal open={applyModalOpen} onOpenChange={setApplyModalOpen} listing={selectedListing} />
+
         </>
     );
 };

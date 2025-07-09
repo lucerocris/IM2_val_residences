@@ -164,8 +164,8 @@ const FinancialSummary = ({ monthlyRevenue }: { monthlyRevenue: MonthlyRevenue[]
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <Card className="p-3 rounded-lg">
-                                <div className="text-sm text-green-700 font-medium">Revenue</div>
-                                <div className="text-xl font-bold text-green-800">
+                                <div className="text-sm font-medium">Revenue</div>
+                                <div className="text-xl font-bold">
                                     ₱{currentMonth.revenue.toLocaleString()}
                                 </div>
                                 {previousMonth && (
@@ -177,8 +177,8 @@ const FinancialSummary = ({ monthlyRevenue }: { monthlyRevenue: MonthlyRevenue[]
                             </Card>
 
                             <Card className="p-3 rounded-lg">
-                                <div className="text-sm text-red-700 font-medium">Expenses</div>
-                                <div className="text-xl font-bold text-red-800">
+                                <div className="text-sm font-medium">Expenses</div>
+                                <div className="text-xl font-bold">
                                     ₱{currentMonth.expenses.toLocaleString()}
                                 </div>
                                 {previousMonth && (
@@ -191,11 +191,11 @@ const FinancialSummary = ({ monthlyRevenue }: { monthlyRevenue: MonthlyRevenue[]
                         </div>
 
                         <Card className="p-4 rounded-lg">
-                            <div className="text-sm text-blue-700 font-medium">Net Profit</div>
-                            <div className="text-2xl font-bold text-blue-800">
+                            <div className="text-sm font-medium">Net Profit</div>
+                            <div className="text-2xl font-bold">
                                 ₱{currentMonth.profit.toLocaleString()}
                             </div>
-                            <div className="text-xs text-blue-600 mt-1">
+                            <div className="text-xs mt-1">
                                 {currentMonth.revenue > 0 ? ((currentMonth.profit / currentMonth.revenue) * 100).toFixed(1) : '0'}% profit margin
                             </div>
                         </Card>
@@ -233,23 +233,23 @@ const PropertySummary = ({ propertyPerformance }: { propertyPerformance: Propert
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <Card className="p-3 rounded-lg">
-                                <div className="text-sm text-purple-700 font-medium">Properties</div>
-                                <div className="text-xl font-bold text-purple-800">{totalProperties}</div>
-                                <div className="text-xs text-purple-600">{totalUnits} total units</div>
+                                <div className="text-sm font-medium">Properties</div>
+                                <div className="text-xl font-bold">{totalProperties}</div>
+                                <div className="text-xs">{totalUnits} total units</div>
                             </Card>
 
                             <Card className="p-3 rounded-lg">
-                                <div className="text-sm text-orange-700 font-medium">Occupancy</div>
-                                <div className="text-xl font-bold text-orange-800">{averageOccupancy.toFixed(1)}%</div>
-                                <div className="text-xs text-orange-600">Average rate</div>
+                                <div className="text-smfont-medium">Occupancy</div>
+                                <div className="text-xl font-bold">{averageOccupancy.toFixed(1)}%</div>
+                                <div className="text-xs">Average rate</div>
                             </Card>
                         </div>
 
                         {bestPerformer && (
                             <Card className="p-4 rounded-lg">
-                                <div className="text-sm text-yellow-700 font-medium">Best Performer</div>
-                                <div className="text-lg font-bold text-yellow-800">{bestPerformer.address}</div>
-                                <div className="text-xs text-yellow-600 mt-1">
+                                <div className="text-smfont-medium">Best Performer</div>
+                                <div className="text-lg font-bold">{bestPerformer.address}</div>
+                                <div className="text-xs mt-1">
                                     ₱{bestPerformer.netIncome.toLocaleString()} net income
                                 </div>
                             </Card>

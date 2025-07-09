@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import LandlordLayout from '@/layout/LandlordLayout';
 import { Link } from '@inertiajs/react';
-import { AlertCircle, Building2, Calendar, PhilippinePeso, Eye, FileText, Plus, TrendingUp, Users, Wrench } from 'lucide-react';
+import { AlertCircle, Building2, Calendar, PhilippinePeso, Eye, FileText, Plus, TrendingUp, Users, Wrench, DollarSign } from 'lucide-react';
 
 type MaintenanceRequest = {
     id: number;
@@ -28,37 +28,6 @@ type RecentActivities = {
     amount?: number;
     applicant?: string;
 };
-
-const recentActivities: RecentActivities[] = [
-    {
-        id: 1,
-        type: 'lease_signed',
-        description: 'New lease signed for Unit 12A',
-        time: '2 hours ago',
-        tenant: 'John Smith',
-    },
-    {
-        id: 2,
-        type: 'payment_received',
-        description: 'Rent payment received from Unit 8B',
-        time: '4 hours ago',
-        amount: 1800,
-    },
-    {
-        id: 3,
-        type: 'maintenance_completed',
-        description: 'Plumbing repair completed in Unit 5C',
-        time: '1 day ago',
-    },
-    {
-        id: 4,
-        type: 'application_submitted',
-        description: 'New rental application for Unit 15A',
-        time: '2 days ago',
-        applicant: 'Sarah Johnson',
-    },
-    { id: 5, type: 'lease_renewal', description: 'Lease renewal signed for Unit 3B', time: '3 days ago' },
-];
 
 type UpcomingExpirations = {
     id: number;
@@ -173,11 +142,19 @@ const DashboardPage = ({
                             <Card>
                                 <DashboardCardHeader
                                     icon={<Calendar className="h-5 w-5" />}
-                                    cardTitle={'Recent Activities'}
+                                    cardTitle={'Quick Actions'}
                                     cardDescription={'Latest updates across your properties'}
                                 />
+                                <div className="grid grid-cols-2 gap-4 px-4 pt-4 md:grid-cols-4 lg:grid-cols-2">
+                                    <QuickActionsButtons icon={<Plus className="h-5 w-5" />} buttonTitle={'Add Unit'} />
+                                    <QuickActionsButtons icon={<Users className="h-5 w-5" />} buttonTitle={'New Tenant'} />
+                                    <QuickActionsButtons icon={<FileText className="h-5 w-5" />} buttonTitle={'Create Lease'} />
+                                    <QuickActionsButtons icon={<DollarSign className="h-5 w-5" />} buttonTitle={'Record Payment'} />
+                                    <QuickActionsButtons icon={<Wrench className="h-5 w-5" />} buttonTitle={'Maintenance'} />
+                                    <QuickActionsButtons icon={<Eye className="h-5 w-5" />} buttonTitle={'View Reports'} />
+                                </div>
                                 <DashboardCardContent
-                                    items={recentActivities}
+                                    items={[]}
                                     getKey={(activity) => activity.id}
                                     renderItems={(activity: RecentActivities) => (
                                         <div className="flex items-start gap-3 rounded-lg bg-gray-50 p-3">
@@ -250,23 +227,6 @@ const DashboardPage = ({
                             />
                         </Card>
                     </div>
-                    {/* Quick Actions */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Quick Actions</CardTitle>
-                            <CardDescription>Common tasks and shortcuts</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
-                                <QuickActionsButtons icon={<Plus className="h-5 w-5" />} buttonTitle={'Add Unit'} />
-                                <QuickActionsButtons icon={<Users className="h-5 w-5" />} buttonTitle={'New Tenant'} />
-                                <QuickActionsButtons icon={<FileText className="h-5 w-5" />} buttonTitle={'Create Lease'} />
-                                <QuickActionsButtons icon={<PhilippinePeso className="h-5 w-5" />} buttonTitle={'Record Payment'} />
-                                <QuickActionsButtons icon={<Wrench className="h-5 w-5" />} buttonTitle={'Maintenance'} />
-                                <QuickActionsButtons icon={<Eye className="h-5 w-5" />} buttonTitle={'View Reports'} />
-                            </div>
-                        </CardContent>
-                    </Card>
                 </div>
             </LandlordLayout>
         </>
