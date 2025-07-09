@@ -75,4 +75,10 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
     Route::delete('/landlord/tenants/{id}', [TenantController::class, 'destroy'])->name('tenants.destroy');
 // Landlord maintenance requests
     Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index']);
+
+
+// Landlord Update Prospective to Tenant && Delete Applications of the same unit && Send Message
+    Route::get('/landlord/applications', [RentalApplicationController::class, 'index'])->name('landlord.applications.index');
+    Route::patch('/landlord/applications/{application}/status', [RentalApplicationController::class, 'updateStatus'])->name('landlord.applications.update-status');
+    Route::post('/landlord/applications/{application}/message', [RentalApplicationController::class, 'sendMessage'])->name('landlord.applications.send-message');
 });
