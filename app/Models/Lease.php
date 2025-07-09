@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Lease extends Model
 {
@@ -47,6 +48,10 @@ class Lease extends Model
         return Lease::all()->count();
     }
 
+    public static function getNumberOfActiveLeases() {
+        return DB::table('leases')->where('lease_status', '=', 'active')->get()->count();
+    }
+
     public static function getTableData() {
         return Lease::with([
             'tenant:id,user_name,email,user_contact_number',
@@ -64,6 +69,10 @@ class Lease extends Model
                 'maintenanceRequests as maintenance_requests'
             ])
             ->get();
+    }
+
+    public static function getNumberOfOverdueBills() {
+
     }
 
 }

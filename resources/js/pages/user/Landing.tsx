@@ -1,13 +1,13 @@
 import MainLayout from "@/layout/MainLayout";
 import Header from "@/components/main/ui/Header";
 
-const tenantHome = () => {   
+const tenantHome = () => {
     return(
         <>
             <Header links = {[
                 {label: "VIEW LISTINGS", href: "/user/listings"},
                 {label: "USER DASHBOARD", href: "/user"},
-                {label: "LOG OUT", href: "/"}
+                {label: "LOG OUT", href: "/logout", method: 'post'}
             ]}
             />
             <MainLayout>

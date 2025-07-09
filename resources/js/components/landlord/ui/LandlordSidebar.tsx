@@ -140,10 +140,6 @@ const maintenanceNavigation: NavigationType[] = [
                 name: 'Requests',
                 href: '/landlord/maintenance/requests',
             },
-            {
-                name: 'History',
-                href: '/maintenance/history',
-            },
         ],
     },
 ];

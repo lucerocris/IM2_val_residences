@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import type { Table } from "@tanstack/react-table"
 import { SlidersHorizontal } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 
 interface MaintenanceTableViewOptionsProps<TData> {
@@ -16,15 +17,15 @@ interface MaintenanceTableViewOptionsProps<TData> {
 
 export function MaintenanceTableViewOptions<TData>({ table }: MaintenanceTableViewOptionsProps<TData>) {
     const columnDisplayNames: Record<string, string> = {
+        id: "Request ID",
         tenant_info: "Tenant Information",
         property_info: "Property Details",
-        description: "Issue Description",
+        maintenance_description: "Description",
         request_status: "Status",
         priority_level: "Priority",
-        request_date: "Dates",
-        estimated_cost: "Cost",
-        notes: "Notes",
-        created_at: "Created Date"
+        request_date: "Request Date",
+        schedule_info: "Schedule Information",
+        cost_info: "Cost Information"
     }
 
     return (

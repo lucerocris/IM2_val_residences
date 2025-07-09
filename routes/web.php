@@ -37,9 +37,8 @@ Route::middleware('auth', 'user.type:tenant')->group(function () {
     Route::get('/tenant/listings', [TenantController::class, 'listings']);
 });
 
-
+//Prospective Routes
 Route::middleware('auth', 'user.type:prospective_tenant')->group(function () {
-    // Prospective Tenant
     Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
     Route::get('/user/listings', [UserController::class, 'listings']);
 });

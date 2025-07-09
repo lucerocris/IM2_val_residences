@@ -1,4 +1,4 @@
-    import type { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2, User, Building, Calendar, PhilippinePeso, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -121,7 +121,6 @@ export const leaseColumns: ColumnDef<Lease>[] = [
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    <User className="mr-2 h-4 w-4" />
                     Tenant
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
@@ -134,7 +133,6 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                 <div className="flex flex-col">
                     <span className="font-medium">{lease.tenant.user_name}</span>
                     <span className="text-xs text-muted-foreground">{lease.tenant.email}</span>
-                    <span className="text-xs text-muted-foreground">{lease.tenant.user_contact_number}</span>
                 </div>
             );
         },
@@ -165,9 +163,6 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                             {propertyTypeConfig[lease.units.property_type].label}
                         </Badge>
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                        Owner: {lease.units.landlord.user_name}
-                    </span>
                 </div>
             );
         },
@@ -205,7 +200,6 @@ export const leaseColumns: ColumnDef<Lease>[] = [
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    <Calendar className="mr-2 h-4 w-4" />
                     Lease Period
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
@@ -228,11 +222,6 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                     <span className="text-xs text-muted-foreground">
                         {lease.lease_term} months term
                     </span>
-                    {lease.lease_status === 'active' && (
-                        <span className={`text-xs ${daysRemaining > 30 ? 'text-green-600' : daysRemaining > 0 ? 'text-yellow-600' : 'text-red-600'}`}>
-                            {daysRemaining > 0 ? `${daysRemaining} days remaining` : `Expired ${Math.abs(daysRemaining)} days ago`}
-                        </span>
-                    )}
                 </div>
             );
         }
@@ -242,7 +231,6 @@ export const leaseColumns: ColumnDef<Lease>[] = [
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    <PhilippinePeso className="mr-2 h-4 w-4" />
                     Financial
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
@@ -309,9 +297,6 @@ export const leaseColumns: ColumnDef<Lease>[] = [
             return (
                 <div className="flex flex-col">
                     <span>{date.toLocaleDateString()}</span>
-                    <span className="text-xs text-muted-foreground">
-                        {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
                 </div>
             );
         }
