@@ -37,5 +37,9 @@ class RentalApplication extends Model
             'rentalUnits.landlord:id,user_name'])->get();
     }
 
+    public static function getNumberOfPendingApplications() {
+        return DB::table('rental_applications')->where('application_status', '=', 'pending')->get()->count();
+    }
+
 
 }

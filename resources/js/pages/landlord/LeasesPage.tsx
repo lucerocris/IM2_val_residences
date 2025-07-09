@@ -6,9 +6,13 @@ import { AlertTriangle, CheckCircle, Clock, FileText } from 'lucide-react';
 
 interface LeasesPageProps {
     leases: Lease[];
+    numberOfLeases: number;
+    numberOfActiveLease: number;
+    numberOfPendingApplication: number;
+    numberOfOverDueBills: number;
 }
 
-const LeasesPage = ({leases}: LeasesPageProps) => {
+const LeasesPage = ({leases, numberOfLeases, numberOfActiveLease, numberOfPendingApplication, numberOfOverDueBills}: LeasesPageProps) => {
 
     const leaseStatuses = [
         { label: 'Active', value: 'active' },
@@ -25,27 +29,27 @@ const LeasesPage = ({leases}: LeasesPageProps) => {
     const metricData = [
         {
             title: 'Total leases',
-            metric: '1',
+            metric: numberOfLeases,
             metricDescription: 'All lease agreements',
             icon: <FileText className="h-4 w-4 text-muted-foreground" />,
         },
 
         {
             title: 'Active Leases',
-            metric: '1',
+            metric: numberOfActiveLease,
             metricDescription: 'Currently active agreements',
             icon: <CheckCircle className="h-4 w-4 text-green-600" />,
         },
 
         {
             title: 'Pending Approval',
-            metric: '0',
+            metric: numberOfPendingApplication,
             metricDescription: 'Awaiting approval process',
             icon: <Clock className="h-4 w-4 text-orange-600" />,
         },
         {
             title: 'With Overdue Bills',
-            metric: '0',
+            metric: numberOfOverDueBills,
             metricDescription: 'Outstanding payment issues',
             icon: <AlertTriangle className="h-4 w-4 text-red-600" />,
         },
