@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\LandlordAdmin;
 
+use App\Http\Requests\StoreTenantRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Lease;
 use App\Models\RentalBill;
@@ -28,7 +29,7 @@ class TenantLandlordController extends Controller
 
    public function store(StoreTenantRequest $request) {
         Tenant::create($request->validated());
-        return redirect()route->('tenants.index')->with('success', 'Tenant added successfully');
+        return redirect()->route('tenants.index')->with('success', 'Tenant added successfully');
     }
 
 
