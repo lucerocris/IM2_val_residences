@@ -146,11 +146,11 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
                 </div>
 
                 <div className = "space-y-2">
-                    <InputLabel label = "Amount" input = {<Input id = {"amount"} type = "number" value = {currentBill.rentAmount} readOnly className = "bg-gray-50"/>} />
+                    <InputLabel label = "Amount" labelText="Amount" input = {<Input id = {"Amount"} type = "number" value = {currentBill.rentAmount} readOnly className = "bg-gray-50"/>} />
                 </div>
 
                 <div className = "space-y-2">
-                    <InputLabel label = "Reference Number" input = {<Input id = "reference" placeholder = "Enter reference number" value = {referenceNumber} onChange = {(e) => setReferenceNumber(e.target.value)} />} />
+                    <InputLabel label = "refNo" labelText="Reference Number" input = {<Input id = "refNo" placeholder = "Enter reference number" value = {referenceNumber} onChange = {(e) => setReferenceNumber(e.target.value)} />} />
                 </div>
 
                 <Button 
@@ -202,11 +202,11 @@ const MaintenanceModal = ({leaseData, currentBill}:ButtonSectionProps) => {
                 </div>
 
                 <div className = "space-y-2">
-                    <InputLabel label = "Description" input = {<Textarea id = "description" placeholder = "Please describe the maintenance issue in detail..." className = "min-h-[100px]"/>} />
+                    <InputLabel label = "desc" labelText="Description" input = {<Textarea id = "desc" placeholder = "Please describe the maintenance issue in detail..." className = "min-h-[100px]"/>} />
                 </div>
 
                 <div className = "space-y-2">
-                    <InputLabel label = "Additional Notes (Optional)" input = {<Textarea id = "tenant-remarks" placeholder = "Any additional information or special instructions..." rows = {3} />} />
+                    <InputLabel label = "tenant-remarks" labelText="Additional Notes (Optional)" input = {<Textarea id = "tenant-remarks" placeholder = "Any additional information or special instructions..." rows = {3} />} />
                 </div>
 
                 <Button className = "w-full" disabled = {!priorityLevel}>

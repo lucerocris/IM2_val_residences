@@ -63,10 +63,55 @@ const GcashPayment = () => {
                     <div className = "grid gap-6 md:grid-cols-2">
                         <Card>
                             <CardHeader>
-                                <Card>
-                                    
-                                </Card>
+                                <CardTitle className = "flex items-center gap-2">
+                                    <QrCode className = "size-5" />
+                                    Payment Instructions
+                                </CardTitle>
+                                <CardDescription>Scan the QR code or use the details below</CardDescription>
                             </CardHeader>
+                            <CardContent>
+                                <div className = "flex justify-center">
+                                    <div className = "size-48 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center rounded-lg">
+                                        <div className = "text-center">
+                                            <QrCode className = "size-12 text-gray-400 mx-auto mb-2" />
+                                            <p className = "text-sm text-gray-500">GCash QR Code</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className = "space-y-2">
+                                    <div className = "flex justify-between">
+                                        <span className = "text-lg font-bold text-blue-600">Amount:</span>
+                                        <span>₱{amount.toLocaleString()}</span>
+                                    </div>
+
+                                    <div className = "flex justify-between">
+                                        <span>GCash Number:</span>
+                                        <span>0917-123-4567</span>
+                                    </div>
+                                    
+                                    <div className = "flex justify-between">
+                                        <span>Account Name:</span>
+                                        <span>Val Residences Co.</span>
+                                    </div>
+
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className = "flex items-center gap-2">
+                                    <Upload className = "size-5" />
+                                    Submit Proof of Payment
+                                </CardTitle>
+                                <CardDescription>Submit your GCash transaction screenshot</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <form onSubmit = {handleSubmit}>
+                                    
+                                </form>
+                            </CardContent>
                         </Card>
                     </div>
                 </div>
