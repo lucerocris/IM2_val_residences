@@ -14,6 +14,7 @@ use App\Models\VacancySubscription;
 use App\Models\VacancyNotification;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,6 +27,25 @@ class DatabaseSeeder extends Seeder
         $landlord = Landlord::factory()->create([
             'user_name' => 'John Landlord',
             'email' => 'landlord@example.com',
+        ]);
+
+        $testLandlord = Landlord::create([
+            'user_name' => 'Cris Lawrence Lucero',
+            'email' => 'testadmin@gmail.com',
+            'password' => Hash::make('admin123'),
+        ]);
+
+
+        $testTenant = Tenant::create([
+            'user_name' => 'Derick Angelo Yu',
+            'email' => 'testtenant@gmail.com',
+            'password' => Hash::make('tenant123'),
+        ]);
+
+        $testProsTenant = ProspectiveTenant::create([
+            'user_name' => 'Simon Gementiza',
+            'email' => 'testprostenant@gmail.com',
+            'password' => Hash::make('prostenant123'),
         ]);
 
         // Create rental units owned by the landlord - FORCE them to be 'available' initially

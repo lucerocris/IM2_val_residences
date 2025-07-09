@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_name');
             $table->string('email')->unique();
-            $table->string('user_contact_number');
+            $table->string('user_contact_number')->nullable();
             $table->enum('user_type', ['landlord', 'tenant', 'prospective_tenant']);
 
 
@@ -35,7 +35,7 @@ return new class extends Migration
 
 
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
 

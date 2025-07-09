@@ -1,9 +1,8 @@
 import { Link } from '@inertiajs/react';
-import Modal from './Modal';
-import LoginForm from './Login'
-import SignUpForm from './SignUp'
 
-type HeaderLink = { label: string, href: string }
+
+type Method = 'get' | 'post' | 'put' | 'patch' | 'delete';
+type HeaderLink = { label: string, href: string, method?: Method }
 type HeaderProps = {
     links: HeaderLink[],
     actions?: React.ReactNode
@@ -21,7 +20,13 @@ const Header = ({links, actions}: HeaderProps) => {
                     {/*Nav bar links*/}
                     <div className="flex items-center gap-[24px] text-white">
                         {links.map(link => (
-                            <Link key = {link.href} href = {link.href}>{link.label}</Link>
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                method={link.method}
+                            >
+                                {link.label}
+                            </Link>
                         ))}
                         {actions}
                     </div>

@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2, User, Building, Calendar, DollarSign, FileText, Wrench, AlertCircle, CheckCircle, Clock } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2, User, Calendar, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -46,12 +46,12 @@ export type MaintenanceRequest = {
             user_name: string
         }
     }
-    lease?: {
+    lease: {
         id: string
         start_date: string
         end_date: string
         lease_status: string
-    }
+    } | null
 }
 
 const requestStatusConfig = {
@@ -69,7 +69,7 @@ const requestStatusConfig = {
         color: '#2563eb',
         borderColor: '#bfdbfe',
         label: 'In Progress',
-        icon: Wrench
+        icon: AlertTriangle
     },
     'completed': {
         variant: 'secondary' as const,
@@ -85,7 +85,7 @@ const requestStatusConfig = {
         color: '#dc2626',
         borderColor: '#fecaca',
         label: 'Cancelled',
-        icon: Trash2
+        icon: XCircle
     }
 };
 
@@ -105,33 +105,22 @@ const priorityLevelConfig = {
         label: 'Medium'
     },
     'high': {
-        variant: 'secondary' as const,
-        backgroundColor: '#fed7d7',
-        color: '#c53030',
-        borderColor: '#feb2b2',
-        label: 'High'
-    },
-    'urgent': {
         variant: 'destructive' as const,
         backgroundColor: '#fee2e2',
         color: '#dc2626',
         borderColor: '#fecaca',
+        label: 'High'
+    },
+    'urgent': {
+        variant: 'destructive' as const,
+        backgroundColor: '#fecaca',
+        color: '#991b1b',
+        borderColor: '#f87171',
         label: 'Urgent'
     }
 };
 
-const propertyTypeConfig = {
-    'duplex': {
-        variant: 'outline' as const,
-        label: 'Duplex'
-    },
-    'triplex': {
-        variant: 'outline' as const,
-        label: 'Triplex'
-    }
-};
-
-export const maintenanceColumns: ColumnDef<MaintenanceRequest>[] = [
+export const maintenanceRequestColumns: ColumnDef<MaintenanceRequest>[] = [
     {
         id: 'select',
         header: ({ table }) => (
@@ -151,13 +140,13 @@ export const maintenanceColumns: ColumnDef<MaintenanceRequest>[] = [
         enableSorting: false,
         enableHiding: false
     },
+
     {
         accessorKey: 'tenant',
         id: 'tenant_info',
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    <User className="mr-2 h-4 w-4" />
                     Tenant
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
@@ -165,12 +154,10 @@ export const maintenanceColumns: ColumnDef<MaintenanceRequest>[] = [
         },
         cell: ({ row }) => {
             const request = row.original;
-
             return (
                 <div className="flex flex-col">
                     <span className="font-medium">{request.tenant.user_name}</span>
                     <span className="text-xs text-muted-foreground">{request.tenant.email}</span>
-                    <span className="text-xs text-muted-foreground">{request.tenant.user_contact_number}</span>
                 </div>
             );
         },
@@ -181,29 +168,22 @@ export const maintenanceColumns: ColumnDef<MaintenanceRequest>[] = [
     {
         accessorKey: 'unit',
         id: 'property_info',
-        header: 'Property Details',
+        header: 'Property',
         cell: ({ row }) => {
             const request = row.original;
-
             return (
                 <div className="flex flex-col space-y-1">
-                    <div className="flex items-center text-sm font-medium">
-                        <Building className="mr-2 h-3 w-3" />
-                        <span className="truncate max-w-[200px]">{request.unit.address}</span>
-                    </div>
+                    <span className="font-medium text-sm truncate max-w-[200px]">
+                        {request.unit.address}
+                    </span>
                     {request.unit.unit_number && (
                         <span className="text-xs text-muted-foreground">
                             Unit: {request.unit.unit_number}
                         </span>
                     )}
-                    <div className="flex items-center space-x-1">
-                        <Badge variant={propertyTypeConfig[request.unit.property_type].variant} className="text-xs">
-                            {propertyTypeConfig[request.unit.property_type].label}
-                        </Badge>
-                    </div>
-                    <span className="text-xs text-muted-foreground">
-                        Owner: {request.unit.landlord.user_name}
-                    </span>
+                    <Badge variant="outline" className="text-xs w-fit">
+                        {request.unit.property_type}
+                    </Badge>
                 </div>
             );
         },
@@ -211,21 +191,14 @@ export const maintenanceColumns: ColumnDef<MaintenanceRequest>[] = [
     },
     {
         accessorKey: 'maintenance_description',
-        id: 'description',
-        header: 'Issue Description',
+        header: 'Description',
         cell: ({ row }) => {
-            const request = row.original;
-
+            const description = row.getValue('maintenance_description') as string;
             return (
-                <div className="flex flex-col space-y-1 max-w-[300px]">
-                    <span className="text-sm line-clamp-2" title={request.maintenance_description}>
-                        {request.maintenance_description}
-                    </span>
-                    {request.tenant_remarks && (
-                        <span className="text-xs text-muted-foreground line-clamp-1" title={request.tenant_remarks}>
-                            Remarks: {request.tenant_remarks}
-                        </span>
-                    )}
+                <div className="max-w-[300px]">
+                    <p className="text-sm truncate" title={description}>
+                        {description}
+                    </p>
                 </div>
             );
         },
@@ -237,7 +210,7 @@ export const maintenanceColumns: ColumnDef<MaintenanceRequest>[] = [
         cell: ({ row }) => {
             const status = row.getValue('request_status') as string;
             const config = requestStatusConfig[status as keyof typeof requestStatusConfig];
-            const Icon = config.icon;
+            const IconComponent = config.icon;
 
             return (
                 <Badge
@@ -248,9 +221,9 @@ export const maintenanceColumns: ColumnDef<MaintenanceRequest>[] = [
                         borderColor: config.borderColor,
                         border: '1px solid'
                     }}
-                    className="font-medium flex items-center w-fit"
+                    className="font-medium"
                 >
-                    <Icon className="mr-1 h-3 w-3" />
+                    <IconComponent className="mr-1 h-3 w-3" />
                     {config.label}
                 </Badge>
             );
@@ -262,15 +235,7 @@ export const maintenanceColumns: ColumnDef<MaintenanceRequest>[] = [
     },
     {
         accessorKey: 'priority_level',
-        header: ({ column }) => {
-            return (
-                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    <AlertCircle className="mr-2 h-4 w-4" />
-                    Priority
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
+        header: 'Priority',
         cell: ({ row }) => {
             const priority = row.getValue('priority_level') as string;
             const config = priorityLevelConfig[priority as keyof typeof priorityLevelConfig];
@@ -300,120 +265,106 @@ export const maintenanceColumns: ColumnDef<MaintenanceRequest>[] = [
         header: ({ column }) => {
             return (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    <Calendar className="mr-2 h-4 w-4" />
-                    Dates
+                    Request Date
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             );
         },
         cell: ({ row }) => {
-            const request = row.original;
-            const requestDate = new Date(request.request_date);
-            const scheduledDate = request.scheduled_date ? new Date(request.scheduled_date) : null;
-            const completionDate = request.completion_date ? new Date(request.completion_date) : null;
-
-            return (
-                <div className="flex flex-col space-y-1">
-                    <div className="text-sm">
-                        <span className="font-medium">Requested:</span>
-                        <span className="ml-1">{requestDate.toLocaleDateString()}</span>
-                    </div>
-                    {scheduledDate && (
-                        <div className="text-xs text-muted-foreground">
-                            <span className="font-medium">Scheduled:</span>
-                            <span className="ml-1">{scheduledDate.toLocaleDateString()}</span>
-                        </div>
-                    )}
-                    {completionDate && (
-                        <div className="text-xs text-green-600">
-                            <span className="font-medium">Completed:</span>
-                            <span className="ml-1">{completionDate.toLocaleDateString()}</span>
-                        </div>
-                    )}
-                </div>
-            );
-        }
-    },
-    {
-        accessorKey: 'estimated_cost',
-        header: ({ column }) => {
-            return (
-                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    <DollarSign className="mr-2 h-4 w-4" />
-                    Cost
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-        cell: ({ row }) => {
-            const request = row.original;
-
+            const date = new Date(row.getValue('request_date'));
             return (
                 <div className="flex flex-col">
-                    {request.estimated_cost !== null && (
-                        <span className="text-sm">
-                            <span className="text-muted-foreground">Est:</span>
-                            <span className="ml-1 font-medium">${request.estimated_cost.toLocaleString()}</span>
-                        </span>
-                    )}
-                    {request.actual_cost !== null && (
-                        <span className="text-sm">
-                            <span className="text-muted-foreground">Actual:</span>
-                            <span className="ml-1 font-medium">${request.actual_cost.toLocaleString()}</span>
-                        </span>
-                    )}
-                    {request.estimated_cost === null && request.actual_cost === null && (
-                        <span className="text-xs text-muted-foreground">Not specified</span>
-                    )}
-                </div>
-            );
-        }
-    },
-    {
-        id: 'notes',
-        header: 'Notes',
-        cell: ({ row }) => {
-            const request = row.original;
-
-            return (
-                <div className="flex flex-col space-y-1 max-w-[200px]">
-                    {request.landlord_notes && (
-                        <div className="text-xs">
-                            <span className="font-medium text-muted-foreground">Landlord:</span>
-                            <span className="ml-1 line-clamp-2" title={request.landlord_notes}>
-                                {request.landlord_notes}
-                            </span>
-                        </div>
-                    )}
-                    {!request.landlord_notes && (
-                        <span className="text-xs text-muted-foreground">No notes</span>
-                    )}
-                </div>
-            );
-        },
-        enableSorting: false
-    },
-    {
-        accessorKey: 'created_at',
-        header: ({ column }) => {
-            return (
-                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    Created Date
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
-        cell: ({ row }) => {
-            const date = new Date(row.getValue('created_at'));
-            return (
-                <div className="flex flex-col">
-                    <span>{date.toLocaleDateString()}</span>
+                    <span className="text-sm">{date.toLocaleDateString()}</span>
                     <span className="text-xs text-muted-foreground">
                         {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                 </div>
             );
         }
+    },
+    {
+        id: 'schedule_info',
+        header: 'Schedule',
+        cell: ({ row }) => {
+            const request = row.original;
+            const scheduledDate = request.scheduled_date ? new Date(request.scheduled_date) : null;
+            const completionDate = request.completion_date ? new Date(request.completion_date) : null;
+
+            if (completionDate) {
+                return (
+                    <div className="flex flex-col">
+                        <span className="text-sm text-green-600 font-medium">
+                            Completed
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                            {completionDate.toLocaleDateString()}
+                        </span>
+                    </div>
+                );
+            }
+
+            if (scheduledDate) {
+                return (
+                    <div className="flex flex-col">
+                        <span className="text-sm font-medium">
+                            Scheduled
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                            {scheduledDate.toLocaleDateString()}
+                        </span>
+                    </div>
+                );
+            }
+
+            return (
+                <span className="text-sm text-muted-foreground">
+                    Not scheduled
+                </span>
+            );
+        },
+        enableSorting: false
+    },
+    {
+        id: 'cost_info',
+        header: 'Cost',
+        cell: ({ row }) => {
+            const request = row.original;
+            const estimatedCost = request.estimated_cost;
+            const actualCost = request.actual_cost;
+
+            if (actualCost) {
+                return (
+                    <div className="flex flex-col">
+                        <span className="text-sm font-medium">
+                            ₱{actualCost.toLocaleString()}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                            Actual
+                        </span>
+                    </div>
+                );
+            }
+
+            if (estimatedCost) {
+                return (
+                    <div className="flex flex-col">
+                        <span className="text-sm font-medium">
+                            ₱{estimatedCost.toLocaleString()}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                            Estimated
+                        </span>
+                    </div>
+                );
+            }
+
+            return (
+                <span className="text-sm text-muted-foreground">
+                    Not estimated
+                </span>
+            );
+        },
+        enableSorting: false
     },
     {
         id: 'actions',
@@ -444,41 +395,39 @@ export const maintenanceColumns: ColumnDef<MaintenanceRequest>[] = [
                             <User className="mr-2 h-4 w-4" /> Contact tenant
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
+
                         {request.request_status === 'pending' && (
                             <>
                                 <DropdownMenuItem className="text-blue-600">
-                                    <Wrench className="mr-2 h-4 w-4" /> Mark in progress
+                                    <Calendar className="mr-2 h-4 w-4" /> Schedule maintenance
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Calendar className="mr-2 h-4 w-4" /> Schedule work
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="text-red-600">
-                                    <Trash2 className="mr-2 h-4 w-4" /> Cancel request
+                                <DropdownMenuItem className="text-blue-600">
+                                    Start work
                                 </DropdownMenuItem>
                             </>
                         )}
+
                         {request.request_status === 'in_progress' && (
                             <>
                                 <DropdownMenuItem className="text-green-600">
-                                    <CheckCircle className="mr-2 h-4 w-4" /> Mark completed
+                                    <CheckCircle className="mr-2 h-4 w-4" /> Mark as completed
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <DollarSign className="mr-2 h-4 w-4" /> Add costs
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="text-red-600">
-                                    <Trash2 className="mr-2 h-4 w-4" /> Cancel request
+                                <DropdownMenuItem className="text-blue-600">
+                                    <Calendar className="mr-2 h-4 w-4" /> Reschedule
                                 </DropdownMenuItem>
                             </>
                         )}
+
+                        {(request.request_status === 'pending' || request.request_status === 'in_progress') && (
+                            <DropdownMenuItem className="text-red-600">
+                                <XCircle className="mr-2 h-4 w-4" /> Cancel request
+                            </DropdownMenuItem>
+                        )}
+
                         {request.request_status === 'completed' && (
-                            <>
-                                <DropdownMenuItem>
-                                    <FileText className="mr-2 h-4 w-4" /> View report
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <DollarSign className="mr-2 h-4 w-4" /> Edit costs
-                                </DropdownMenuItem>
-                            </>
+                            <DropdownMenuItem>
+                                <Eye className="mr-2 h-4 w-4" /> View completion report
+                            </DropdownMenuItem>
                         )}
                     </DropdownMenuContent>
                 </DropdownMenu>
