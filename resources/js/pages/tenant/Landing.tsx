@@ -10,7 +10,7 @@ import ButtonSection from "@/components/tenants/tenantsDashboard/button-section"
 import ContactLandlord from "@/components/tenants/tenantsDashboard/contact-landlord";
 
 
-const TenantDashboard = () => {   
+const TenantDashboard = () => {
   const [profileModalOpen, setProfileModalOpen] = useState(false)
 
   const tenantData = {
@@ -74,14 +74,14 @@ const TenantDashboard = () => {
 
   return(
     <>
-      <Header 
-        links={[ 
+      <Header
+        links={[
           {label: "VIEW LISTINGS", href: "/tenant/listings"},
           {label: "TENANT DASHBOARD", href: "/tenant/dashboard"},
-          {label: "LOG OUT", href: "/"}
+          {label: "LOG OUT", href: "/logout", method: 'post'}
         ]}
         actions={
-          <button 
+          <button
             onClick={() => setProfileModalOpen(true)}
             className="flex items-center gap-2 px-3 py-1.5 text-white hover:bg-white/10 rounded-md transition-colors"
           >
