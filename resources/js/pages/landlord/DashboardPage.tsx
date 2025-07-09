@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import LandlordLayout from '@/layout/LandlordLayout';
 import { Link } from '@inertiajs/react';
-import { AlertCircle, Building2, Calendar, PhilippinePeso, Eye, FileText, Plus, TrendingUp, Users, Wrench } from 'lucide-react';
+import { AlertCircle, Building2, Calendar, PhilippinePeso, Eye, FileText, Plus, TrendingUp, Users, Wrench, DollarSign } from 'lucide-react';
 
 type MaintenanceRequest = {
     id: number;
