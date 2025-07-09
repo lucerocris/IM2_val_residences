@@ -22,7 +22,14 @@ class StoreTenantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+        'user_name' => 'required|string',
+        'email' => 'required|string',
+        'password' => 'required|string',
+        'user_contact_number' => 'required|string',
+        'employment_status' => 'required|string',
+        'emergency_contact' => 'required|string',
+        'tenant_occupation' => 'required|string',
+        'monthly_income' => 'required|string',
         ];
     }
 }

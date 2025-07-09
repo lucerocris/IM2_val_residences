@@ -26,7 +26,26 @@ class TenantLandlordController extends Controller
         return Inertia::render('landlord/AddTenantPage');
    }
 
-   public function store() {
-        
-   }
+   public function store(StoreTenantRequest $request) {
+        Tenant::create($request->validated());
+        return redirect()route->('tenants.index')->with('success', 'Tenant added successfully');
+    }
+
+
+    // Delete Tenant
+    public function destroy($id)
+    {
+        $tenant = User::where('role', 'tenant')->findOrFail($id);
+
+        //Optional: check for leases or requests before deleting
+        $tenant->leases()->delete();
+        $tenant->maintenanceRequests()->delete();
+
+        $tenant->delete();
+
+        return redirect()->back()->with('success', 'Tenant deleted successfully.');
+    }
+
+
+
 }

@@ -69,8 +69,11 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
 // Landlord payments
     Route::get('/landlord/payments/rent-collection', [FinanceController::class, 'rent']);
     Route::get('/landlord/payments/report', [FinanceController::class, 'report']);
+// Landlord Delete Lease
+    Route::delete('/landlord/leases/{id}', [LeaseController::class, 'destroy'])->name('leases.destroy');
 
+// Landlord Delete Tenant
+    Route::delete('/landlord/tenants/{id}', [TenantController::class, 'destroy'])->name('tenants.destroy');
 // Landlord maintenance requests
     Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index']);
 });
-
