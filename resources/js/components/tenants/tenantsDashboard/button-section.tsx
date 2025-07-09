@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { CreditCard, Wrench } from "lucide-react";
+import { CreditCard, Link, Wrench } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
@@ -209,10 +209,13 @@ const MaintenanceModal = ({leaseData, currentBill}:ButtonSectionProps) => {
                     <InputLabel label = "tenant-remarks" labelText="Additional Notes (Optional)" input = {<Textarea id = "tenant-remarks" placeholder = "Any additional information or special instructions..." rows = {3} />} />
                 </div>
 
-                <Button className = "w-full" disabled = {!priorityLevel}>
+            <Link href="/tenant/maintenanceRequest" method="post">
+            <Button className = "w-full" disabled = {!priorityLevel}>
                     <Wrench className = "w-4 h-4 mr-2" />
                     Submit Request
                 </Button>
+            </Link>
+                
             </div>
         </>
     );
