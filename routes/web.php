@@ -36,7 +36,15 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth', 'user.type:tenant')->group(function () {
     Route::get('/tenant/dashboard', [TenantController::class, 'index']);
     Route::get('/tenant/listings', [TenantController::class, 'listings']);
+
+// Tenant Maintenance Request
     Route::post('/tenant/maintenanceRequest', [RequestMaintenanceController::class, 'store']);
+
+
+// Tenant Payment Upload
+    Route::get('/tenant/payments/gcash', [TenantController::class, 'gcash']);
+    Route::get('/tenant/payments/paymaya', [TenantController::class, 'paymaya']);
+    Route::get('/tenant/payments/bankTransfer', [TenantController::class, 'bank']);
 });
 
 //Prospective Routes
