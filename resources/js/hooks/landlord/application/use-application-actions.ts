@@ -1,4 +1,4 @@
-// resources/js/hooks/use-application-actions.ts
+import { router } from '@inertiajs/react';
 import type { RentalApplication } from '@/types/application.types';
 
 export function useApplicationActions(
@@ -7,7 +7,7 @@ export function useApplicationActions(
 ) {
     function updateApplicationStatus(
         id: string,
-        status: 'approved' | 'rejected',
+        action: 'approved' | 'rejected',
         reviewNotes: string
     ) {
         setApplications(prev =>
@@ -15,7 +15,7 @@ export function useApplicationActions(
                 app.id === id
                     ? {
                         ...app,
-                        application_status: status,
+                        application_status: action,
                         reviewed_date: new Date().toISOString().split('T')[0],
                         review_notes: reviewNotes,
                         updated_at: new Date().toISOString(),
@@ -23,13 +23,33 @@ export function useApplicationActions(
                     : app
             )
         );
-        // Optionally await an API call here.
+
+        router.patch(`/landlord/applications/${id}/status`, {
+            action: action, notes: reviewNotes
+        }, {
+            preserveScroll: true,
+            onSuccess: page => {
+                if(page.props.applicationData) {
+                    setApplications(page.props.applicationsData as RentalApplication[]);
+                }
+            },
+            onError: () => {
+                setApplications(prev =>
+                    prev.map(app =>
+                        app.id === id ? { ...app, application_status: 'pending' } : app
+                    )
+                );
+            },
+        })
     }
+
 
     function sendMessage(id: string, message: string) {
-        // await axios.post(`/api/applications/${id}/messages`, { message });
-        console.log(`Sending message to ${id}: ${message}`);
+        router.post(
+            `/landlord/applications/${id}/message`,
+            { message },
+            { preserveScroll: true }
+        );
     }
-
     return { updateApplicationStatus, sendMessage };
 }

@@ -8,6 +8,17 @@ class Tenant extends User
 {
     protected static $singleTableType = 'tenant';
 
+    protected static function booted() {
+        static::addGlobalScope('tenant', function ($query) {
+            $query->where('user_type', 'tenant');
+        });
+
+        static::creating(function ($model) {
+            $model->user_type = 'tenant';
+        });
+
+    }
+
     // Add Tenant-specific methods and relationships here
     public function leases()
     {

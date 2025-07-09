@@ -35,7 +35,7 @@ class RentalUnit extends Model
         return $this->belongsTo(Landlord::class, 'landlord_id');
     }
 
-    public function rentalUnits() {
+    public function rentalUnit() {
         return $this->hasMany(RentalUnit::class, 'unit_id');
     }
 

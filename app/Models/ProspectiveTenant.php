@@ -6,5 +6,9 @@
     {
         protected static $singleTableType = 'prospective_tenant';
 
-        // Add subtype-specific methods or relationships here
+
+        public function rentalApplications()
+        {
+            return $this->hasMany(RentalApplication::class, 'prospective_tenant_id');
+        }
     }

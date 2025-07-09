@@ -24,17 +24,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create one landlord
-        $landlord = Landlord::factory()->create([
-            'user_name' => 'John Landlord',
-            'email' => 'landlord@example.com',
-        ]);
-
         $testLandlord = Landlord::create([
             'user_name' => 'Cris Lawrence Lucero',
             'email' => 'testadmin@gmail.com',
             'password' => Hash::make('admin123'),
         ]);
-
 
         $testTenant = Tenant::create([
             'user_name' => 'Derick Angelo Yu',
@@ -48,10 +42,10 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('prostenant123'),
         ]);
 
-        // Create rental units owned by the landlord - FORCE them to be 'available' initially
+        // Create rental units owned by the test landlord
         $units = RentalUnit::factory(8)->create([
-            'landlord_id' => $landlord->id,
-            'availability_status' => 'available', // ← Force available status
+            'landlord_id' => $testLandlord->id,
+            'availability_status' => 'available',
         ]);
 
         // Create tenants and prospective tenants
@@ -178,7 +172,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->command->info('Database seeded successfully!');
-        $this->command->info("Created: 1 Landlord, {$tenants->count()} Tenants, {$prospects->count()} Prospective Tenants");
+        $this->command->info("Created: 1 Test Landlord, {$tenants->count()} Tenants, {$prospects->count()} Prospective Tenants");
         $this->command->info("Created: {$units->count()} Rental Units, {$occupiedUnits->count()} Active Leases, 2 Terminated Leases");
         $this->command->info("Available units: {$availableUnits->count()}");
     }

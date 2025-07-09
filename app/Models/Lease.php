@@ -33,7 +33,7 @@ class Lease extends Model
     }
 
     public function tenant() {
-        return $this->belongsTo(Tenant::class, 'tenant_id');
+        return $this->belongsTo(User::class, 'tenant_id')->where('user_type', 'tenant');
     }
 
     public function rentalBills() {
@@ -53,7 +53,7 @@ class Lease extends Model
     }
 
     public static function getTableData() {
-        return Lease::with([
+        return self::with([
             'tenant:id,user_name,email,user_contact_number',
             'units:id,address,unit_number,property_type,landlord_id',
             'units.landlord:id,user_name'
@@ -70,9 +70,4 @@ class Lease extends Model
             ])
             ->get();
     }
-
-    public static function getNumberOfOverdueBills() {
-
-    }
-
 }
