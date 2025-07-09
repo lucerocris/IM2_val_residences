@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface InputLabelProps {
-    label: string;
+    label?: string;
     labelText: string;
     input: React.ReactNode;
 }

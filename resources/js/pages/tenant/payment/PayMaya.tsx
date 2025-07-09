@@ -118,8 +118,9 @@ const PayMayaPayment = () => {
                                     <div>
                                         <Label className = "text-base font-medium flex items-center gap-2 mb-3">
                                             <Upload className = "size-5" />
+                                            Proof of Payment
                                         </Label>
-                                        <p>Upload your PayMaya transaction screenshot</p>
+                                        <p className = "text-sm">Upload your PayMaya transaction screenshot</p>
 
                                         <div
                                             className = "border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors"

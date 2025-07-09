@@ -81,8 +81,8 @@ const GcashPayment = () => {
                                 </div>
 
                                 <div className = "space-y-2">
-                                    <div className = "flex justify-between">
-                                        <span className = "text-lg font-bold text-blue-600">Amount:</span>
+                                    <div className = "flex justify-between mt-4">
+                                        <span className = "text-lg">Amount:</span>
                                         <span>₱{amount.toLocaleString()}</span>
                                     </div>
 
@@ -125,7 +125,7 @@ const GcashPayment = () => {
                                     </div>
 
                                     <div>
-                                        <Label className = "text-base font-medium flex items-center gap-2 mb-3">
+                                        <Label className = "text-base font-medium flex items-center gap-2 my-3">
                                             <Upload className = "size-5" />
                                             Proof of Payment
                                         </Label>
@@ -190,7 +190,7 @@ const GcashPayment = () => {
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div className = "space-y-4 my-4">
                                         <Label htmlFor = "notes">Additional Notes (Optional)</Label>
                                         <Textarea 
                                         id = "notes"
@@ -201,7 +201,7 @@ const GcashPayment = () => {
                                         />
                                     </div>
 
-                                    <Button type = "submit" className = "w-full"
+                                    <Button type = "submit" className = "w-full bg-blue-600"
                                     disabled = {!proofFile || !referenceNumber}>
                                         Submit Payment Proof
                                     </Button>
