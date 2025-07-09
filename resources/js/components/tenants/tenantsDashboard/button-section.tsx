@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -140,20 +141,31 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
                             <SelectItem value = "gcash">GCash</SelectItem>
                             <SelectItem value = "paymaya">PayMaya</SelectItem>
                             <SelectItem value = "bank-transfers">Bank Transfer</SelectItem>
-                            <SelectItem value = "credit-card">Credit Card</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
 
                 <div className = "space-y-2">
-                    <InputLabel label = "Amount" input = {<Input id = {"amount"} type = "number" value = {currentBill.rentAmount} readOnly className = "bg-gray-50"/>} />
+                    <InputLabel label = "Amount" labelText="Amount" input = {<Input id = {"Amount"} type = "number" value = {currentBill.rentAmount} readOnly className = "bg-gray-50"/>} />
                 </div>
 
                 <div className = "space-y-2">
-                    <InputLabel label = "Reference Number" input = {<Input id = "reference" placeholder = "Enter reference number" value = {referenceNumber} onChange = {(e) => setReferenceNumber(e.target.value)} />} />
+                    <InputLabel label = "refNo" labelText="Reference Number" input = {<Input id = "refNo" placeholder = "Enter reference number" value = {referenceNumber} onChange = {(e) => setReferenceNumber(e.target.value)} />} />
                 </div>
 
-                <Button className = "w-full" disabled = {!paymentMethod || !referenceNumber.trim()}>
+                <Button 
+                    className = "w-full" 
+                    disabled = {!paymentMethod || !referenceNumber.trim()}
+                    onClick = {() => {
+                        if(paymentMethod === "gcash") {
+                            router.visit("/tenant/payments/gcash");
+                        } else if (paymentMethod === "paymaya") {
+                            router.visit("/tenant/payments/paymaya");
+                        } else if (paymentMethod === "bank-transfers") {
+                            router.visit("/tenant/payments/bankTransfer");
+                        }
+                    }}
+                    >
                     <CreditCard className = "w-4 h-4 mr-2"/>
                     Proceed to Payment
                 </Button>
@@ -190,11 +202,11 @@ const MaintenanceModal = ({leaseData, currentBill}:ButtonSectionProps) => {
                 </div>
 
                 <div className = "space-y-2">
-                    <InputLabel label = "Description" input = {<Textarea id = "description" placeholder = "Please describe the maintenance issue in detail..." className = "min-h-[100px]"/>} />
+                    <InputLabel label = "desc" labelText="Description" input = {<Textarea id = "desc" placeholder = "Please describe the maintenance issue in detail..." className = "min-h-[100px]"/>} />
                 </div>
 
                 <div className = "space-y-2">
-                    <InputLabel label = "Additional Notes (Optional)" input = {<Textarea id = "tenant-remarks" placeholder = "Any additional information or special instructions..." rows = {3} />} />
+                    <InputLabel label = "tenant-remarks" labelText="Additional Notes (Optional)" input = {<Textarea id = "tenant-remarks" placeholder = "Any additional information or special instructions..." rows = {3} />} />
                 </div>
 
                 <Button className = "w-full" disabled = {!priorityLevel}>

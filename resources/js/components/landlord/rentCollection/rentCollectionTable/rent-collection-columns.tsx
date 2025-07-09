@@ -288,16 +288,8 @@ export const rentCollectionColumns: ColumnDef<RentalBill>[] = [
             {bill.payment_status !== "paid" && (
               <>
                 <DropdownMenuItem>
-                  <Send className="mr-2 h-4 w-4" />
-                  Send reminder
-                </DropdownMenuItem>
-                <DropdownMenuItem>
                   <CheckCircle className="mr-2 h-4 w-4" />
                   Mark as paid
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <DollarSign className="mr-2 h-4 w-4" />
-                  Record partial payment
                 </DropdownMenuItem>
               </>
             )}

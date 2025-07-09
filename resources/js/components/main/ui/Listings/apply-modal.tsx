@@ -55,10 +55,11 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                         <div className = "grid grid-cols-2 gap-4">
                             <div>
                                 <InputLabel 
-                                    label = "Full Name" 
+                                    label = "fullName" 
+                                    labelText = "Full Name"
                                     input = 
                                     {<Input 
-                                        id = "Full Name" 
+                                        id = "fullName" 
                                         onChange={(e) => handleInputChange("Full Name", e.target.value)} 
                                         required 
                                     />} 
@@ -68,6 +69,7 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                             <div>
                                 <InputLabel 
                                     label = "Email"
+                                    labelText = "Email"
                                     input = 
                                     {<Input 
                                         id = "Email"
@@ -83,10 +85,11 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
 
                             <div>
                                 <InputLabel 
-                                    label = "Phone Number"
+                                    label = "phoneNo"
+                                    labelText="Phone Number"
                                     input = 
                                     {<Input 
-                                        id = "Phone Number"
+                                        id = "phoneNo"
                                         onChange = {(e) => handleInputChange("Phone Number", e.target.value)}
                                         required
                                     />}
@@ -96,6 +99,7 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                             <div>
                                 <InputLabel 
                                     label = "Occupation"
+                                    labelText="Occupation"
                                     input = 
                                     {<Input 
                                         id = "Occupation"
@@ -110,6 +114,7 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                             <div>
                                 <InputLabel 
                                     label = "Annual Income"
+                                    labelText="Annual Income"
                                     input = 
                                     {<Input 
                                         id = "Annual Income"
@@ -122,10 +127,11 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
 
                             <div>
                                 <InputLabel 
-                                    label = "Preferred Move In Date"
+                                    label = "moveInDate"
+                                    labelText="Preferred Move-In Date"
                                     input = 
                                     {<Input 
-                                        id = "Preferred Move In Date"
+                                        id = "moveInDate"
                                         type = "date"
                                         onChange = {(e) => handleInputChange("Preferred Move In Date", e.target.value)}
                                         required
@@ -137,6 +143,7 @@ const ApplyModal = ({ open, onOpenChange, listing }:ApplyModalProps) => {
                         <div>
                             <InputLabel 
                                 label = "Additional Message"
+                                labelText="Additional Message"
                                 input = 
                                 {<Textarea 
                                     id = "Additional Message"

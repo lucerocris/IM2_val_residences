@@ -54,17 +54,17 @@ const Hero = ({ title, subtitle, buttonLabel, onHeaderToggle, showScrollButton =
                 
                 <div className = "absolute inset-0">
                     <img src = {Image1} className= "size-full object-cover" />
-                    <div className = "absolute inset-0 bg-gradient-to-r from-foreground/60 via-foreground/30 to-transparent"></div>
+                    <div className = "absolute inset-0 bg-black opacity-50"></div>
                 </div>
 
                 {/* Text n shi */}
-                <div className = "relative z-10 container mx-auto px-4 h-full flex items-center">
+                <div className = "absolute z-10 container mx-auto px-20 h-full flex items-center">
                     <div className = "max-w-2xl lg:max-w-3xl">
-                        <h1 className = "text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+                        <h1 className = "text-5xl lg:text-6xl font-bold text-white mb-2 leading-tight">
                             {title}
                         </h1>
 
-                        <p className = "text-xl lg:text-2xl text-white/90 mb-8 leading-relaxed font-light max-w-xl">
+                        <p className = "text-lg lg:text-xl text-white/90 mb-6 leading-relaxed font-light max-w-xl">
                             {subtitle}
                         </p>
 
@@ -72,7 +72,7 @@ const Hero = ({ title, subtitle, buttonLabel, onHeaderToggle, showScrollButton =
                             <Button 
                                 onClick={scrollToListings}
                                 size="lg"
-                                className="bg-white hover:bg-white/90 text-black px-8 py-3 text-lg font-semibold flex items-center gap-2"
+                                className="bg-white hover:bg-white/90 text-black px-8 py-3 text-md font-semibold flex items-center gap-2"
                             >
                                 {buttonLabel || "VIEW LISTINGS"}
                                 <ChevronDown className="size-5" />
@@ -85,6 +85,7 @@ const Hero = ({ title, subtitle, buttonLabel, onHeaderToggle, showScrollButton =
                 <div className = {`absolute bottom-0 left-0 w-full h-32 transition-opacity duration-500 ${
                     isInListingsSection ? 'opacity-100' : 'opacity-0'
                 } bg-gradient-to-t from-background to-transparent`}></div>
+
             </div>
         </>
     );

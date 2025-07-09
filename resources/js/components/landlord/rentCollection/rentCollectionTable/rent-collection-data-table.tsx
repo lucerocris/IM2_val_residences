@@ -11,7 +11,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-
+import { RentCollectionTableViewOptions } from "./rent-collection-table-view-options"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -165,15 +165,10 @@ export function RentCollectionDataTable<TData, TValue>({
                         </Button>
                     )}
 
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8"
-                        onClick={handleExportData}
-                    >
-                        <FileText className="mr-2 h-4 w-4" />
-                        Export
-                    </Button>
+                </div>
+
+                <div className = "flex items-center space-x-2">
+                    <RentCollectionTableViewOptions table = {table} />
                 </div>
             </div>
 

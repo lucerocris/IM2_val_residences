@@ -326,15 +326,6 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                         <DropdownMenuItem>
                             <Edit className="mr-2 h-4 w-4" /> Edit lease
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <FileText className="mr-2 h-4 w-4" /> View contract
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <PhilippinePeso className="mr-2 h-4 w-4" /> Manage bills
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <User className="mr-2 h-4 w-4" /> Contact tenant
-                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {lease.lease_status === 'pending' && (
                             <>
