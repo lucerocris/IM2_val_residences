@@ -5,6 +5,7 @@ import { MapPin, DollarSign, Eye, X, Clock, CheckCircle, XCircle, AlertCircle } 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import NoApplication from "./no-application";
 import TitleCard from "./title-card";
+import { Button } from "@/components/ui/button";
 
 interface RentalApplication {
   id: number
@@ -202,6 +203,17 @@ const ApplicationMain = () => {
                                     </Alert>
                                 )}
                                 {/* APPROVED STATUS ALERT - END */}
+
+                                {application.application_status === "pending" && (
+                                    <Button
+                                      variant = "outline"
+                                      size = "sm"
+                                      className = "text-red-600"
+                                    >
+                                        <X className = "size-4 mr-1"/>
+                                        Withdraw
+                                    </Button>
+                                )}
 
                             </CardContent>
                         </Card>
