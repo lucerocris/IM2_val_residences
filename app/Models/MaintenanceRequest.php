@@ -167,7 +167,7 @@ class MaintenanceRequest extends Model
 
     public static function getMaintenanceRequests() {
         return DB::table('maintenance_requests')
-            ->select('id', 'maintenance_description', 'request_status', 'priority_level', 'request_date', 'scheduledDate')
+            ->select('id', 'maintenance_description', 'request_status', 'priority_level', 'request_date', 'scheduled_date')
             ->get();
 
     }
