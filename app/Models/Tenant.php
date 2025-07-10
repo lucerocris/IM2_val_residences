@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 class Tenant extends User
 {
     protected static $singleTableType = 'tenant';
@@ -52,6 +52,11 @@ class Tenant extends User
     public static function getTenantInfo()
     {
         return DB::table('users')->where('user_type', '=', 'tenant')->select('id', 'user_name', 'email')->get();
+    }
+
+    public static function getSelfInfo() //Gets Tenant Info but for himself!!
+    {
+        return DB::table('users')->where('id', Auth::id())->select('user_name', 'email', 'user_contanct_number', 'user_type', 'move_in_date', 'employment_status', 'emergency_contact', 'tenant_occupation')->get();
     }
 
 }
