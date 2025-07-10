@@ -1,23 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import {
-    CalendarDays,
-    CheckCircle,
-    DollarSign,
-    Home,
-    XCircle,
-    Clock
-} from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CalendarDays, CheckCircle, Clock, DollarSign, Home, XCircle } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { RentalApplication } from '@/types/application.types';
 import { Badge } from '@/components/ui/badge';
-
-
-
+import { Button } from '@/components/ui/button';
+import { RentalApplication } from '@/types/application.types';
 
 const getStatusBadge = (status: string) => {
     switch (status) {
@@ -59,8 +46,34 @@ interface ApplicationCardProps {
     onViewDetails: (application: RentalApplication) => void;
 }
 
-
 const ApplicationCard = ({ application, onViewDetails }: ApplicationCardProps) => {
+    // Add null checks for the relationships
+    if (!application.prospective_tenant || !application.rental_unit) {
+        return (
+            <Card className="transition-shadow hover:shadow-md">
+                <CardHeader>
+                    <div className="flex items-start justify-between">
+                        <div className="space-y-1">
+                            <CardTitle className="flex items-center gap-2">
+                                <Avatar className="h-8 w-8">
+                                    <AvatarFallback>N/A</AvatarFallback>
+                                </Avatar>
+                                Data not available
+                            </CardTitle>
+                            <CardDescription>This application data is no longer available</CardDescription>
+                        </div>
+                        <div className="flex items-center gap-2">{getStatusBadge(application.application_status)}</div>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                        Application #{application.id} - {application.application_status}
+                    </p>
+                </CardContent>
+            </Card>
+        );
+    }
+
     return (
         <Card className="transition-shadow hover:shadow-md">
             <CardHeader>
@@ -119,6 +132,6 @@ const ApplicationCard = ({ application, onViewDetails }: ApplicationCardProps) =
             </CardContent>
         </Card>
     );
-}
+};
 
 export default ApplicationCard;
