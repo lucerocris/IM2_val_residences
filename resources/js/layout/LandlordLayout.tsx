@@ -2,15 +2,20 @@ import LandlordHeader from '@/components/landlord/ui/LandlordHeader';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import LandlordSidebar from '@/components/landlord/ui/LandlordSidebar';
 import { ReactNode } from 'react';
+import { Toaster } from 'sonner';
+import { useFlashMessages } from '@/hooks/use-flash-messages';
+
 interface LandlordLayoutProps {
     children: ReactNode;
 }
 const LandlordLayout = ({children}:LandlordLayoutProps ) => {
+    useFlashMessages();
     return (
         <>
             <SidebarProvider>
                 <LandlordSidebar/>
                 <SidebarInset className="flex-grow overflow-hidden">
+                    <Toaster duration={4000}/>
                     <div className="flex min-h-screen w-full">
                         <div className="w-full flex-1">
                             <LandlordHeader trigger={<SidebarTrigger />} />

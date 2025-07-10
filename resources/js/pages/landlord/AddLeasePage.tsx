@@ -8,6 +8,7 @@ import LandlordLayout from '@/layout/LandlordLayout';
 import type { AddLeaseProps, LeaseFormData } from '@/types/addLease.types';
 import { router, useForm } from '@inertiajs/react';
 import type React from 'react';
+import { toast } from 'sonner';
 
 export default function AddLease({ tenants, available_units }: AddLeaseProps) {
     const { data, setData, post, processing, errors, reset } = useForm<LeaseFormData>({
@@ -68,9 +69,6 @@ export default function AddLease({ tenants, available_units }: AddLeaseProps) {
         event.preventDefault();
 
         post('/landlord/leases', {
-            onSuccess: () => {
-                router.visit('/landlord/leases');
-            },
             onError: (errors) => {
                 console.error('Form submission errors:', errors);
             },

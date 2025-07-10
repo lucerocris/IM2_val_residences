@@ -8,6 +8,7 @@ import LandlordLayout from '@/layout/LandlordLayout';
 import type { PropertyFormData } from '@/types/propertyFormData.types';
 import { router, useForm } from '@inertiajs/react';
 import type React from 'react';
+import { toast } from 'sonner';
 
 interface AddPropertyProps {
     landlord_id?: number;
@@ -82,10 +83,6 @@ export default function AddProperty({ landlord_id = 1 }: AddPropertyProps) {
         // Submit using Inertia with file upload
         router.post('/landlord/properties', formData, {
             forceFormData: true,
-            onSuccess: () => {
-                // Navigate back to a property list
-                router.visit('/landlord/properties');
-            },
             onError: (errors) => {
                 console.error('Form submission errors:', errors);
             },

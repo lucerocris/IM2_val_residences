@@ -1,5 +1,7 @@
 import { router } from '@inertiajs/react';
 import type { RentalApplication } from '@/types/application.types';
+import { toast } from "sonner";
+
 
 export function useApplicationActions(
     applications: RentalApplication[],
