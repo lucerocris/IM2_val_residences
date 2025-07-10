@@ -164,6 +164,13 @@ class MaintenanceRequest extends Model
             'lease:id,start_date,end_date,lease_status',
         ])->get()->toArray();
     }
+
+    public static function getMaintenanceRequests() {
+        return DB::table('maintenance_requests')
+            ->select('id', 'description', 'status', 'priority', 'request_date', 'scheduledDate')
+            ->get();
+
+    }
 }
 //export type MaintenanceRequest = {
 //    id: string
