@@ -30,6 +30,7 @@ const Header = ({links, links2, actions}: HeaderProps) => {
                                     key={link.href}
                                     href={link.href}
                                     method={link.method}
+                                    className = "relative text-white after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 hover:after:w-full"
                                 >
                                     {link.label}
                                 </Link>
@@ -48,7 +49,7 @@ const Header = ({links, links2, actions}: HeaderProps) => {
                                             <Button
                                               type = "button"
                                               variant = "outline"
-                                              className = "text-black px-2 hover:bg-black/40 hover:text-white/80"
+                                              className = "bg-white text-black hover:opacity-70 duration-400 opacity-90 px-4"
                                             >
                                                 {link.label}
                                             </Button>

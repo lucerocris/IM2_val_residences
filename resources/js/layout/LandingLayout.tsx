@@ -24,14 +24,13 @@ const LandingLayout = ({ children, title, subtitle, buttonLabel }: LandingLayout
 
     const headerActions = (
         <>
-            <Button variant = "outline" className = "bg-black opacity-90 px-4">
+            <Button variant = "outline" className = "bg-transparent hover:opacity-70 duration-400 opacity-90 px-4">
                 <LoginModal />
             </Button>
 
-            <Button variant = "outline" className = "bg-black opacity-90 px-4">
+            <Button variant = "outline" className = "bg-white text-black hover:opacity-70 duration-400 opacity-90 px-4">
                 <SignUpModal />
             </Button>
-
         </>
     );
 
