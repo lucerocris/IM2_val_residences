@@ -124,48 +124,24 @@ const DashboardPage = ({
                     <LandlordPageHeader
                         title={'Dashboard'}
                         subtitle={'Overview of your rental properties and operations'}
-                        actions={
-                            <Button size="sm" asChild>
-                                <Link href="/landlord/properties/create">
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Add Property
-                                </Link>
-                            </Button>
-                        }
                     />
 
                     {/* Key Metrics */}
                     <div className="flex w-full gap-5">
                         <MetricGrid metrics={metricData} className={'grid flex-1 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1'} />
-                        {/* Recent Activities */}
                         <div className="flex-1">
-                            <Card>
+                            <Card className="h-full">
                                 <DashboardCardHeader
                                     icon={<Calendar className="h-5 w-5" />}
                                     cardTitle={'Quick Actions'}
                                     cardDescription={'Latest updates across your properties'}
                                 />
-                                <div className="grid grid-cols-2 gap-4 px-4 pt-4 md:grid-cols-4 lg:grid-cols-2 ">
-                                    <QuickActionsButtons icon={<Plus className="h-5 w-5" />} buttonTitle={'Add Unit'} />
-                                    <QuickActionsButtons icon={<Users className="h-5 w-5" />} buttonTitle={'New Tenant'} />
-                                    <QuickActionsButtons icon={<FileText className="h-5 w-5" />} buttonTitle={'Create Lease'} />
-                                    <QuickActionsButtons icon={<DollarSign className="h-5 w-5" />} buttonTitle={'Record Payment'} />
-                                    <QuickActionsButtons icon={<Wrench className="h-5 w-5" />} buttonTitle={'Maintenance'} />
-                                    <QuickActionsButtons icon={<Eye className="h-5 w-5" />} buttonTitle={'View Reports'} />
+                                <div className="grid grid-row-2 gap-4 px-4 pt-4 md:grid-row-4 lg:grid-row-4 h-full">
+                                    <QuickActionsButtons icon={<Plus className="h-5 w-5" />} buttonTitle={'Add Unit'} href={'/landlord/properties/create'} />
+                                    <QuickActionsButtons icon={<Users className="h-5 w-5" />} buttonTitle={'New Tenant'} href={'/landlord/tenants/create'}/>
+                                    <QuickActionsButtons icon={<FileText className="h-5 w-5" />} buttonTitle={'Create Lease'} href={'/landlord/leases/create'} />
+                                    <QuickActionsButtons icon={<Wrench className="h-5 w-5" />} buttonTitle={'Maintenance'} href={'/landlord/maintenance/requests'}/>
                                 </div>
-                                <DashboardCardContent
-                                    items={[]}
-                                    getKey={(activity) => activity.id}
-                                    renderItems={(activity: RecentActivities) => (
-                                        <div className="flex items-start gap-3 rounded-lg bg-gray-50 p-3">
-                                            <div className="mt-2 h-2 w-2 rounded-full bg-blue-500"></div>
-                                            <div className="flex-1">
-                                                <p className="text-sm font-medium">{activity.description}</p>
-                                                <p className="mt-1 text-xs text-gray-500">{activity.time}</p>
-                                            </div>
-                                        </div>
-                                    )}
-                                />
                             </Card>
                         </div>
                     </div>
