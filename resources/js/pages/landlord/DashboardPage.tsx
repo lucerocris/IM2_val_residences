@@ -145,7 +145,7 @@ const DashboardPage = ({
                                     cardTitle={'Quick Actions'}
                                     cardDescription={'Latest updates across your properties'}
                                 />
-                                <div className="grid grid-cols-2 gap-4 px-4 pt-4 md:grid-cols-4 lg:grid-cols-2">
+                                <div className="grid grid-cols-2 gap-4 px-4 pt-4 md:grid-cols-4 lg:grid-cols-2 ">
                                     <QuickActionsButtons icon={<Plus className="h-5 w-5" />} buttonTitle={'Add Unit'} />
                                     <QuickActionsButtons icon={<Users className="h-5 w-5" />} buttonTitle={'New Tenant'} />
                                     <QuickActionsButtons icon={<FileText className="h-5 w-5" />} buttonTitle={'Create Lease'} />
