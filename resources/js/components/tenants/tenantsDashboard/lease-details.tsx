@@ -1,63 +1,151 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import LeaseDetailsInfo from "./lease-details-info";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 
 interface LeaseData {
-    apartment: string;
-    unitNo: string;
-    totalFloors: string;
-    livingArea: string;
-    bedrooms: string;
-    toiletBaths: string;
-    balcony: string;
-    parkingSpace: string;
-    petFriendly: string;
-    furnished: string;
-    leaseTerm: string;
-    rentPrice: string;
-    deposit: string;
-    advance: string;
-    startDate: string;
-    endDate: string;
-    status: string;
+  id: number
+  tenant_id: number
+  unit_id: number
+  start_date: string
+  end_date: string
+  monthly_rent: string
+  deposit_amount: string
+  lease_term: number
+  lease_status: string
+  terms_and_conditions: string
+  unit: {
+    id: number
+    landlord_id: number
+    address: string
+    unit_number: string
+    availability_status: string
+    floor_area: string
+    rent_price: string
+    property_type: string
+    description: string
+    amenities: string[]
+  }
 }
 
 interface LeaseDetailsProps {
-    leaseData: LeaseData;
+  leaseData: LeaseData
 }
 
-const LeaseDetails = ({ leaseData }: LeaseDetailsProps) => {
-    return(
-        <>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Lease Details</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className = "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <LeaseDetailsInfo title = "Apartment" info = {leaseData.apartment} />
-                        <LeaseDetailsInfo title = "Unit No." info = {leaseData.unitNo} />
-                        <LeaseDetailsInfo title = "Total Floors" info = {leaseData.totalFloors} />
-                        <LeaseDetailsInfo title = "Living Area (sqm)" info = {leaseData.livingArea} />
-                        <LeaseDetailsInfo title = "Bedrooms" info = {leaseData.bedrooms} />                        
-                        <LeaseDetailsInfo title = "Toilet & Baths" info = {leaseData.toiletBaths} />
-                        <LeaseDetailsInfo title = "Balcony" info = {leaseData.balcony} />
-                        <LeaseDetailsInfo title = "Parking Space" info = {leaseData.parkingSpace} />
-                    </div>
+export default function LeaseDetails({ leaseData }: LeaseDetailsProps) {
+  const formatCurrency = (amount: string) => {
+    return Number.parseFloat(amount).toLocaleString("en-PH", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  }
 
-                    <Separator className = "my-4" />
-                    
-                    <div className = "grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <LeaseDetailsInfo title = "Lease Term (months)" info = {leaseData.leaseTerm} />
-                            <LeaseDetailsInfo title = "Rent Price (Php)" info = {leaseData.rentPrice} />
-                            <LeaseDetailsInfo title = "Deposit (Months)" info = {leaseData.deposit} />
-                            <LeaseDetailsInfo title = "Advance (Months)" info = {leaseData.advance} />
-                    </div>
-                    
-                </CardContent>
-            </Card>
-        </>
-    );
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "active":
+        return "bg-green-100 text-green-800 hover:bg-green-100"
+      case "expired":
+        return "bg-red-100 text-red-800 hover:bg-red-100"
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
+      default:
+        return "bg-gray-100 text-gray-800 hover:bg-gray-100"
+    }
+  }
+
+  const formatAmenity = (amenity: string) => {
+    return amenity.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+  }
+
+  return (
+    <Card className="w-full max-w-4xl mx-auto">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg font-semibold text-gray-900">Lease Details</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Lease Information */}
+        <div>
+          <h3 className="text-base font-medium text-gray-900 mb-2">Lease Information</h3>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-1">
+              <p className="text-xs text-gray-600">Start Date</p>
+              <p className="text-sm font-semibold text-gray-900">{formatDate(leaseData.start_date)}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs text-gray-600">Monthly Rent (Php)</p>
+              <p className="text-sm font-semibold text-gray-900">{formatCurrency(leaseData.monthly_rent)}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs text-gray-600">Deposit Amount (Php)</p>
+              <p className="text-sm font-semibold text-gray-900">{formatCurrency(leaseData.deposit_amount)}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs text-gray-600">Lease Term (months)</p>
+              <p className="text-sm font-semibold text-gray-900">{leaseData.lease_term}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs text-gray-600">Lease Status</p>
+              <Badge className={`${getStatusColor(leaseData.lease_status)} text-xs`}>
+                {leaseData.lease_status.charAt(0).toUpperCase() + leaseData.lease_status.slice(1)}
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        {/* Separator */}
+        <hr className="border-gray-200" />
+
+        {/* Rental Unit Information */}
+        <div>
+          <h3 className="text-base font-medium text-gray-900 mb-2">Rental Unit Information</h3>
+          <div className="grid grid-cols-3 gap-4 mb-3">
+            <div className="space-y-1">
+              <p className="text-xs text-gray-600">Address</p>
+              <p className="text-sm font-semibold text-gray-900">{leaseData.unit.address}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs text-gray-600">Unit Number</p>
+              <p className="text-sm font-semibold text-gray-900">{leaseData.unit.unit_number}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs text-gray-600">Property Type</p>
+              <p className="text-sm font-semibold text-gray-900 capitalize">{leaseData.unit.property_type}</p>
+            </div>
+          </div>
+
+          <div className="mb-3 space-y-1">
+            <p className="text-xs text-gray-600">Description</p>
+            <p className="text-sm text-gray-900">{leaseData.unit.description}</p>
+          </div>
+
+          <div className="space-y-1">
+            <p className="text-xs text-gray-600">Amenities</p>
+            <div className="flex flex-wrap gap-1">
+              {leaseData.unit.amenities.map((amenity, index) => (
+                <Badge key={index} variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-100 text-xs px-2 py-1">
+                  {formatAmenity(amenity)}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Separator */}
+        <hr className="border-gray-200" />
+
+        {/* Terms and Conditions */}
+        <div className="space-y-1">
+          <p className="text-xs text-gray-600">Terms and Conditions</p>
+          <p className="text-sm text-gray-900 leading-relaxed">{leaseData.terms_and_conditions}</p>
+        </div>
+      </CardContent>
+    </Card>
+  )
 }
-
-export default LeaseDetails;
