@@ -87,7 +87,7 @@ const TenantDashboard = () => {
           <Button
             variant = "outline"
             onClick={() => setProfileModalOpen(true)}
-            className="flex items-center gap-2 px-3 py-1.5 text-white bg-black/90 hover:text-black hover:bg-white/90 rounded-md transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 text-white bg-transparent hover:text-black hover:bg-white/90 rounded-md transition-colors"
           >
             <User className="h-4 w-4" />
           </Button>
