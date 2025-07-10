@@ -1,18 +1,23 @@
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ReactNode } from 'react';
+import { Link } from '@inertiajs/react';
 
 interface  QuickActionsButtonsProps {
-    icon: ReactNode,
+    icon: ReactNode;
+    href: string;
     buttonTitle: string,
 }
 
-const QuickActionsButtons = ({icon, buttonTitle}: QuickActionsButtonsProps) => {
+const QuickActionsButtons = ({icon, buttonTitle, href}: QuickActionsButtonsProps) => {
     return (
-        <Button variant="outline" className="h-20 flex-col gap-2 bg-transparent">
-            {icon}
-            {buttonTitle}
-        </Button>
+        <Link href={href}>
+            <Button variant="outline" className="h-full flex-col gap-2 bg-transparent w-full">
+                {icon}
+                {buttonTitle}
+            </Button>
+        </Link>
+
     );
 }
 
