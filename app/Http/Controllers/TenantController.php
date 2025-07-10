@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\MaintenanceRequest;
 
 class TenantController extends Controller
 {
-     public function index() {
-        return Inertia::render('tenant/Landing');
+    public function index() {
+        $maintenance = MaintenanceRequest::getMaintenanceRequests();
+        return Inertia::render('tenant/Landing', ['maintenanceRequests']);
     }
 
     public function listings() {
