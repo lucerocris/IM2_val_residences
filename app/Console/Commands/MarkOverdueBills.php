@@ -29,7 +29,11 @@ class MarkOverdueBills extends Command
     {
         $today = Carbon::today();
 
-        DB::table('rental_bills')->where('due_date', '<', $today)->where('amount_paid', '<', 'rent_amount')->update(['payment_status' => 'overdue']);
+        $updatedCount = DB::table('rental_bills')
+            ->where('due_date', '<', $today)
+            ->whereRaw('amount_paid < rent_amount')
+            ->where('payment_status', '!=', 'overdue')
+            ->update(['payment_status' => 'overdue']);
 
         $this->info('Overdue rental bills updated successfully.');
     }
