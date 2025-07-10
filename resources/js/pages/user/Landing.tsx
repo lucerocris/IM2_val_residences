@@ -5,9 +5,12 @@ import ApplicationMain from "@/components/prospective-tenant/application-status/
 const tenantHome = () => {
     return(
         <>
-            <Header links = {[
+            <Header 
+            links = {[
                 {label: "VIEW LISTINGS", href: "/user/listings"},
                 {label: "USER DASHBOARD", href: "/user"},
+            ]}
+            links2 = {[
                 {label: "LOG OUT", href: "/logout", method: 'post'}
             ]}
             />

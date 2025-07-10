@@ -3,6 +3,7 @@ import Header from "@/components/main/ui/Header";
 import TenantLayout from "@/layout/TenantLayout";
 import TenantProfileModal from "@/components/tenants/tenantsDashboard/tenant-profile-modal";
 import { User } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import CurrentBill from "@/components/tenants/tenantsDashboard/current-bill";
 import LeaseDetails from '@/components/tenants/tenantsDashboard/lease-details';
 import MaintenanceRequestComponent from "@/components/tenants/tenantsDashboard/maintenance-request";
@@ -77,17 +78,19 @@ const TenantDashboard = () => {
       <Header
         links={[
           {label: "VIEW LISTINGS", href: "/tenant/listings"},
-          {label: "TENANT DASHBOARD", href: "/tenant/dashboard"},
+          {label: "TENANT DASHBOARD", href: "/tenant/dashboard"}
+        ]}
+        links2 = {[
           {label: "LOG OUT", href: "/logout", method: 'post'}
         ]}
         actions={
-          <button
+          <Button
+            variant = "outline"
             onClick={() => setProfileModalOpen(true)}
-            className="flex items-center gap-2 px-3 py-1.5 text-white hover:bg-white/10 rounded-md transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 text-white bg-black/90 hover:text-black hover:bg-white/90 rounded-md transition-colors"
           >
             <User className="h-4 w-4" />
-            Profile
-          </button>
+          </Button>
         }
       />
       <TenantLayout>

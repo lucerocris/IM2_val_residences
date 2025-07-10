@@ -4,6 +4,7 @@ import Hero from '@/components/main/ui/Hero';
 import LoginModal from '@/components/main/ui/LoginModal';
 import SignUpModal from '@/components/main/ui/SignUpModal';
 import { ReactNode, useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 interface LandingLayoutProps {
     children: ReactNode;
@@ -23,8 +24,14 @@ const LandingLayout = ({ children, title, subtitle, buttonLabel }: LandingLayout
 
     const headerActions = (
         <>
-            <LoginModal />
-            <SignUpModal />
+            <Button variant = "outline" className = "bg-black opacity-90 px-4">
+                <LoginModal />
+            </Button>
+
+            <Button variant = "outline" className = "bg-black opacity-90 px-4">
+                <SignUpModal />
+            </Button>
+
         </>
     );
 
@@ -34,7 +41,7 @@ const LandingLayout = ({ children, title, subtitle, buttonLabel }: LandingLayout
             <div className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
                 headerVisible ? 'translate-y-0' : '-translate-y-full'
             }`}>
-                <Header links={headerLinks} actions={headerActions} />
+                <Header links={headerLinks} actions={headerActions}/>
             </div>
 
             {/* Hero Section */}
