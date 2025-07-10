@@ -13,6 +13,7 @@ use App\Http\Controllers\LandlordAdmin\RentalApplicationController;
 use App\Http\Controllers\LandlordAdmin\LeaseController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\RequestMaintenanceController;
 
 Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
@@ -35,6 +36,14 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth', 'user.type:tenant')->group(function () {
     Route::get('/tenant/dashboard', [TenantController::class, 'index']);
     Route::get('/tenant/listings', [TenantController::class, 'listings']);
+
+
+// Tenant Maintenance Request
+    Route::post('/tenant/maintenanceRequest', [RequestMaintenanceController::class, 'store']);
+
+
+// Tenant Payment Upload
+
     Route::get('/tenant/payments/gcash', [TenantController::class, 'gcash']);
     Route::get('/tenant/payments/paymaya', [TenantController::class, 'paymaya']);
     Route::get('/tenant/payments/bankTransfer', [TenantController::class, 'bank']);

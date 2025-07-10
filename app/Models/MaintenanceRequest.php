@@ -12,13 +12,16 @@ class MaintenanceRequest extends Model
     use HasFactory;
 
     protected $fillable = [
+        'tenant_id',
+        'unit_id',
+        'lease_id',
         'request_date',
         'maintenance_description',
         'request_status',
         'priority_level',
         'scheduled_date',
         'completion_date',
-        'tenants_remarks',
+        'tenant_remarks',
         'landlord_notes',
         'estimated_cost',
         'actual_cost'
@@ -203,4 +206,3 @@ class MaintenanceRequest extends Model
 //        lease_status: string
 //    } | null
 //}
-
