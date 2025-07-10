@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class Lease extends Model
 {
@@ -70,4 +72,15 @@ class Lease extends Model
             ])
             ->get();
     }
+
+
+    //Gets his Own leaes info
+    /* public static function getOwnLease($userId = null) {
+        $id = $userId ?? Auth::id();
+
+        // Fix when table columns are added dab dab dab dab
+        //
+        //return DB::table('leases')->where('tenant_id', $id)->select('apartment', 'unitNo', 'totalFloors', 'livingArea', 'bedrooms', 'toiletBaths', 'balcony', 'parkingSpace', 'petFriendly', 'furnished', 'leaseTerm', 'rentPrice', 'deposit', 'advance', 'startDate', 'endDate', 'status')->get();
+    }
+    */
 }
