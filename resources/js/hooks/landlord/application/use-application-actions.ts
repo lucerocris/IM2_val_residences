@@ -29,7 +29,7 @@ export function useApplicationActions(
         }, {
             preserveScroll: true,
             onSuccess: page => {
-                if(page.props.applicationData) {
+                if(page.props.applicationsData) {
                     setApplications(page.props.applicationsData as RentalApplication[]);
                 }
             },

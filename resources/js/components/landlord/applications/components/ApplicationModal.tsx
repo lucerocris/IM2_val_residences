@@ -1,3 +1,13 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -22,6 +32,7 @@ import {
     User,
     XCircle,
 } from 'lucide-react';
+import { useState } from 'react';
 
 interface ApplicationModalProps {
     application: RentalApplication | null;
@@ -56,7 +67,58 @@ const ApplicationModal = ({
     onSendMessage,
     messageText,
 }: ApplicationModalProps) => {
+    const [showApproveDialog, setShowApproveDialog] = useState(false);
+    const [showRejectDialog, setShowRejectDialog] = useState(false);
+
     if (!application) return null;
+
+    // Handle cases where prospective_tenant or rental_unit might be null (for approved applications)
+    const prospectiveTenant = application.prospective_tenant;
+    const rentalUnit = application.rental_unit;
+
+    // If critical data is missing, show a simplified view
+    if (!prospectiveTenant || !rentalUnit) {
+        return (
+            <Dialog open={isOpen} onOpenChange={onClose}>
+                <DialogContent className="max-h-[90vh] !max-w-4xl overflow-y-auto">
+                    <DialogHeader className="space-y-4">
+                        <div className="flex items-center gap-3">
+                            <Avatar className="h-10 w-10">
+                                <AvatarFallback className="bg-primary text-primary-foreground">N/A</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                                <DialogTitle className="text-xl font-semibold">Application #{application.id}</DialogTitle>
+                                <DialogDescription className="text-base">Data not available - Application has been processed</DialogDescription>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                {getStatusBadge(application.application_status)}
+                                <Badge variant="outline" className="text-xs">
+                                    #{application.id}
+                                </Badge>
+                            </div>
+                        </div>
+                    </DialogHeader>
+                    <div className="space-y-6">
+                        <Card>
+                            <CardContent className="py-6">
+                                <p className="text-center text-muted-foreground">
+                                    This application has been {application.application_status}.
+                                    {application.application_status === 'approved' && ' The prospective tenant has been converted to a tenant.'}
+                                </p>
+                                {application.review_notes && (
+                                    <div className="mt-4 rounded-md bg-muted p-4">
+                                        <p className="text-sm">
+                                            <strong>Review Notes:</strong> {application.review_notes}
+                                        </p>
+                                    </div>
+                                )}
+                            </CardContent>
+                        </Card>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        );
+    }
 
     const isPending = application.application_status === 'pending';
 
@@ -68,16 +130,16 @@ const ApplicationModal = ({
                     <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
                             <AvatarFallback className="bg-primary text-primary-foreground">
-                                {application.prospective_tenant.user_name
+                                {prospectiveTenant.user_name
                                     .split(' ')
                                     .map((n) => n[0])
                                     .join('')}
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
-                            <DialogTitle className="text-xl font-semibold">{application.prospective_tenant.user_name}</DialogTitle>
+                            <DialogTitle className="text-xl font-semibold">{prospectiveTenant.user_name}</DialogTitle>
                             <DialogDescription className="text-base">
-                                {application.rental_unit.address} {application.rental_unit.unit_number}
+                                {rentalUnit.address} {rentalUnit.unit_number}
                             </DialogDescription>
                         </div>
                         <div className="flex items-center gap-2">
@@ -97,15 +159,11 @@ const ApplicationModal = ({
                                 <CardTitle className="text-base font-medium">Applicant Details</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-2">
-                                <InfoRow icon={Mail} label="Email" value={application.prospective_tenant.email} />
-                                <InfoRow icon={Phone} label="Phone" value={application.prospective_tenant.user_contact_number} />
-                                <InfoRow
-                                    icon={DollarSign}
-                                    label="Monthly Income"
-                                    value={`$${application.prospective_tenant.monthly_income.toLocaleString()}`}
-                                />
-                                <InfoRow icon={Briefcase} label="Employment" value={application.prospective_tenant.employment_status} />
-                                <InfoRow icon={MapPin} label="Current Address" value={application.prospective_tenant.current_address} />
+                                <InfoRow icon={Mail} label="Email" value={prospectiveTenant.email} />
+                                <InfoRow icon={Phone} label="Phone" value={prospectiveTenant.user_contact_number} />
+                                <InfoRow icon={DollarSign} label="Monthly Income" value={`$${prospectiveTenant.monthly_income.toLocaleString()}`} />
+                                <InfoRow icon={Briefcase} label="Employment" value={prospectiveTenant.employment_status} />
+                                <InfoRow icon={MapPin} label="Current Address" value={prospectiveTenant.current_address} />
                             </CardContent>
                         </Card>
 
@@ -114,22 +172,18 @@ const ApplicationModal = ({
                                 <CardTitle className="text-base font-medium">Property Details</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-2">
-                                <InfoRow
-                                    icon={Home}
-                                    label="Address"
-                                    value={`${application.rental_unit.address} ${application.rental_unit.unit_number}`}
-                                />
-                                <InfoRow icon={DollarSign} label="Monthly Rent" value={`$${application.rental_unit.rent_price.toLocaleString()}`} />
-                                <InfoRow icon={Home} label="Property Type" value={application.rental_unit.property_type} />
+                                <InfoRow icon={Home} label="Address" value={`${rentalUnit.address} ${rentalUnit.unit_number}`} />
+                                <InfoRow icon={DollarSign} label="Monthly Rent" value={`$${rentalUnit.rent_price.toLocaleString()}`} />
+                                <InfoRow icon={Home} label="Property Type" value={rentalUnit.property_type} />
                                 <InfoRow icon={CheckCircle} label="Availability">
-                                    {getAvailabilityBadge(application.rental_unit.availability_status)}
+                                    {getAvailabilityBadge(rentalUnit.availability_status)}
                                 </InfoRow>
                                 <InfoRow
                                     icon={CalendarDays}
                                     label="Preferred Move-in"
                                     value={new Date(application.preferred_move_in_date).toLocaleDateString()}
                                 />
-                                <InfoRow icon={User} label="Landlord" value={application.rental_unit.landlord.user_name} />
+                                <InfoRow icon={User} label="Landlord" value={rentalUnit.landlord.user_name} />
                             </CardContent>
                         </Card>
                     </div>
@@ -201,16 +255,11 @@ const ApplicationModal = ({
                                     />
                                 </div>
                                 <div className="flex gap-2">
-                                    <Button onClick={() => onApplicationAction(application.id, 'approved', reviewNotes)} className="flex-1" size="sm">
+                                    <Button onClick={() => setShowApproveDialog(true)} className="flex-1" size="sm">
                                         <CheckCircle className="mr-2 h-4 w-4" />
                                         Approve
                                     </Button>
-                                    <Button
-                                        onClick={() => onApplicationAction(application.id, 'rejected', reviewNotes)}
-                                        variant="destructive"
-                                        className="flex-1"
-                                        size="sm"
-                                    >
+                                    <Button onClick={() => setShowRejectDialog(true)} variant="destructive" className="flex-1" size="sm">
                                         <XCircle className="mr-2 h-4 w-4" />
                                         Reject
                                     </Button>
@@ -263,6 +312,60 @@ const ApplicationModal = ({
                         </CardContent>
                     </Card>
                 </div>
+
+                {/* Approve Confirmation Dialog */}
+                <AlertDialog open={showApproveDialog} onOpenChange={setShowApproveDialog}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure you want to approve this application?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This will approve {prospectiveTenant.user_name}'s application for {rentalUnit.address} {rentalUnit.unit_number}. This
+                                action will also automatically reject all other pending applications for this unit.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={() => {
+                                    onApplicationAction(application.id, 'approved', reviewNotes);
+                                    setShowApproveDialog(false);
+                                    onClose();
+                                }}
+                                className="bg-green-600 hover:bg-green-700"
+                            >
+                                <CheckCircle className="mr-2 h-4 w-4" />
+                                Approve Application
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+
+                {/* Reject Confirmation Dialog */}
+                <AlertDialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure you want to reject this application?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This will reject {prospectiveTenant.user_name}'s application for {rentalUnit.address} {rentalUnit.unit_number}. This
+                                action cannot be undone.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={() => {
+                                    onApplicationAction(application.id, 'rejected', reviewNotes);
+                                    setShowRejectDialog(false);
+                                    onClose();
+                                }}
+                                className="bg-red-600 hover:bg-red-700"
+                            >
+                                <XCircle className="mr-2 h-4 w-4" />
+                                Reject Application
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </DialogContent>
         </Dialog>
     );
