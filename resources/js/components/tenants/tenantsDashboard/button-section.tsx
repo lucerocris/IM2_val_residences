@@ -166,8 +166,8 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
                     <InputLabel label = "refNo" labelText="Reference Number" input = {<Input id = "refNo" placeholder = "Enter reference number" value = {referenceNumber} onChange = {(e) => setReferenceNumber(e.target.value)} />} />
                 </div>
 
-                <Button 
-                    className = "w-full" 
+                <Button
+                    className = "w-full"
                     disabled = {!paymentMethod || !referenceNumber.trim()}
                     onClick = {() => {
                         if(paymentMethod === "gcash") {
@@ -187,51 +187,88 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
     );
 }
 
-const MaintenanceModal = ({leaseData, currentBill}:ButtonSectionProps) => {
-    
-    const [priorityLevel, setPriorityLevel] = useState("")
+const MaintenanceModal = ({ leaseData, currentBill }: ButtonSectionProps) => {
+    const [priorityLevel, setPriorityLevel] = useState("");
+    const [description, setDescription] = useState("");
+    const [remarks, setRemarks] = useState("");
 
-    return(
+    const handleMaintenanceSubmit = () => {
+        router.post('/tenant/maintenanceRequest', {
+            priority_level: priorityLevel,
+            description,
+            remarks,
+            lease_id: leaseData.id, // optional: assuming you want to associate the request with a lease
+        });
+    };
+
+    return (
         <>
             <DialogHeader>
                 <DialogTitle>Submit Maintenance Request</DialogTitle>
-                <DialogDescription>Describe the maintenance issue for {leaseData.unit.address}</DialogDescription>
+                <DialogDescription>
+                    Describe the maintenance issue for {leaseData.unit.address}
+                </DialogDescription>
             </DialogHeader>
 
-            <div className = "space-y-4">
-                <div className = "space-y-2">
-                    <Label htmlFor = "priority">Priority Level</Label>
-                    <Select value = {priorityLevel} onValueChange = {setPriorityLevel}>
+            <div className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="priority">Priority Level</Label>
+                    <Select value={priorityLevel} onValueChange={setPriorityLevel}>
                         <SelectTrigger>
-                            <SelectValue placeholder = "Select your priority level" />
+                            <SelectValue placeholder="Select your priority level" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value = "low">Low - Can wait a few days</SelectItem>
-                            <SelectItem value = "medium">Medium - Should be addressed soon</SelectItem>
-                            <SelectItem value = "high">High - Needs attention within 24 hours</SelectItem>
-                            <SelectItem value = "urgent">Urgent - Emergency repair needed</SelectItem>
+                            <SelectItem value="low">Low - Can wait a few days</SelectItem>
+                            <SelectItem value="medium">Medium - Should be addressed soon</SelectItem>
+                            <SelectItem value="high">High - Needs attention within 24 hours</SelectItem>
+                            <SelectItem value="urgent">Urgent - Emergency repair needed</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
 
-                <div className = "space-y-2">
-                    <InputLabel label = "desc" labelText="Description" input = {<Textarea id = "desc" placeholder = "Please describe the maintenance issue in detail..." className = "min-h-[100px]"/>} />
+                <div className="space-y-2">
+                    <InputLabel
+                        label="desc"
+                        labelText="Description"
+                        input={
+                            <Textarea
+                                id="desc"
+                                placeholder="Please describe the maintenance issue in detail..."
+                                className="min-h-[100px]"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        }
+                    />
                 </div>
 
-                <div className = "space-y-2">
-                    <InputLabel label = "tenant-remarks" labelText="Additional Notes (Optional)" input = {<Textarea id = "tenant-remarks" placeholder = "Any additional information or special instructions..." rows = {3} />} />
+                <div className="space-y-2">
+                    <InputLabel
+                        label="tenant-remarks"
+                        labelText="Additional Notes (Optional)"
+                        input={
+                            <Textarea
+                                id="tenant-remarks"
+                                placeholder="Any additional information or special instructions..."
+                                rows={3}
+                                value={remarks}
+                                onChange={(e) => setRemarks(e.target.value)}
+                            />
+                        }
+                    />
                 </div>
 
-            <Link href="/tenant/maintenanceRequest" method="post">
-            <Button className = "w-full" disabled = {!priorityLevel}>
-                    <Wrench className = "w-4 h-4 mr-2" />
+                <Button
+                    className="w-full"
+                    disabled={!priorityLevel || !description}
+                    onClick={handleMaintenanceSubmit}
+                >
+                    <Wrench className="w-4 h-4 mr-2" />
                     Submit Request
                 </Button>
-            </Link>
-                
             </div>
         </>
     );
-}
+};
 
 export default ButtonSection;
