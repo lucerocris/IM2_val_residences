@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import LeaseDetailsInfo from "./lease-details-info"
 
 interface LeaseData {
   id: number
@@ -65,28 +67,17 @@ export default function LeaseDetails({ leaseData }: LeaseDetailsProps) {
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card className="w-full mx-auto">
       <CardContent className="space-y-4">
         {/* Lease Information */}
         <div>
           <h3 className="text-base text-gray-900 mb-2 font-bold">Lease Information</h3>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-1">
-              <p className="text-sm text-gray-600">Start Date</p>
-              <p className="text-md font-semibold text-gray-900">{formatDate(leaseData.start_date)}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-gray-600">Monthly Rent (Php)</p>
-              <p className="text-md font-semibold text-gray-900">{formatCurrency(leaseData.monthly_rent)}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-gray-600">Deposit Amount (Php)</p>
-              <p className="text-md font-semibold text-gray-900">{formatCurrency(leaseData.deposit_amount)}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-gray-600">Lease Term (months)</p>
-              <p className="text-md font-semibold text-gray-900">{leaseData.lease_term}</p>
-            </div>
+          <div className="grid grid-cols-5 gap-4">
+            <LeaseDetailsInfo title = "Start Date" data = {formatDate(leaseData.start_date)} />
+            <LeaseDetailsInfo title = "Monthly Rent (Php)" data = {formatCurrency(leaseData.monthly_rent)} />
+            <LeaseDetailsInfo title = "Deposit Amount (Php)" data = {formatCurrency(leaseData.deposit_amount)} />
+            <LeaseDetailsInfo title = "Lease Term (months)" data = {leaseData.lease_term.toLocaleString()} />
+            
             <div className="space-y-1">
               <p className="text-sm text-gray-600">Lease Status</p>
               <Badge className={`${getStatusColor(leaseData.lease_status)} text-sm`}>
@@ -96,25 +87,15 @@ export default function LeaseDetails({ leaseData }: LeaseDetailsProps) {
           </div>
         </div>
 
-        {/* Separator */}
-        <hr className="border-gray-200" />
+        <Separator />
 
         {/* Rental Unit Information */}
         <div>
           <h3 className="text-base font-bold text-gray-900 mb-2">Rental Unit Information</h3>
           <div className="grid grid-cols-3 gap-4 mb-3">
-            <div className="space-y-1">
-              <p className="text-sm text-gray-600">Address</p>
-              <p className="text-md font-semibold text-gray-900">{leaseData.unit.address}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-gray-600">Unit Number</p>
-              <p className="text-md font-semibold text-gray-900">{leaseData.unit.unit_number}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-gray-600">Property Type</p>
-              <p className="text-md font-semibold text-gray-900 capitalize">{leaseData.unit.property_type}</p>
-            </div>
+            <LeaseDetailsInfo title = "Address" data = {leaseData.unit.address}/>
+            <LeaseDetailsInfo title = "Unit Number" data = {leaseData.unit.unit_number} />
+            <LeaseDetailsInfo title = "Property Type" data = {leaseData.unit.property_type.charAt(0).toUpperCase() + leaseData.unit.property_type.slice(1)} />
           </div>
 
           <div className="mb-3 space-y-1">
