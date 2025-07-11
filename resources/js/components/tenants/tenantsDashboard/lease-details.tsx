@@ -66,33 +66,30 @@ export default function LeaseDetails({ leaseData }: LeaseDetailsProps) {
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-gray-900">Lease Details</CardTitle>
-      </CardHeader>
       <CardContent className="space-y-4">
         {/* Lease Information */}
         <div>
-          <h3 className="text-base font-medium text-gray-900 mb-2">Lease Information</h3>
+          <h3 className="text-base text-gray-900 mb-2 font-bold">Lease Information</h3>
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-1">
-              <p className="text-xs text-gray-600">Start Date</p>
-              <p className="text-sm font-semibold text-gray-900">{formatDate(leaseData.start_date)}</p>
+              <p className="text-sm text-gray-600">Start Date</p>
+              <p className="text-md font-semibold text-gray-900">{formatDate(leaseData.start_date)}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-xs text-gray-600">Monthly Rent (Php)</p>
-              <p className="text-sm font-semibold text-gray-900">{formatCurrency(leaseData.monthly_rent)}</p>
+              <p className="text-sm text-gray-600">Monthly Rent (Php)</p>
+              <p className="text-md font-semibold text-gray-900">{formatCurrency(leaseData.monthly_rent)}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-xs text-gray-600">Deposit Amount (Php)</p>
-              <p className="text-sm font-semibold text-gray-900">{formatCurrency(leaseData.deposit_amount)}</p>
+              <p className="text-sm text-gray-600">Deposit Amount (Php)</p>
+              <p className="text-md font-semibold text-gray-900">{formatCurrency(leaseData.deposit_amount)}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-xs text-gray-600">Lease Term (months)</p>
-              <p className="text-sm font-semibold text-gray-900">{leaseData.lease_term}</p>
+              <p className="text-sm text-gray-600">Lease Term (months)</p>
+              <p className="text-md font-semibold text-gray-900">{leaseData.lease_term}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-xs text-gray-600">Lease Status</p>
-              <Badge className={`${getStatusColor(leaseData.lease_status)} text-xs`}>
+              <p className="text-sm text-gray-600">Lease Status</p>
+              <Badge className={`${getStatusColor(leaseData.lease_status)} text-sm`}>
                 {leaseData.lease_status.charAt(0).toUpperCase() + leaseData.lease_status.slice(1)}
               </Badge>
             </div>
@@ -104,32 +101,32 @@ export default function LeaseDetails({ leaseData }: LeaseDetailsProps) {
 
         {/* Rental Unit Information */}
         <div>
-          <h3 className="text-base font-medium text-gray-900 mb-2">Rental Unit Information</h3>
+          <h3 className="text-base font-bold text-gray-900 mb-2">Rental Unit Information</h3>
           <div className="grid grid-cols-3 gap-4 mb-3">
             <div className="space-y-1">
-              <p className="text-xs text-gray-600">Address</p>
-              <p className="text-sm font-semibold text-gray-900">{leaseData.unit.address}</p>
+              <p className="text-sm text-gray-600">Address</p>
+              <p className="text-md font-semibold text-gray-900">{leaseData.unit.address}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-xs text-gray-600">Unit Number</p>
-              <p className="text-sm font-semibold text-gray-900">{leaseData.unit.unit_number}</p>
+              <p className="text-sm text-gray-600">Unit Number</p>
+              <p className="text-md font-semibold text-gray-900">{leaseData.unit.unit_number}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-xs text-gray-600">Property Type</p>
-              <p className="text-sm font-semibold text-gray-900 capitalize">{leaseData.unit.property_type}</p>
+              <p className="text-sm text-gray-600">Property Type</p>
+              <p className="text-md font-semibold text-gray-900 capitalize">{leaseData.unit.property_type}</p>
             </div>
           </div>
 
           <div className="mb-3 space-y-1">
-            <p className="text-xs text-gray-600">Description</p>
-            <p className="text-sm text-gray-900">{leaseData.unit.description}</p>
+            <p className="text-sm text-gray-600">Description</p>
+            <p className="text-md text-gray-900">{leaseData.unit.description}</p>
           </div>
 
           <div className="space-y-1">
-            <p className="text-xs text-gray-600">Amenities</p>
+            <p className="text-sm text-gray-600">Amenities</p>
             <div className="flex flex-wrap gap-1">
               {leaseData.unit.amenities.map((amenity, index) => (
-                <Badge key={index} variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-100 text-xs px-2 py-1">
+                <Badge key={index} variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-100 text-sm px-2 py-1">
                   {formatAmenity(amenity)}
                 </Badge>
               ))}
@@ -142,8 +139,8 @@ export default function LeaseDetails({ leaseData }: LeaseDetailsProps) {
 
         {/* Terms and Conditions */}
         <div className="space-y-1">
-          <p className="text-xs text-gray-600">Terms and Conditions</p>
-          <p className="text-sm text-gray-900 leading-relaxed">{leaseData.terms_and_conditions}</p>
+          <p className="text-sm text-gray-600">Terms and Conditions</p>
+          <p className="text-md text-gray-900 leading-relaxed">{leaseData.terms_and_conditions}</p>
         </div>
       </CardContent>
     </Card>
