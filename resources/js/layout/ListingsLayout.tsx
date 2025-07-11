@@ -9,10 +9,11 @@ interface ListingsLayoutProps {
     subtitle: string;
     buttonLabel?: string;
     headerLinks: { label: string; href: string }[];
+    headerLinks2?: { label: string; href: string }[];
     headerActions?: ReactNode;
 }
 
-const ListingsLayout = ({ children, title, subtitle, buttonLabel, headerLinks, headerActions }: ListingsLayoutProps) => {
+const ListingsLayout = ({ children, title, subtitle, buttonLabel, headerLinks, headerLinks2, headerActions }: ListingsLayoutProps) => {
     const [headerVisible, setHeaderVisible] = useState(false);
 
     return (
@@ -21,7 +22,7 @@ const ListingsLayout = ({ children, title, subtitle, buttonLabel, headerLinks, h
             <div className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
                 headerVisible ? 'translate-y-0' : '-translate-y-full'
             }`}>
-                <Header links={headerLinks} actions={headerActions} />
+                <Header links={headerLinks} links2 = {headerLinks2} actions={headerActions} />
             </div>
 
             {/* Hero Section */}
