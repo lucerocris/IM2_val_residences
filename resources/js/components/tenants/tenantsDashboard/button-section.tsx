@@ -11,27 +11,40 @@ import InputLabel from "./contact-landlord-inputs";
 import { Textarea } from "@/components/ui/textarea";
 
 interface leaseData {
-    apartment: string;
-    unitNo: string;
-    totalFloors: string;
-    livingArea: string;
-    bedrooms: string;
-    toiletBaths: string;
-    balcony: string;
-    parkingSpace: string;
-    petFriendly: string;
-    furnished: string;
-    leaseTerm: string;
-    rentPrice: string;
-    deposit: string;
-    advance: string;
-    startDate: string;
-    endDate: string;
-    status: string;
+    id: number;
+    tenant_id: number;
+    unit_id: number;
+    start_date: string;
+    end_date: string;
+    monthly_rent: string;
+    deposit_amount: string;
+    lease_term: number;
+    lease_status: string;
+    terms_and_conditions: string;
+    unit: {
+        id: number;
+        landlord_id: number;
+        address: string;
+        unit_number: string;
+        availability_status: string;
+        floor_area: string;
+        rent_price: string;
+        property_type: string;
+        description: string;
+        amenities: string[];
+    };
 }
 
 interface currentBill {
     id: number;
+    lease_id: number;
+    billing_date: string;
+    rent_amount: string;
+    due_date: string;
+    paid_date: string | null;
+    amount_paid: string;
+    payment_status: string;
+    // Backward compatibility
     billingDate: string;
     rentAmount: string;
     dueDate: string;
@@ -117,17 +130,17 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
         <>
             <DialogHeader>
                 <DialogTitle>Make Payment</DialogTitle>
-                <DialogDescription>Pay your monthly rent {leaseData.apartment}</DialogDescription>
+                <DialogDescription>Pay your monthly rent for {leaseData.unit.address}</DialogDescription>
             </DialogHeader>
             <div className = "space-y-4">
                 <div className = "bg-gray-50 p-4 rounded-lg">
                     <div className = "flex justify-between items-center mb-2">
                         <span className = "text-sm text-gray-600">Amount Due:</span>
-                        <span className = "font-semibold">₱{currentBill.rentAmount}</span>
+                        <span className = "font-semibold">₱{currentBill.rent_amount}</span>
                     </div>
                     <div className = "flex justify-between items-center">
                         <span className = "text-sm text-gray-600">Due Date:</span>
-                        <span className = "text-sm">{currentBill.dueDate}</span>
+                        <span className = "text-sm">{currentBill.due_date}</span>
                     </div>
                 </div>
 
@@ -146,7 +159,7 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
                 </div>
 
                 <div className = "space-y-2">
-                    <InputLabel label = "Amount" labelText="Amount" input = {<Input id = {"Amount"} type = "number" value = {currentBill.rentAmount} readOnly className = "bg-gray-50"/>} />
+                    <InputLabel label = "Amount" labelText="Amount" input = {<Input id = {"Amount"} type = "number" value = {currentBill.rent_amount} readOnly className = "bg-gray-50"/>} />
                 </div>
 
                 <div className = "space-y-2">
@@ -182,7 +195,7 @@ const MaintenanceModal = ({leaseData, currentBill}:ButtonSectionProps) => {
         <>
             <DialogHeader>
                 <DialogTitle>Submit Maintenance Request</DialogTitle>
-                <DialogDescription>Describe the maintenance issue for {leaseData.apartment}</DialogDescription>
+                <DialogDescription>Describe the maintenance issue for {leaseData.unit.address}</DialogDescription>
             </DialogHeader>
 
             <div className = "space-y-4">
