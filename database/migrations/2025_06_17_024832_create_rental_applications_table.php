@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('rental_applications', function (Blueprint $table) {
             $table->id();
+
+
             $table->foreignId('prospective_tenant_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('unit_id')->constrained('rental_units')->onDelete('cascade');
             $table->date('application_date');
             $table->date('preferred_move_in_date')->nullable();
             $table->enum('application_status', ['pending', 'approved', 'rejected', 'withdrawn'])->default('pending');
             $table->text('additional_notes')->nullable();
+
+            //landlord
             $table->date('reviewed_date')->nullable();
             $table->text('review_notes')->nullable();
             $table->timestamps();
