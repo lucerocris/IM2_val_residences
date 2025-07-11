@@ -24,9 +24,12 @@ const UserListings = ({ListingsData}: UserListingsProps) => {
 
     const headerLinks = [
         {label: "VIEW LISTINGS", href: "/user/listings"},
-        {label: "USER DASHBOARD", href: "/user"},
-        {label: "LOG OUT", href: "/"}
+        {label: "USER DASHBOARD", href: "/user"}
     ];
+
+    const headerLinks2 = [
+        {label: "LOG OUT", href: "/logout", method: "post"}
+    ]
 
     return(
         <ListingsLayout
@@ -34,6 +37,7 @@ const UserListings = ({ListingsData}: UserListingsProps) => {
             subtitle={subtitle}
             buttonLabel={buttonLabel}
             headerLinks={headerLinks}
+            headerLinks2 = {headerLinks2}
         >
             <ListingsMain ListingsData={ListingsData}/>
         </ListingsLayout>
