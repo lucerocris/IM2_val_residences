@@ -30,6 +30,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect('/user')->with('success', 'Registration successful! You can now browse and apply for rental listings.');
+        return redirect('/user/')->with('success', 'Registration successful! You can now browse and apply for rental listings.');
     }
 }

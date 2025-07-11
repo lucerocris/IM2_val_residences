@@ -37,9 +37,8 @@ class TenantLandlordController extends Controller
     // Delete Tenant
     public function destroy($id)
     {
-        $tenant = User::where('role', 'tenant')->findOrFail($id);
+        $tenant = User::where('user_type', 'tenant')->findOrFail($id);
 
-        //Optional: check for leases or requests before deleting
         $tenant->leases()->delete();
         $tenant->maintenanceRequests()->delete();
 

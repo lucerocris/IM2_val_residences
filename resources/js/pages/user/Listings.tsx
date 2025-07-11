@@ -1,7 +1,23 @@
 import ListingsLayout from "@/layout/ListingsLayout";
 import ListingsMain from "@/components/main/ui/Listings/main";
 
-const UserListings = () => {
+interface Listing {
+    id: number;
+    address: string;
+    unit_number: string;
+    availability_status: string;
+    floor_area: number;
+    rent_price: number;
+    property_type: string;
+    description: string;
+    amenities: string[];
+    unit_photos: string[];
+}
+
+interface UserListingsProps {
+    ListingsData: Listing[];
+}
+const UserListings = ({ListingsData}: UserListingsProps) => {
     const title = "Welcome, Cris"
     const subtitle = "Discover your perfect home among our premium rental collection in the heart of Cebu."
     const buttonLabel = "VIEW LISTINGS"
@@ -19,7 +35,7 @@ const UserListings = () => {
             buttonLabel={buttonLabel}
             headerLinks={headerLinks}
         >
-            <ListingsMain />
+            <ListingsMain ListingsData={ListingsData}/>
         </ListingsLayout>
     );
 }

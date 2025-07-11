@@ -62,6 +62,9 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
               .map((s) => s.trim())
               .filter(Boolean);
 
+    // Ensure unit_photos is always treated as an array
+    const photosArray = Array.isArray(listing.unit_photos) ? listing.unit_photos : [];
+
     if (featured) {
         return (
             <>
@@ -70,7 +73,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
                         <div className="relative lg:w-1/2">
                             {/* Image */}
                             <img
-                                src={listing.unit_photos[0] || '/placeholder.svg'}
+                                src={photosArray[0] || '/placeholder.svg'}
                                 alt={`${listing.address} - Unit ${listing.unit_number}`}
                                 className="h-64 w-full object-cover lg:h-full"
                             />
@@ -140,7 +143,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
         <Card className="overflow-hidden border-gray-200 bg-white transition-shadow hover:shadow-lg">
             <div className="relative">
                 <img
-                    src={listing.unit_photos[0] || '/placeholder.svg'}
+                    src={photosArray[0] || '/placeholder.svg'}
                     alt={`${listing.address} - Unit ${listing.unit_number}`}
                     className="h-48 w-full object-cover"
                 />

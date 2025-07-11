@@ -4,11 +4,9 @@ import QuickActionsButtons from '@/components/landlord/dashboard/ui/QuickActions
 import LandlordPageHeader from '@/components/landlord/ui/LandlordPageHeader';
 import MetricGrid from '@/components/landlord/ui/MetricGrid';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import LandlordLayout from '@/layout/LandlordLayout';
-import { Link } from '@inertiajs/react';
-import { AlertCircle, Building2, Calendar, PhilippinePeso, Eye, FileText, Plus, TrendingUp, Users, Wrench, DollarSign } from 'lucide-react';
+import { AlertCircle, Building2, Calendar, FileText, PhilippinePeso, Plus, TrendingUp, Users, Wrench } from 'lucide-react';
 
 type MaintenanceRequest = {
     id: number;
@@ -121,10 +119,7 @@ const DashboardPage = ({
             <LandlordLayout>
                 <div className="space-y-6">
                     {/* Header */}
-                    <LandlordPageHeader
-                        title={'Dashboard'}
-                        subtitle={'Overview of your rental properties and operations'}
-                    />
+                    <LandlordPageHeader title={'Dashboard'} subtitle={'Overview of your rental properties and operations'} />
 
                     {/* Key Metrics */}
                     <div className="flex w-full gap-5">
@@ -136,11 +131,27 @@ const DashboardPage = ({
                                     cardTitle={'Quick Actions'}
                                     cardDescription={'Latest updates across your properties'}
                                 />
-                                <div className="grid grid-row-2 gap-4 px-4 pt-4 md:grid-row-4 lg:grid-row-4 h-full">
-                                    <QuickActionsButtons icon={<Plus className="h-5 w-5" />} buttonTitle={'Add Unit'} href={'/landlord/properties/create'} />
-                                    <QuickActionsButtons icon={<Users className="h-5 w-5" />} buttonTitle={'New Tenant'} href={'/landlord/tenants/create'}/>
-                                    <QuickActionsButtons icon={<FileText className="h-5 w-5" />} buttonTitle={'Create Lease'} href={'/landlord/leases/create'} />
-                                    <QuickActionsButtons icon={<Wrench className="h-5 w-5" />} buttonTitle={'Maintenance'} href={'/landlord/maintenance/requests'}/>
+                                <div className="grid-row-2 md:grid-row-4 lg:grid-row-4 grid h-full gap-4 px-4 pt-4">
+                                    <QuickActionsButtons
+                                        icon={<Plus className="h-5 w-5" />}
+                                        buttonTitle={'Add Unit'}
+                                        href={'/landlord/properties/create'}
+                                    />
+                                    <QuickActionsButtons
+                                        icon={<Users className="h-5 w-5" />}
+                                        buttonTitle={'New Tenant'}
+                                        href={'/landlord/tenants/create'}
+                                    />
+                                    <QuickActionsButtons
+                                        icon={<FileText className="h-5 w-5" />}
+                                        buttonTitle={'Create Lease'}
+                                        href={'/landlord/leases/create'}
+                                    />
+                                    <QuickActionsButtons
+                                        icon={<Wrench className="h-5 w-5" />}
+                                        buttonTitle={'Maintenance'}
+                                        href={'/landlord/maintenance/requests'}
+                                    />
                                 </div>
                             </Card>
                         </div>

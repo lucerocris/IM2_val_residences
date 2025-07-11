@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('user_name');
             $table->string('email')->unique();
             $table->string('user_contact_number')->nullable();
+
             $table->enum('user_type', ['landlord', 'tenant', 'prospective_tenant']);
 
 

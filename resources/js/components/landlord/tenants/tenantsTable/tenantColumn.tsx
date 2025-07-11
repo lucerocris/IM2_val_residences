@@ -2,6 +2,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2, User, Phone, Mail, Building } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { router } from '@inertiajs/react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,6 +12,7 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Link } from '@inertiajs/react';
 
 export type Tenant = {
     id: string
@@ -116,6 +118,14 @@ const leaseStatusConfig = {
         color: '#2563eb',
         borderColor: '#bfdbfe',
         label: 'In Progress'
+    }
+};
+
+const handleDelete = (tenantId: string) => {
+    if (confirm('Are you sure you want to delete this tenant?')) {
+        router.delete(`/landlord/tenants/${tenantId}`, {
+            preserveScroll: true,
+        });
     }
 };
 
@@ -363,25 +373,16 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(tenant.id)}>
-                            Copy tenant ID
-                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Eye className="mr-2 h-4 w-4" /> View profile
-                        </DropdownMenuItem>
                         <DropdownMenuItem>
                             <Edit className="mr-2 h-4 w-4" /> Edit tenant
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Building className="mr-2 h-4 w-4" /> View lease history
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Phone className="mr-2 h-4 w-4" /> Contact tenant
-                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600">
-                            <Trash2 className="mr-2 h-4 w-4" /> Remove tenant
+                        <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(tenant.id)}>
+                            <div className="flex">
+                                <Trash2 className="mr-2 h-4 w-4 text-red-600" />
+                                <span>Remove tenant</span>
+                            </div>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
