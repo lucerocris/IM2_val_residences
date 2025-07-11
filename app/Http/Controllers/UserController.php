@@ -1,19 +1,28 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\RentalUnit;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
     public function index() {
-        return Inertia::render('user/Landing');
+
+        $Listings = RentalUnit::getListingsData();
+
+
+        return Inertia::render('user/Listings',[
+            'ListingsData' => $Listings
+        ]);
     }
 
     public function listings() {
         return Inertia::render('user/Listings');
     }
+
+    public function storeApplication() {
+
+    }
 }
 
-?>

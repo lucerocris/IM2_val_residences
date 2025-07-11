@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('landlord_id')->constrained('users')->onDelete('cascade'); // landlord
             $table->string('address');
             $table->string('unit_number')->nullable();
-            $table->enum('availability_status', ['available', 'occupied', 'maintenance', 'unavailable'])->default('available');
+            $table->enum('availability_status', ['available', 'occupied', 'maintenance', 'unavailable', 'under_constructions'])->default('available');
             $table->decimal('floor_area', 8, 2)->nullable();
             $table->decimal('rent_price', 10, 2);
             $table->enum('property_type', ['duplex', 'triplex']);

@@ -1,4 +1,3 @@
-
 import { useMemo, useState } from 'react';
 import ApplyModal from './apply-modal';
 import ListingsFilter from './Filter';
@@ -21,8 +20,19 @@ interface ListingsMainProps {
     ListingsData: Listing[];
 }
 
-const ListingsMain = ({ ListingsData  }: ListingsMainProps) => {
-    console.log(ListingsData)
+const ListingsMain = ({ ListingsData }: ListingsMainProps) => {
+    console.log('ListingsData:', ListingsData);
+
+    // Debug: Check first item structure
+    if (ListingsData && ListingsData.length > 0) {
+        console.log('First listing structure:', {
+            id: ListingsData[0].id,
+            unit_photos_type: typeof ListingsData[0].unit_photos,
+            unit_photos_value: ListingsData[0].unit_photos,
+            amenities_type: typeof ListingsData[0].amenities,
+            amenities_value: ListingsData[0].amenities,
+        });
+    }
     const [subscriptionModalOpen, setSubscriptionModalOpen] = useState(false);
     const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState(false);
     const [applyModalOpen, setApplyModalOpen] = useState(false);
@@ -32,7 +42,7 @@ const ListingsMain = ({ ListingsData  }: ListingsMainProps) => {
     const [sortBy, setSortBy] = useState('price_low');
 
     const filteredAndSortedListings = useMemo(() => {
-        const filtered = ListingsData.filter((listing) => {
+        const filtered = (ListingsData || []).filter((listing) => {
             const matchesPropertyType = propertyTypeFilter === 'all' || listing.property_type === propertyTypeFilter;
 
             const matchesMaxRent =
@@ -83,11 +93,10 @@ const ListingsMain = ({ ListingsData  }: ListingsMainProps) => {
                 onSubscriptionClick={() => setSubscriptionModalOpen(true)}
                 resultCount={filteredAndSortedListings.length}
             />
-        
+
             <ListingsGrid listings={filteredAndSortedListings} onViewDetails={handleViewDetails} onApply={handleApply} />
             <ViewDetailsModal open={viewDetailsModalOpen} onOpenChange={setViewDetailsModalOpen} listing={selectedListing} />
             <ApplyModal open={applyModalOpen} onOpenChange={setApplyModalOpen} listing={selectedListing} />
-
         </>
     );
 };
