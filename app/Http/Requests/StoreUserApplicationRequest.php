@@ -22,7 +22,12 @@ class StoreUserApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'prospective_tenant_id' => 'required|int',
+            'unit_id' => 'required|int',
+            'application_date' => 'required|date',
+            'preferred_move_in_date' => 'nullable|date',
+            'application_status' => 'required|enum',
+            'additional_notes' => 'nullable|string',
         ];
     }
 }

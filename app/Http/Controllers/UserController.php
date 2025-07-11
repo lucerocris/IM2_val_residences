@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserApplicationRequest;
 use App\Models\RentalUnit;
 use Inertia\Inertia;
 
@@ -21,8 +22,10 @@ class UserController extends Controller
         return Inertia::render('user/Listings');
     }
 
-    public function storeApplication() {
+    public function storeApplication(StoreUserApplicationRequest $request) {
 
+        RentalUnit::create($request->validated());
+        return redirect()->route('user.listings')->with('success', 'User Application added successfully');
     }
-}
 
+}
