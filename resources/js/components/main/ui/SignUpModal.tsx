@@ -5,7 +5,7 @@ const SignUpModal = () => {
     return(
         <>
             <Modal
-                trigger = {<button className = "hover:underline">Sign up</button>}
+                trigger = {<button>Sign up</button>}
                 title = "Sign Up"
                 description = "Enter your credentials to make your account.">
                     <SignUpForm></SignUpForm>

@@ -2,8 +2,21 @@ import MainLayout from '@/layout/MainLayout';
 import Header from '@/components/main/ui/Header';
 import LoginModal from '@/components/main/ui/LoginModal';
 import SignUpModal from '@/components/main/ui/SignUpModal';
+import { Button } from '@/components/ui/button';
 
 const landing = () => {
+
+    const headerActions = (
+    <>
+        <Button variant = "outline" className = "bg-transparent hover:opacity-70 duration-400 opacity-90 px-4">
+            <LoginModal />
+        </Button>
+
+        <Button variant = "outline" className = "bg-white text-black hover:opacity-70 duration-400 opacity-90 px-4">
+            <SignUpModal />
+        </Button>
+    </>
+    );
 
     return (
         <>
@@ -12,12 +25,7 @@ const landing = () => {
                 {label: "About Us", href: "/about"},
                 {label: "Contact Us", href: "contact"}
             ]}
-            actions = {
-                <> 
-                    <LoginModal />
-                    <SignUpModal />
-                </>
-            }
+            actions = { headerActions }
             />
             <MainLayout>
                 <div className = "p-[4.3rem] flex gap-[40px] items-start">
