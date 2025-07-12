@@ -164,8 +164,8 @@ class RentalUnit extends Model
                 'rent_price' => $unit->rent_price,
                 'property_type' => $unit->property_type,
                 'description' => $unit->description,
-                'amenities' => $unit->amenities ? json_decode($unit->amenities) : null,
-                'unit_photos' => $unit->unit_photos ? json_decode($unit->unit_photos) : null,
+                'amenities' => $unit->amenities ?? [],
+                'unit_photos' => $unit->unit_photos ?? [],
                 'created_at' => $unit->created_at->toISOString(),
                 'updated_at' => $unit->updated_at->toISOString(),
             ];

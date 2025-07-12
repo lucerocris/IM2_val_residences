@@ -374,7 +374,7 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => router.visit(`/landlord/tenants/${tenant.id}/edit`)}>
                             <Edit className="mr-2 h-4 w-4" /> Edit tenant
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />

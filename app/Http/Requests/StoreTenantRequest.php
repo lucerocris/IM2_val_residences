@@ -11,7 +11,7 @@ class StoreTenantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,7 @@ class StoreTenantRequest extends FormRequest
         return [
         'user_name' => 'required|string',
         'email' => 'required|string',
-        'password' => 'required|string',
+        'password' => 'nullable|string',
         'user_contact_number' => 'required|string',
         'employment_status' => 'required|string',
         'emergency_contact' => 'required|string',

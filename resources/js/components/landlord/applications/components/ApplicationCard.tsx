@@ -6,6 +6,20 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { RentalApplication } from '@/types/application.types';
 
+// Helper functions for null-safe formatting
+const formatCurrency = (value: number | null | undefined): string => {
+    return value != null ? `$${value.toLocaleString()}` : 'N/A';
+};
+
+const formatDate = (date: string | null | undefined): string => {
+    if (!date) return 'N/A';
+    try {
+        return new Date(date).toLocaleDateString();
+    } catch (error) {
+        return 'Invalid date';
+    }
+};
+
 const getStatusBadge = (status: string) => {
     switch (status) {
         case 'pending':
@@ -97,7 +111,7 @@ const ApplicationCard = ({ application, onViewDetails }: ApplicationCardProps) =
                             </span>
                             <span className="flex items-center gap-1">
                                 <CalendarDays className="h-4 w-4" />
-                                Applied: {application.application_date ? new Date(application.application_date).toLocaleDateString() : 'N/A'}
+                                Applied: {formatDate(application.application_date)}
                             </span>
                         </CardDescription>
                     </div>
@@ -113,15 +127,15 @@ const ApplicationCard = ({ application, onViewDetails }: ApplicationCardProps) =
                 <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-3">
                     <div className="flex items-center gap-2">
                         <DollarSign className="h-4 w-4 text-muted-foreground" />
-                        <span>Income: ${application.prospective_tenant.monthly_income.toLocaleString()}/mo</span>
+                        <span>Income: {formatCurrency(application.prospective_tenant.monthly_income)}/mo</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <Home className="h-4 w-4 text-muted-foreground" />
-                        <span>Rent: ${application.rental_unit.rent_price.toLocaleString()}/mo</span>
+                        <span>Rent: {formatCurrency(application.rental_unit.rent_price)}/mo</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                        <span>Move-in: {new Date(application.preferred_move_in_date).toLocaleDateString()}</span>
+                        <span>Move-in: {formatDate(application.preferred_move_in_date)}</span>
                     </div>
                 </div>
                 {application.additional_notes && (

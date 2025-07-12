@@ -25,7 +25,7 @@ const UserListings = ({ListingsData}: UserListingsProps) => {
     const headerLinks = [
         {label: "VIEW LISTINGS", href: "/user/listings"},
         {label: "USER DASHBOARD", href: "/user"},
-        {label: "LOG OUT", href: "/"}
+        {label: "LOG OUT", href: "/logout", method: 'post'},
     ];
 
     return(

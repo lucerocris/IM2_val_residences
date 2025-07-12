@@ -10,6 +10,8 @@ class RentalApplication extends Model
     use HasFactory;
 
     protected $fillable = [
+        'prospective_tenant_id',
+        'unit_id',
         'application_date',
         'preferred_move_in_date',
         'application_status',

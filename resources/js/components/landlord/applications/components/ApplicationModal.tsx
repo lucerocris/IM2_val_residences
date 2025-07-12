@@ -34,6 +34,20 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
+// Helper functions for null-safe formatting
+const formatCurrency = (value: number | null | undefined): string => {
+    return value != null ? `$${value.toLocaleString()}` : 'N/A';
+};
+
+const formatDate = (date: string | null | undefined): string => {
+    if (!date) return 'N/A';
+    try {
+        return new Date(date).toLocaleDateString();
+    } catch (error) {
+        return 'Invalid date';
+    }
+};
+
 interface ApplicationModalProps {
     application: RentalApplication | null;
     isOpen: boolean;
@@ -161,7 +175,7 @@ const ApplicationModal = ({
                             <CardContent className="space-y-2">
                                 <InfoRow icon={Mail} label="Email" value={prospectiveTenant.email} />
                                 <InfoRow icon={Phone} label="Phone" value={prospectiveTenant.user_contact_number} />
-                                <InfoRow icon={DollarSign} label="Monthly Income" value={`$${prospectiveTenant.monthly_income.toLocaleString()}`} />
+                                <InfoRow icon={DollarSign} label="Monthly Income" value={formatCurrency(prospectiveTenant.monthly_income)} />
                                 <InfoRow icon={Briefcase} label="Employment" value={prospectiveTenant.employment_status} />
                                 <InfoRow icon={MapPin} label="Current Address" value={prospectiveTenant.current_address} />
                             </CardContent>
@@ -173,16 +187,12 @@ const ApplicationModal = ({
                             </CardHeader>
                             <CardContent className="space-y-2">
                                 <InfoRow icon={Home} label="Address" value={`${rentalUnit.address} ${rentalUnit.unit_number}`} />
-                                <InfoRow icon={DollarSign} label="Monthly Rent" value={`$${rentalUnit.rent_price.toLocaleString()}`} />
+                                <InfoRow icon={DollarSign} label="Monthly Rent" value={formatCurrency(rentalUnit.rent_price)} />
                                 <InfoRow icon={Home} label="Property Type" value={rentalUnit.property_type} />
                                 <InfoRow icon={CheckCircle} label="Availability">
                                     {getAvailabilityBadge(rentalUnit.availability_status)}
                                 </InfoRow>
-                                <InfoRow
-                                    icon={CalendarDays}
-                                    label="Preferred Move-in"
-                                    value={new Date(application.preferred_move_in_date).toLocaleDateString()}
-                                />
+                                <InfoRow icon={CalendarDays} label="Preferred Move-in" value={formatDate(application.preferred_move_in_date)} />
                                 <InfoRow icon={User} label="Landlord" value={rentalUnit.landlord.user_name} />
                             </CardContent>
                         </Card>
@@ -200,11 +210,11 @@ const ApplicationModal = ({
                             <div className="flex items-center justify-between text-sm">
                                 <div>
                                     <p className="font-medium">Created</p>
-                                    <p className="text-muted-foreground">{new Date(application.created_at).toLocaleDateString()}</p>
+                                    <p className="text-muted-foreground">{formatDate(application.created_at)}</p>
                                 </div>
                                 <div className="text-center">
                                     <p className="font-medium">Updated</p>
-                                    <p className="text-muted-foreground">{new Date(application.updated_at).toLocaleDateString()}</p>
+                                    <p className="text-muted-foreground">{formatDate(application.updated_at)}</p>
                                 </div>
                                 <div className="text-right">
                                     <p className="font-medium">Status</p>
@@ -277,7 +287,7 @@ const ApplicationModal = ({
                                     Review Notes
                                     {application.reviewed_date && (
                                         <Badge variant="outline" className="ml-auto text-xs">
-                                            {new Date(application.reviewed_date).toLocaleDateString()}
+                                            {formatDate(application.reviewed_date)}
                                         </Badge>
                                     )}
                                 </CardTitle>

@@ -8,17 +8,34 @@ import type { TenantFormData } from '@/types/addTenant.types';
 import { router, useForm } from '@inertiajs/react';
 import type React from 'react';
 
-export default function AddTenant() {
-    const { data, setData, post, processing, errors, reset } = useForm<TenantFormData>({
-        user_name: '',
-        email: '',
-        user_contact_number: '',
-        move_in_date: '',
-        employment_status: '',
-        emergency_contact: '',
-        tenant_occupation: '',
-        current_address: '',
-        monthly_income: '',
+interface TenantData {
+    id: string;
+    user_name: string;
+    email: string;
+    user_contact_number: string;
+    move_in_date: string | null;
+    employment_status: string | null;
+    emergency_contact: string | null;
+    tenant_occupation: string | null;
+    current_address: string | null;
+    monthly_income: string | null;
+}
+interface AddTenantProps {
+    tenant?: TenantData;
+    isEditing?: boolean;
+}
+
+export default function AddTenant({tenant, isEditing}: AddTenantProps) {
+    const { data, setData, post, put,  processing, errors, reset } = useForm<TenantFormData>({
+        user_name: tenant?.user_name || '',
+        email: tenant?.email || '',
+        user_contact_number: tenant?.user_contact_number || '',
+        move_in_date: tenant?.move_in_date || '',
+        employment_status: tenant?.employment_status || '',
+        emergency_contact: tenant?.emergency_contact || '',
+        tenant_occupation: tenant?.tenant_occupation || '',
+        current_address: tenant?.current_address || '',
+        monthly_income: tenant?.monthly_income || '',
         user_type: 'tenant',
     });
 
@@ -29,14 +46,27 @@ export default function AddTenant() {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-        post('/landlord/tenants', {
-            onSuccess: () => {
-                router.visit('/landlord/tenants');
-            },
-            onError: (errors: Record<string, string>) => {
-                console.error('Form submission errors:', errors);
-            },
-        });
+        if (isEditing && tenant) {
+            // UPDATE EXISTING TENANT
+            put(`/landlord/tenants/${tenant.id}`, {
+                onSuccess: () => {
+                    router.visit('/landlord/tenants');
+                },
+                onError: (errors: Record<string, string>) => {
+                    console.error('Form submission errors:', errors);
+                },
+            });
+        } else {
+            // CREATE NEW TENANT
+            post('/landlord/tenants', {
+                onSuccess: () => {
+                    router.visit('/landlord/tenants');
+                },
+                onError: (errors: Record<string, string>) => {
+                    console.error('Form submission errors:', errors);
+                },
+            });
+        }
     };
 
     const handleCancel = () => {

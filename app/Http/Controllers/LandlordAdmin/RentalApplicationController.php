@@ -50,7 +50,6 @@ class RentalApplicationController extends Controller
                 return back()->withErrors(['error' => $result['message']]);
             }
         } else {
-            // Handle rejection
             $application->update([
                 'application_status' => 'rejected',
                 'reviewed_date' => now(),

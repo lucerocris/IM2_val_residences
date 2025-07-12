@@ -9,8 +9,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { router } from '@inertiajs/react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Edit, Eye, Home, MapPin, MoreHorizontal, Trash2 } from 'lucide-react';
+import { ArrowUpDown, Edit, Home, MapPin, MoreHorizontal, Trash2 } from 'lucide-react';
 
 export type Unit = {
     id: string;
@@ -34,6 +35,14 @@ export type Unit = {
     updated_at: string;
 };
 
+const handleDelete = (unitID: string)=> {
+    if (confirm('Are you sure you want to delete this unit?')) {
+        router.delete(`/landlord/properties/${unitID}`, {
+            preserveScroll: true,
+        });
+    }
+}
+
 export const propertyColumns: ColumnDef<Unit>[] = [
     {
         id: 'select',
@@ -55,8 +64,8 @@ export const propertyColumns: ColumnDef<Unit>[] = [
         header: 'Images',
         cell: ({ row }) => {
             const photos = row.getValue('unit_photos') as string[] | null;
-            const primaryPhoto = photos && photos.length > 0 ? photos[0] : null;
-
+            const primaryPhoto = photos && Array.isArray(photos) && photos.length > 0 ? photos[0] : null;
+            console.log(primaryPhoto);
             return (
                 <div className="flex items-center justify-center">
                     {primaryPhoto ? (
@@ -242,9 +251,12 @@ export const propertyColumns: ColumnDef<Unit>[] = [
         cell: ({ row }) => {
             const amenities = row.getValue('amenities') as string[] | null;
 
-            if (!amenities || amenities.length === 0) {
+            // Ensure amenities is actually an array
+            if (!amenities || !Array.isArray(amenities) || amenities.length === 0) {
                 return <span className="text-muted-foreground">None listed</span>;
             }
+
+            console.log(amenities);
 
             return (
                 <div className="flex flex-wrap gap-1">
@@ -319,17 +331,11 @@ export const propertyColumns: ColumnDef<Unit>[] = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => navigator.clipboard.writeText(property.id)}>Copy property ID</DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Eye className="mr-2 h-4 w-4" /> View details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => router.visit(`/landlord/properties/${property.id}/edit`)}>
                             <Edit className="mr-2 h-4 w-4" /> Edit property
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Home className="mr-2 h-4 w-4" /> View photos
-                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600">
+                        <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(property.id)}>
                             <Trash2 className="mr-2 h-4 w-4" /> Delete property
                         </DropdownMenuItem>
                     </DropdownMenuContent>
