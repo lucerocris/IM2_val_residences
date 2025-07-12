@@ -1,15 +1,16 @@
 
 interface LeaseDetailsInfoProps{
     title: string;
-    info: string;
+    data: string;
+    className?: string
 }
 
-const LeaseDetailsInfo = ({ title, info }: LeaseDetailsInfoProps) => {
+const LeaseDetailsInfo = ({ title, data }: LeaseDetailsInfoProps) => {
     return(
         <>
-            <div>
+            <div className = "space-y-1">
                 <p className = "text-sm text-gray-600">{title}</p>
-                <p className = "font-semibold">{info}</p>
+                <p className = "text-md font-semibold text-gray-900">{data}</p>
             </div>
         </>
     );

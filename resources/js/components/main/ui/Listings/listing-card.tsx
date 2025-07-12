@@ -85,7 +85,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
                         </div>
 
                         {/* Rent price */}
-                        <div className="p-6 lg:w-1/2">
+                        <div className="p-6 lg:w-1/2 flex flex-col">
                             <div className="mb-4">
                                 <p className="text-3xl font-bold text-orange-500">
                                     {formatPrice(listing.rent_price)}
@@ -111,7 +111,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
                             <p className="mb-6 line-clamp-3 text-sm text-gray-700">{listing.description}</p>
 
                             {/* amenities */}
-                            <div>
+                            <div className="flex-1">
                                 <h4 className="mb-3 text-sm font-semibold text-gray-900">Premium Amenities</h4>
                                 <div className="grid grid-cols-3 gap-2">
                                     {amenitiesArray.slice(0, 6).map((amenity, idx) => (
@@ -123,7 +123,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
                                 </div>
                             </div>
 
-                            <div className="mt-6 flex gap-2">
+                            <div className="mt-6 flex items-center gap-2">
                                 <Button onClick={() => onViewDetails(listing)} variant="outline" className="flex-1">
                                     View Details
                                 </Button>
@@ -140,7 +140,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
 
     // Regular listing card
     return (
-        <Card className="overflow-hidden border-gray-200 bg-white transition-shadow hover:shadow-lg">
+        <Card className="overflow-hidden border-gray-200 bg-white transition-shadow hover:shadow-lg flex flex-col h-full">
             <div className="relative">
                 <img
                     src={photosArray[0] || '/placeholder.svg'}
@@ -151,7 +151,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
                 <Badge className="absolute top-3 right-3 bg-blue-600 text-white">{listing.property_type}</Badge>
             </div>
 
-            <div className="p-4">
+            <div className="p-4 flex flex-col flex-1">
                 <div className="mb-3">
                     <p className="text-2xl font-bold text-orange-500">
                         {formatPrice(listing.rent_price)}
@@ -173,7 +173,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
 
                 <p className="mb-4 line-clamp-2 text-sm text-gray-700">{listing.description}</p>
 
-                <div className="mb-4">
+                <div className="mb-4 flex-1">
                     <div className="flex flex-wrap gap-1">
                         {amenitiesArray.slice(0, 4).map((amenity, idx) => (
                             <div key={idx} className="flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-xs text-blue-600">
@@ -187,7 +187,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
                     </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 mt-auto">
                     <Button onClick={() => onViewDetails(listing)} variant="outline" className="flex-1">
                         View Details
                     </Button>

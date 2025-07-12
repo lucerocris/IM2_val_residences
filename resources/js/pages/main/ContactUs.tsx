@@ -4,8 +4,22 @@ import Header from '@/components/main/ui/Header';
 import LoginModal from '@/components/main/ui/LoginModal';
 import SignUpModal from '@/components/main/ui/SignUpModal';
 import { MapPinned, Phone, Mail } from 'lucide-react'
+import { Button } from '@/components/ui/button';
 
 const landing = () => {
+
+    const headerActions = (
+        <>
+            <Button variant = "outline" className = "bg-transparent hover:opacity-70 duration-400 opacity-90 px-4">
+                <LoginModal />
+            </Button>
+
+            <Button variant = "outline" className = "bg-white text-black hover:opacity-70 duration-400 opacity-90 px-4">
+                <SignUpModal />
+            </Button>
+        </>
+    );
+
     return(
         <>
             <Header links = {[
@@ -13,12 +27,7 @@ const landing = () => {
                 {label: "About Us", href: "/about"},
                 {label: "Contact Us", href: "contact"}
             ]}
-            actions = {
-                <> 
-                    <LoginModal />
-                    <SignUpModal />
-                </>
-            }
+            actions = { headerActions }
             />
             <MainLayout>
                 <div className = "pt-[4.3rem] pb-[4.3rem]">
