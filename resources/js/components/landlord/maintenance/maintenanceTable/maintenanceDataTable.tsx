@@ -118,14 +118,6 @@ export function MaintenanceDataTable<TData, TValue>({
                 </div>
 
                 <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="sm" className="h-8">
-                        <Calendar className="mr-2 h-4 w-4" />
-                        Schedule View
-                    </Button>
-                    <Button variant="outline" size="sm" className="h-8">
-                        <FileText className="mr-2 h-4 w-4" />
-                        Export
-                    </Button>
                     <MaintenanceTableViewOptions table={table} />
                 </div>
             </div>

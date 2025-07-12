@@ -94,7 +94,9 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
 
 
 // Landlord maintenance requests
-    Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index']);
+    Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index'])->name('maintenance.index');
+    Route::delete('/landlord/maintenance/{id}', [MaintenanceController::class, 'destroy']);
+    Route::patch('/landlord/maintenance/{id}', [MaintenanceController::class, 'completeMaintenance']);
 
 
 // Landlord Update Prospective to Tenant && Delete Applications of the same unit && Send Message
