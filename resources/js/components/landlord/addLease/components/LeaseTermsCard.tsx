@@ -14,11 +14,26 @@ interface LeaseTermsCardProps {
     onLeaseTermChange: (term: string) => void;
     onStartDateChange: (startDate: string) => void;
     errors: Partial<Record<keyof LeaseFormData, string>>;
-
+    isEditing?: boolean;
 }
 
+const LeaseTermsCard = ({start_date, lease_term, onStartDateChange, errors, onLeaseTermChange, onInputChange, end_date, isEditing}: LeaseTermsCardProps) => {
+    const formatDate = (dateString: string) => {
+        if (!dateString) return 'Not set';
+        return new Date(dateString).toLocaleDateString();
+    };
 
-const LeaseTermsCard = ({start_date, lease_term, onStartDateChange, errors, onLeaseTermChange, onInputChange, end_date}: LeaseTermsCardProps) => {
+    const getLeaseTermLabel = (term: string) => {
+        const termMap: Record<string, string> = {
+            '6': '6 Months',
+            '12': '12 Months',
+            '18': '18 Months',
+            '24': '24 Months',
+            '36': '36 Months'
+        };
+        return termMap[term] || `${term} Months`;
+    };
+
     return (
         <Card>
             <CardHeader>
@@ -29,48 +44,73 @@ const LeaseTermsCard = ({start_date, lease_term, onStartDateChange, errors, onLe
                 <CardDescription>Define the lease duration and dates</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    <div className="space-y-2">
-                        <Label htmlFor="start_date">Start Date *</Label>
-                        <Input
-                            id="start_date"
-                            type="date"
-                            value={start_date}
-                            onChange={(e) => onStartDateChange(e.target.value)}
-                            className={errors.start_date ? 'border-red-500' : ''}
-                        />
-                        {errors.start_date && <p className="text-sm text-red-500">{errors.start_date}</p>}
+                {isEditing ? (
+                    // Edit mode: Show read-only lease terms
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                        <div className="space-y-2">
+                            <Label>Start Date</Label>
+                            <div className=" text-sm">
+                                {formatDate(start_date)}
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Lease Term</Label>
+                            <div className=" text-sm">
+                                {getLeaseTermLabel(lease_term)}
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label>End Date</Label>
+                            <div className=" text-sm">
+                                {formatDate(end_date)}
+                            </div>
+                        </div>
                     </div>
+                ) : (
+                    // Create mode: Show editable fields
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                        <div className="space-y-2">
+                            <Label htmlFor="start_date">Start Date *</Label>
+                            <Input
+                                id="start_date"
+                                type="date"
+                                value={start_date}
+                                onChange={(e) => onStartDateChange(e.target.value)}
+                                className={errors.start_date ? 'border-red-500' : ''}
+                            />
+                            {errors.start_date && <p className="text-sm text-red-500">{errors.start_date}</p>}
+                        </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="lease_term">Lease Term (Months) *</Label>
-                        <Select value={lease_term} onValueChange={onLeaseTermChange}>
-                            <SelectTrigger className={errors.lease_term ? 'border-red-500' : ''}>
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="6">6 Months</SelectItem>
-                                <SelectItem value="12">12 Months</SelectItem>
-                                <SelectItem value="18">18 Months</SelectItem>
-                                <SelectItem value="24">24 Months</SelectItem>
-                                <SelectItem value="36">36 Months</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        {errors.lease_term && <p className="text-sm text-red-500">{errors.lease_term}</p>}
-                    </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="lease_term">Lease Term (Months) *</Label>
+                            <Select value={lease_term} onValueChange={onLeaseTermChange}>
+                                <SelectTrigger className={errors.lease_term ? 'border-red-500' : ''}>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="6">6 Months</SelectItem>
+                                    <SelectItem value="12">12 Months</SelectItem>
+                                    <SelectItem value="18">18 Months</SelectItem>
+                                    <SelectItem value="24">24 Months</SelectItem>
+                                    <SelectItem value="36">36 Months</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            {errors.lease_term && <p className="text-sm text-red-500">{errors.lease_term}</p>}
+                        </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="end_date">End Date *</Label>
-                        <Input
-                            id="end_date"
-                            type="date"
-                            value={end_date}
-                            onChange={(e) => onInputChange('end_date', e.target.value)}
-                            className={errors.end_date ? 'border-red-500' : ''}
-                        />
-                        {errors.end_date && <p className="text-sm text-red-500">{errors.end_date}</p>}
+                        <div className="space-y-2">
+                            <Label htmlFor="end_date">End Date *</Label>
+                            <Input
+                                id="end_date"
+                                type="date"
+                                value={end_date}
+                                onChange={(e) => onInputChange('end_date', e.target.value)}
+                                className={errors.end_date ? 'border-red-500' : ''}
+                            />
+                            {errors.end_date && <p className="text-sm text-red-500">{errors.end_date}</p>}
+                        </div>
                     </div>
-                </div>
+                )}
             </CardContent>
         </Card>
     )

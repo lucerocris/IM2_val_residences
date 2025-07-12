@@ -48,7 +48,7 @@ export default function AddTenant({tenant, isEditing}: AddTenantProps) {
 
         if (isEditing && tenant) {
             // UPDATE EXISTING TENANT
-            put(`/landlord/tenants/${tenant.id}`, {
+            router.put(`/landlord/tenants/${tenant.id}`, data,  {
                 onSuccess: () => {
                     router.visit('/landlord/tenants');
                 },
@@ -58,7 +58,7 @@ export default function AddTenant({tenant, isEditing}: AddTenantProps) {
             });
         } else {
             // CREATE NEW TENANT
-            post('/landlord/tenants', {
+            router.post('/landlord/tenants', data, {
                 onSuccess: () => {
                     router.visit('/landlord/tenants');
                 },

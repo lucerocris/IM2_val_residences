@@ -45,29 +45,20 @@ const handleDelete = (unitID: string)=> {
 
 export const propertyColumns: ColumnDef<Unit>[] = [
     {
-        id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
         accessorKey: 'unit_photos',
-        header: 'Images',
+        header: () => {
+            return (
+                <>
+                    <p className="pl-3">Images</p>
+                </>
+            )
+        },
         cell: ({ row }) => {
             const photos = row.getValue('unit_photos') as string[] | null;
             const primaryPhoto = photos && Array.isArray(photos) && photos.length > 0 ? photos[0] : null;
             console.log(primaryPhoto);
             return (
-                <div className="flex items-center justify-center">
+                <div className="pl-3 flex items-center justify-center">
                     {primaryPhoto ? (
                         <div className="relative">
                             <img
@@ -104,7 +95,7 @@ export const propertyColumns: ColumnDef<Unit>[] = [
             const unitNumber = row.original.unit_number;
 
             return (
-                <div className="flex max-w-[200px] flex-col">
+                <div className="pl-4 flex max-w-[200px] flex-col">
                     <span className="truncate font-medium">{address}</span>
                     {unitNumber && <span className="text-xs text-muted-foreground">Unit: {unitNumber}</span>}
                     <span className="text-xs text-muted-foreground">ID: {row.original.id}</span>
@@ -227,7 +218,7 @@ export const propertyColumns: ColumnDef<Unit>[] = [
                 currency: 'PHP',
             }).format(price);
 
-            return <span className="font-medium">{formatted}</span>;
+            return <span className="pl-4 font-medium">{formatted}</span>;
         },
     },
     {
@@ -242,7 +233,7 @@ export const propertyColumns: ColumnDef<Unit>[] = [
             const raw = row.getValue('floor_area');
             const area = Number(raw);
 
-            return Number.isFinite(area) && area > 0 ? <span>{Math.round(area)} sq ft</span> : <span className="text-muted-foreground">N/A</span>;
+            return Number.isFinite(area) && area > 0 ? <span className="pl-3">{Math.round(area)} sq ft</span> : <span className="text-muted-foreground">N/A</span>;
         },
     },
     {
@@ -307,7 +298,7 @@ export const propertyColumns: ColumnDef<Unit>[] = [
         cell: ({ row }) => {
             const date = new Date(row.getValue('created_at'));
             return (
-                <div className="flex flex-col">
+                <div className="pl-3 flex flex-col">
                     <span>{date.toLocaleDateString()}</span>
                     <span className="text-xs text-muted-foreground">{date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                 </div>

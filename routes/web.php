@@ -81,7 +81,9 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
 // Landlord leases
     Route::get('/landlord/leases', [LeaseController::class, 'index'])->name('leases.index');
     Route::get('/landlord/leases/create', [LeaseController::class, 'create']);
+    Route::get('/landlord/leases/{lease_id}/{unit_id}/{tenant_id}/edit', [LeaseController::class, 'edit']);
     Route::post('/landlord/leases', [LeaseController::class, 'store']);
+    Route::put('/landlord/leases/{id}', [LeaseController::class, 'update']);
 
 // Landlord payments
     Route::get('/landlord/payments/rent-collection', [FinanceController::class, 'rent']);

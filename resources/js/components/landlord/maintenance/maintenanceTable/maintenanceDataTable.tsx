@@ -66,16 +66,7 @@ export function MaintenanceDataTable<TData, TValue>({
     return (
         <div className="space-y-4">
             {/* Header Section */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                    <Wrench className="h-5 w-5 text-muted-foreground" />
-                    <h2 className="text-lg font-semibold">Maintenance Requests</h2>
-                </div>
-                <Button variant="default" size="sm">
-                    <Plus className="mr-2 h-4 w-4" />
-                    New Request
-                </Button>
-            </div>
+
 
             {/* Filters Section */}
             <div className="flex items-center justify-between">
@@ -139,23 +130,6 @@ export function MaintenanceDataTable<TData, TValue>({
                 </div>
             </div>
 
-            {/* Selected Items Actions */}
-            {Object.keys(rowSelection).length > 0 && (
-                <div className="flex items-center space-x-2 p-2 bg-muted/50 rounded-md">
-                    <span className="text-sm font-medium">
-                        {Object.keys(rowSelection).length} item(s) selected
-                    </span>
-                    <Button variant="outline" size="sm">
-                        Bulk Update Status
-                    </Button>
-                    <Button variant="outline" size="sm">
-                        Bulk Schedule
-                    </Button>
-                    <Button variant="outline" size="sm">
-                        Export Selected
-                    </Button>
-                </div>
-            )}
 
             {/* Table Section */}
             <div className="rounded-md border">
