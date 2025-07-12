@@ -131,25 +131,6 @@ const handleDelete = (tenantId: string) => {
 
 export const tenantColumns: ColumnDef<Tenant>[] = [
     {
-        id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false
-    },
-    {
         accessorKey: 'user_name',
         header: ({ column }) => {
             return (
@@ -164,7 +145,7 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
             const tenant = row.original;
 
             return (
-                <div className="flex flex-col">
+                <div className="flex flex-col pl-3">
                     <span className="font-medium">{tenant.user_name}</span>
                     <span className="text-xs text-muted-foreground">ID: {tenant.id}</span>
                     {tenant.tenant_occupation && (
@@ -322,12 +303,12 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
             const moveInDate = row.getValue('move_in_date') as string | null;
 
             if (!moveInDate) {
-                return <span className="text-muted-foreground">Not set</span>;
+                return <span className="text-muted-foreground pl-4">Not set</span>;
             }
 
             const date = new Date(moveInDate);
             return (
-                <div className="flex flex-col">
+                <div className="flex flex-col pl-4">
                     <span>{date.toLocaleDateString()}</span>
                     <span className="text-xs text-muted-foreground">
                         {Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))} days ago
@@ -349,7 +330,7 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
         cell: ({ row }) => {
             const date = new Date(row.getValue('created_at'));
             return (
-                <div className="flex flex-col">
+                <div className="pl-3 flex flex-col">
                     <span>{date.toLocaleDateString()}</span>
                     <span className="text-xs text-muted-foreground">
                         {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -374,7 +355,7 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => router.visit(`/landlord/tenants/${tenant.id}/edit`)}>
                             <Edit className="mr-2 h-4 w-4" /> Edit tenant
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />

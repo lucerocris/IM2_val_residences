@@ -11,6 +11,7 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
+import { router } from '@inertiajs/react';
 
 export type Lease = {
     id: string
@@ -93,28 +94,15 @@ const propertyTypeConfig = {
     }
 };
 
+const handleDelete = (leaseID: string) => {
+    if (confirm('Are you sure you want to delete this lease?')) {
+        router.delete(`/landlord/leases/${leaseID}`, {
+            preserveScroll: true,
+        })
+    }
+}
+
 export const leaseColumns: ColumnDef<Lease>[] = [
-
-
-    {
-        id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false
-    },
     {
         accessorKey: 'tenant',
         id: 'tenant_info',
@@ -130,7 +118,7 @@ export const leaseColumns: ColumnDef<Lease>[] = [
             const lease = row.original;
 
             return (
-                <div className="flex flex-col">
+                <div className="pl-4 flex flex-col">
                     <span className="font-medium">{lease.tenant.user_name}</span>
                     <span className="text-xs text-muted-foreground">{lease.tenant.email}</span>
                 </div>
@@ -213,7 +201,7 @@ export const leaseColumns: ColumnDef<Lease>[] = [
             const daysRemaining = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
             return (
-                <div className="flex flex-col">
+                <div className="pl-3 flex flex-col">
                     <div className="text-sm">
                         <span className="font-medium">{startDate.toLocaleDateString()}</span>
                         <span className="text-muted-foreground"> to </span>
@@ -240,7 +228,7 @@ export const leaseColumns: ColumnDef<Lease>[] = [
             const lease = row.original;
 
             return (
-                <div className="flex flex-col">
+                <div className="pl-3 flex flex-col">
                     <span className="font-medium text-sm">
                         ₱{lease.monthly_rent.toLocaleString()}/month
                     </span>
@@ -295,7 +283,7 @@ export const leaseColumns: ColumnDef<Lease>[] = [
         cell: ({ row }) => {
             const date = new Date(row.getValue('created_at'));
             return (
-                <div className="flex flex-col">
+                <div className="pl-3 flex flex-col">
                     <span>{date.toLocaleDateString()}</span>
                 </div>
             );
@@ -323,7 +311,7 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                         <DropdownMenuItem>
                             <Eye className="mr-2 h-4 w-4" /> View lease details
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={()=> router.visit(`/landlord/leases/${lease.id}/${lease.units.id}/${lease.tenant.id}/edit`)}>
                             <Edit className="mr-2 h-4 w-4" /> Edit lease
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -338,10 +326,13 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                             </>
                         )}
                         {lease.lease_status === 'active' && (
-                            <DropdownMenuItem className="text-red-600">
-                                <Trash2 className="mr-2 h-4 w-4" /> Terminate lease
+                            <DropdownMenuItem variant='destructive' className="text-red-600">
+                                <Trash2 className="mr-2 h-4 w-4 text-red-600" /> Terminate lease
                             </DropdownMenuItem>
                         )}
+                        <DropdownMenuItem  variant='destructive' className={"text-red-600"} onClick={() => handleDelete(lease.id)}>
+                            <Trash2 className="mr-2 h-4 w-4 text-red-600" /> Delete Lease
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

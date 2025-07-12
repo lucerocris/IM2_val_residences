@@ -6,26 +6,33 @@ import PropertyInfoCard from '@/components/landlord/addProperty/components/Prope
 import LandlordPageHeader from '@/components/landlord/ui/LandlordPageHeader';
 import LandlordLayout from '@/layout/LandlordLayout';
 import type { PropertyFormData } from '@/types/propertyFormData.types';
-import { router, useForm } from '@inertiajs/react';
+import { router, useForm, usePage } from '@inertiajs/react';
 import type React from 'react';
-import { toast } from 'sonner';
 
 interface AddPropertyProps {
-    landlord_id?: number;
+    unit?: PropertyFormData;
+    isEditing?: boolean;
 }
 
-export default function AddProperty({ landlord_id = 1 }: AddPropertyProps) {
+export default function AddProperty({ unit, isEditing }: AddPropertyProps) {
+    const { props } = usePage();
+    const auth = (props as any).auth;
+
     const { data, setData, post, processing, errors, reset } = useForm<PropertyFormData>({
-        address: '',
-        unit_number: '',
-        property_type: '',
-        floor_area: '',
-        rent_price: '',
-        availability_status: 'available',
-        description: '',
-        amenities: [],
-        photos: [],
+        address: unit?.address || '',
+        unit_number: unit?.unit_number || '',
+        property_type: unit?.property_type || '',
+        floor_area: unit?.floor_area || '',
+        rent_price: unit?.rent_price || '',
+        availability_status: unit?.availability_status || 'available',
+        description: unit?.description || '',
+        amenities: Array.isArray(unit?.amenities) ? unit.amenities : [],
+        photos: [] as File[],
     });
+
+    // Debug logging
+    console.log('Form data:', data);
+    console.log('Landlord ID:', auth?.user?.id);
 
     // this is triggered everytime you type in the input fields
     const handleInputChange = (field: keyof PropertyFormData, value: string | string[]) => {
@@ -41,7 +48,7 @@ export default function AddProperty({ landlord_id = 1 }: AddPropertyProps) {
     };
 
     const handlePhotoUpload = (validFiles: File[]) => {
-        // Update form data
+        // Update form data with File objects
         setData('photos', [...data.photos, ...validFiles]);
     };
 
@@ -55,40 +62,43 @@ export default function AddProperty({ landlord_id = 1 }: AddPropertyProps) {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-        // Create FormData for file upload
-        const formData = new FormData();
+        console.log('Submitting:', data);
 
-        // Append landlord_id
-        formData.append('landlord_id', landlord_id.toString());
+        // Create submission data with landlord_id
+        const submissionData = {
+            ...data,
+            landlord_id: auth.user.id,
+        };
 
-        // Append regular form fields
-        formData.append('address', data.address);
-        formData.append('unit_number', data.unit_number);
-        formData.append('property_type', data.property_type);
-        formData.append('floor_area', data.floor_area);
-        formData.append('rent_price', data.rent_price);
-        formData.append('availability_status', data.availability_status);
-        formData.append('description', data.description);
+        console.log('Final submission data:', submissionData);
 
-        // Append amenities as an array
-        data.amenities.forEach((amenity, index) => {
-            formData.append(`amenities[${index}]`, amenity);
-        });
-
-        // Append photos
-        data.photos.forEach((photo, index) => {
-            formData.append(`photos[${index}]`, photo);
-        });
-
-        // Submit using Inertia with file upload
-        router.post('/landlord/properties', formData, {
-            forceFormData: true,
-            onError: (errors) => {
-                console.error('Form submission errors:', errors);
-            },
-        });
+        if (isEditing && unit) {
+            // For updates, use router.post with _method override
+            router.post(
+                `/landlord/properties/${unit.id}`,
+                {
+                    forceFormData: true,
+                    ...submissionData,
+                    _method: 'PUT',
+                },
+                {
+                    forceFormData: true,
+                    onError: (errors) => {
+                        console.error('Edit form errors:', errors);
+                    },
+                },
+            );
+        } else {
+            // For new properties, use the form helper's post method
+            // Use router.post to include landlord_id
+            router.post('/landlord/properties', submissionData, {
+                forceFormData: true,
+                onError: (errors) => {
+                    console.error('Form submission errors:', errors);
+                },
+            });
+        }
     };
-
     const handleCancel = () => {
         // Navigate back to a property list
         router.visit('/landlord/properties');

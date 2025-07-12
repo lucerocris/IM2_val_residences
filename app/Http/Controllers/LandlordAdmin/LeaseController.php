@@ -49,11 +49,31 @@ class LeaseController extends Controller
         return redirect()->route('leases.index')->with('success', 'Lease created successfully.');
     }
 
+    public function edit($lease_id, $unit_id, $tenant_id)
+    {
+        $lease = Lease::findOrFail($lease_id);
+        $tenant = Tenant::findOrFail($tenant_id);
+        $unit = RentalUnit::findOrFail($unit_id);
+
+        return Inertia::render('landlord/AddLeasePage', [
+            'lease' => $lease,
+            'isEditing' => true,
+            'tenant' => $tenant,
+            'unit' => $unit,
+        ]);
+    }
+
+    public function update(StoreLeaseRequest $request, $id)
+    {
+        $lease = Lease::findOrFail($id);
+        $lease->update($request->validated());
+        return redirect()->route('leases.index')->with('success', 'Successfully edited the lease');
+    }
+
     public function destroy($id)
     {
         $lease = Lease::findOrFail($id);
         $lease->delete();
-
         return redirect()->back()->with('success', 'Lease deleted successfully.');
     }
 }

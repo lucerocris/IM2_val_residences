@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('rental_units', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('landlord_id')->constrained('users')->onDelete('cascade'); // landlord
+            $table->foreignId('landlord_id')->constrained('users');
             $table->string('address');
             $table->string('unit_number')->nullable();
             $table->enum('availability_status', ['available', 'occupied', 'maintenance', 'unavailable', 'under_constructions'])->default('available');

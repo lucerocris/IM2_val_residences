@@ -11,7 +11,7 @@ class StoreUserApplicationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,12 +22,14 @@ class StoreUserApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'prospective_tenant_id' => 'required|int',
-            'unit_id' => 'required|int',
-            'application_date' => 'required|date',
-            'preferred_move_in_date' => 'nullable|date',
-            'application_status' => 'required|enum',
-            'additional_notes' => 'nullable|string',
+            'prospective_tenant_id'   => 'required|exists:Users,id',
+            'unit_id'                 => 'required|exists:rental_units,id',
+            'application_date'     => 'required|date',
+            'application_status'  => 'required|string|max:1000',
+            'preferred_move_in_date'  => 'required|date|after:today',
+            'additional_notes'        => 'nullable|string|max:1000',
+            'monthly_income'           => 'nullable|numeric|min:0',
+            'employment_status'       => 'nullable|in:employed,self-employed,unemployed,student',
         ];
     }
 }

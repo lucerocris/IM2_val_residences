@@ -9,8 +9,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { router } from '@inertiajs/react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Edit, Eye, Home, MapPin, MoreHorizontal, Trash2 } from 'lucide-react';
+import { ArrowUpDown, Edit, Home, MapPin, MoreHorizontal, Trash2 } from 'lucide-react';
 
 export type Unit = {
     id: string;
@@ -34,31 +35,30 @@ export type Unit = {
     updated_at: string;
 };
 
+const handleDelete = (unitID: string)=> {
+    if (confirm('Are you sure you want to delete this unit?')) {
+        router.delete(`/landlord/properties/${unitID}`, {
+            preserveScroll: true,
+        });
+    }
+}
+
 export const propertyColumns: ColumnDef<Unit>[] = [
     {
-        id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
         accessorKey: 'unit_photos',
-        header: 'Images',
+        header: () => {
+            return (
+                <>
+                    <p className="pl-3">Images</p>
+                </>
+            )
+        },
         cell: ({ row }) => {
             const photos = row.getValue('unit_photos') as string[] | null;
-            const primaryPhoto = photos && photos.length > 0 ? photos[0] : null;
-
+            const primaryPhoto = photos && Array.isArray(photos) && photos.length > 0 ? photos[0] : null;
+            console.log(primaryPhoto);
             return (
-                <div className="flex items-center justify-center">
+                <div className="pl-3 flex items-center justify-center">
                     {primaryPhoto ? (
                         <div className="relative">
                             <img
@@ -95,7 +95,7 @@ export const propertyColumns: ColumnDef<Unit>[] = [
             const unitNumber = row.original.unit_number;
 
             return (
-                <div className="flex max-w-[200px] flex-col">
+                <div className="pl-4 flex max-w-[200px] flex-col">
                     <span className="truncate font-medium">{address}</span>
                     {unitNumber && <span className="text-xs text-muted-foreground">Unit: {unitNumber}</span>}
                     <span className="text-xs text-muted-foreground">ID: {row.original.id}</span>
@@ -218,7 +218,7 @@ export const propertyColumns: ColumnDef<Unit>[] = [
                 currency: 'PHP',
             }).format(price);
 
-            return <span className="font-medium">{formatted}</span>;
+            return <span className="pl-4 font-medium">{formatted}</span>;
         },
     },
     {
@@ -233,7 +233,7 @@ export const propertyColumns: ColumnDef<Unit>[] = [
             const raw = row.getValue('floor_area');
             const area = Number(raw);
 
-            return Number.isFinite(area) && area > 0 ? <span>{Math.round(area)} sq ft</span> : <span className="text-muted-foreground">N/A</span>;
+            return Number.isFinite(area) && area > 0 ? <span className="pl-3">{Math.round(area)} sq ft</span> : <span className="text-muted-foreground">N/A</span>;
         },
     },
     {
@@ -242,9 +242,12 @@ export const propertyColumns: ColumnDef<Unit>[] = [
         cell: ({ row }) => {
             const amenities = row.getValue('amenities') as string[] | null;
 
-            if (!amenities || amenities.length === 0) {
+            // Ensure amenities is actually an array
+            if (!amenities || !Array.isArray(amenities) || amenities.length === 0) {
                 return <span className="text-muted-foreground">None listed</span>;
             }
+
+            console.log(amenities);
 
             return (
                 <div className="flex flex-wrap gap-1">
@@ -295,7 +298,7 @@ export const propertyColumns: ColumnDef<Unit>[] = [
         cell: ({ row }) => {
             const date = new Date(row.getValue('created_at'));
             return (
-                <div className="flex flex-col">
+                <div className="pl-3 flex flex-col">
                     <span>{date.toLocaleDateString()}</span>
                     <span className="text-xs text-muted-foreground">{date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
@@ -319,17 +322,11 @@ export const propertyColumns: ColumnDef<Unit>[] = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => navigator.clipboard.writeText(property.id)}>Copy property ID</DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Eye className="mr-2 h-4 w-4" /> View details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => router.visit(`/landlord/properties/${property.id}/edit`)}>
                             <Edit className="mr-2 h-4 w-4" /> Edit property
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Home className="mr-2 h-4 w-4" /> View photos
-                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600">
+                        <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(property.id)}>
                             <Trash2 className="mr-2 h-4 w-4" /> Delete property
                         </DropdownMenuItem>
                     </DropdownMenuContent>

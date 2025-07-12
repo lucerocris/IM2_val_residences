@@ -8,24 +8,19 @@ import LandlordLayout from '@/layout/LandlordLayout';
 import type { AddLeaseProps, LeaseFormData } from '@/types/addLease.types';
 import { router, useForm } from '@inertiajs/react';
 import type React from 'react';
-import { toast } from 'sonner';
 
-export default function AddLease({ tenants, available_units }: AddLeaseProps) {
+export default function AddLease({ tenants, available_units, lease, isEditing, tenant, unit }: AddLeaseProps) {
     const { data, setData, post, processing, errors, reset } = useForm<LeaseFormData>({
-        tenant_id: '',
-        unit_id: '',
-        start_date: '',
-        end_date: '',
-        monthly_rent: '',
-        deposit_amount: '',
-        lease_term: '12',
-        lease_status: 'pending',
-        terms_and_conditions: '',
+        tenant_id: lease?.tenant_id || '',
+        unit_id: lease?.unit_id || '',
+        start_date: lease?.start_date || '',
+        end_date: lease?.end_date || '',
+        monthly_rent: lease?.monthly_rent || '',
+        deposit_amount: lease?.deposit_amount || '',
+        lease_term: lease?.lease_term || '12',
+        lease_status: lease?.lease_status || 'pending',
+        terms_and_conditions: lease?.terms_and_conditions || '',
     });
-
-    console.log(data);
-    console.log(tenants);
-    console.log(available_units);
 
     const handleInputChange = (field: keyof LeaseFormData, value: string) => {
         setData(field, value);
@@ -68,11 +63,23 @@ export default function AddLease({ tenants, available_units }: AddLeaseProps) {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-        post('/landlord/leases', {
-            onError: (errors) => {
-                console.error('Form submission errors:', errors);
-            },
-        });
+        if (lease && isEditing) {
+            router.put(`/landlord/leases/${lease.id}`, data, {
+                onSuccess: () => {
+                    router.visit('/landlord/leases');
+                },
+
+                onError: (errors: Record<string, string>) => {
+                    console.error('Form submission errors:', errors);
+                },
+            });
+        } else {
+            router.post('/landlord/leases', data, {
+                onError: (errors) => {
+                    console.error('Form submission errors:', errors);
+                },
+            });
+        }
     };
 
     const handleCancel = () => {
@@ -95,6 +102,9 @@ export default function AddLease({ tenants, available_units }: AddLeaseProps) {
                         onInputChange={handleInputChange}
                         onUnitChange={handleUnitChange}
                         errors={errors}
+                        tenant={tenant}
+                        unit={unit}
+                        isEditing={isEditing}
                     />
 
                     {/* Lease Terms */}

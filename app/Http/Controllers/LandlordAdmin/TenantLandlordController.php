@@ -33,6 +33,23 @@ class TenantLandlordController extends Controller
         return redirect()->route('tenants.index')->with('success', 'Tenant added successfully');
     }
 
+    public function edit($id)
+    {
+        $tenant = Tenant::findOrFail($id);
+
+        return Inertia::render('landlord/AddTenantPage', [
+            'tenant' => $tenant,
+            'isEditing' => true
+        ]);
+    }
+
+    public function update(StoreTenantRequest $request, $id) {
+        $tenant = Tenant::findOrFail($id);
+        $tenant->update($request->validated());
+
+        return redirect()->route('tenants.index')->with('success', 'Tenant updated successfully');
+    }
+
 
     // Delete Tenant
     public function destroy($id)

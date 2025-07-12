@@ -26,5 +26,10 @@ export interface RentalUnit {
 
 export interface AddLeaseProps {
     tenants: Tenant[];
+    tenant?: Tenant;
+    unit?: RentalUnit;
+    lease?: LeaseFormData;
     available_units: RentalUnit[];
+    isEditing?: boolean;
+
 }

@@ -25,6 +25,7 @@ const UserListings = ({ListingsData}: UserListingsProps) => {
     const headerLinks = [
         {label: "VIEW LISTINGS", href: "/user/listings"},
         {label: "USER DASHBOARD", href: "/user"}
+
     ];
 
     const headerLinks2 = [

@@ -51,7 +51,7 @@ Route::middleware('auth', 'user.type:tenant')->group(function () {
 Route::middleware('auth', 'user.type:prospective_tenant')->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
     Route::get('/user/listings', [UserController::class, 'index'])->name('user.listings');
-    Route::post('/user/listings', [UserController::class, 'store']);
+    Route::post('/user/application', [UserController::class, 'storeApplication'])->name('user.applications.store');
 });
 
 
@@ -64,11 +64,16 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
     Route::get('/landlord/properties', [RentalUnitController::class, 'index'])->name('landlord.properties');
     Route::post('/landlord/properties', [RentalUnitController::class, 'store']);
     Route::get('/landlord/properties/create', [RentalUnitController::class, 'create']);
-    Route::delete('/landlord/properties', [RentalUnitController::class, 'destroy']);
+    Route::get('/landlord/properties/{id}/edit', [RentalUnitController::class, 'edit']);
+    Route::put('/landlord/properties/{id}', [RentalUnitController::class, 'update']);
+    Route::delete('/landlord/properties/{id}', [RentalUnitController::class, 'destroy'])->name('unit.destroy');
 
 // Landlord Tenants
-    Route::get('/landlord/tenants', [TenantLandlordController::class, 'index']);
+    Route::get('/landlord/tenants', [TenantLandlordController::class, 'index'])->name('tenants.index');
     Route::get('/landlord/tenants/create', [TenantLandlordController::class, 'create']);
+    Route::get('/landlord/tenants/{id}/edit', [TenantLandlordController::class, 'edit']);
+    Route::put('/landlord/tenants/{id}', [TenantLandlordController::class, 'update']);
+    Route::delete('/landlord/tenants/{id}', [TenantLandlordController::class, 'destroy'])->name('tenants.destroy');
 
 // Landlord applications
     Route::get('/landlord/applications', [RentalApplicationController::class, 'index']);
@@ -76,7 +81,9 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
 // Landlord leases
     Route::get('/landlord/leases', [LeaseController::class, 'index'])->name('leases.index');
     Route::get('/landlord/leases/create', [LeaseController::class, 'create']);
+    Route::get('/landlord/leases/{lease_id}/{unit_id}/{tenant_id}/edit', [LeaseController::class, 'edit']);
     Route::post('/landlord/leases', [LeaseController::class, 'store']);
+    Route::put('/landlord/leases/{id}', [LeaseController::class, 'update']);
 
 // Landlord payments
     Route::get('/landlord/payments/rent-collection', [FinanceController::class, 'rent']);
@@ -84,10 +91,13 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
 // Landlord Delete Lease
     Route::delete('/landlord/leases/{id}', [LeaseController::class, 'destroy'])->name('leases.destroy');
 
-// Landlord Delete Tenant
-    Route::delete('/landlord/tenants/{id}', [TenantLandlordController::class, 'destroy'])->name('tenants.destroy');
+
+
 // Landlord maintenance requests
-    Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index']);
+    Route::get('/landlord/maintenance/requests', [MaintenanceController::class, 'index'])->name('maintenance.index');
+    Route::delete('/landlord/maintenance/{id}', [MaintenanceController::class, 'destroy']);
+    Route::patch('/landlord/maintenance/{id}/complete', [MaintenanceController::class, 'completeMaintenance']);
+    Route::patch('/landlord/maintenance/{id}/start', [MaintenanceController::class, 'startMaintenance']);
 
 
 // Landlord Update Prospective to Tenant && Delete Applications of the same unit && Send Message
