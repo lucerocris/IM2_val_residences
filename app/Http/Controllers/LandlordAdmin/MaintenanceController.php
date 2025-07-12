@@ -25,9 +25,15 @@ class MaintenanceController extends Controller
         return redirect()->back()->with('success', 'Request deleted successfully');
     }
 
-    public function startMaintenance()
+    public function startMaintenance(Request $request, $id)
     {
+        $maintenanceRequest = MaintenanceRequest::findOrFail($id);
 
+        $validatedData = $request->validate([
+            'request_status' => 'required|string|in:pending,in_progress,completed,cancelled',
+        ]);
+        $maintenanceRequest->update($validatedData);
+        return redirect()->back()->with('success', 'Request updated successfully');
     }
 
     public function completeMaintenance(Request $request, $id)

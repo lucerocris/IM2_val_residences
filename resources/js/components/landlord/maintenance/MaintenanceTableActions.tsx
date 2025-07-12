@@ -49,7 +49,7 @@ const MaintenanceTableActions = ({request}: MaintenanceTableActionsProps) => {
     }
 
     const handleComplete = (requestID: string) => {
-        router.patch(`/landlord/maintenance/${requestID}`, {
+        router.patch(`/landlord/maintenance/${requestID}/complete`, {
             actual_cost: Number(values.actual_cost),
             request_status: "completed",
         }, {
@@ -57,6 +57,15 @@ const MaintenanceTableActions = ({request}: MaintenanceTableActionsProps) => {
             onSuccess: () => setOpen(false),
         });
     };
+
+    const handleStart = (requestID: string) => {
+        router.patch(`/landlord/maintenance/${requestID}/start`, {
+            request_status: "in_progress"
+        }, {
+            preserveScroll:true,
+            onSuccess: () => setOpen(false),
+        })
+    }
 
 
     return (
@@ -73,7 +82,7 @@ const MaintenanceTableActions = ({request}: MaintenanceTableActionsProps) => {
                     <DropdownMenuSeparator />
                     {request.request_status === 'pending' && (
                         <>
-                            <DropdownMenuItem className="text-blue-600 focus:bg-blue-100 focus:text-blue-600">
+                            <DropdownMenuItem className="text-blue-600 focus:bg-blue-100 focus:text-blue-600" onClick={() => handleStart(request.id)}>
                                 <Wrench className="mr-2 h-4 w-4 text-blue-600" /> Start work
                             </DropdownMenuItem>
                         </>
@@ -86,13 +95,6 @@ const MaintenanceTableActions = ({request}: MaintenanceTableActionsProps) => {
                             </DropdownMenuItem>
                         </>
                     )}
-
-                    {(request.request_status === 'pending' || request.request_status === 'in_progress') && (
-                        <DropdownMenuItem className="text-red-600" variant="destructive">
-                            <XCircle className="mr-2 h-4 w-4 text-red" /> Cancel request
-                        </DropdownMenuItem>
-                    )}
-
                     <DropdownMenuItem className="text-red-600" variant="destructive" onClick={() => handleDelete(request.id)}>
                         <Trash2 className="mr-2 h-4 w-4 text-red" /> Delete request
                     </DropdownMenuItem>
