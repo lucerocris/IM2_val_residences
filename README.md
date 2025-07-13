@@ -85,8 +85,8 @@ This platform provides a complete ecosystem for rental property management, feat
 
 1. Clone the repository
 ```bash
-git clone https://github.com/lucerocris/rental-platform.git
-cd rental-platform
+git clone https://github.com/lucerocris/IM2_val_residences.git
+cd IM2_val_residences
 ```
 
 2. Install PHP dependencies
