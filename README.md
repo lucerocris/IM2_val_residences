@@ -170,13 +170,13 @@ The system uses Laravel's MVC architecture with:
 - Lease document access
 - Bill payment system
 - Maintenance request submission
-- Personal information management
+
 
 ### Prospective Tenant Features
 - Property search and filtering
 - Application submission
 - Status tracking
-- Communication with landlords
+
 
 ## 🔒 Security
 
@@ -189,8 +189,6 @@ The system uses Laravel's MVC architecture with:
 ## 📈 Performance
 
 - Efficient database queries with relationships
-- Image optimization for property photos
-- Caching for frequently accessed data
 - Pagination for large datasets
 
 ## 🤝 Contributing
