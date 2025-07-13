@@ -25,7 +25,6 @@ class MaintenanceRequestFactory extends Factory
             'completion_date' => fake()->optional()->dateTimeBetween('-1 month', 'now'),
             'tenant_remarks' => fake()->optional()->sentence(),
             'landlord_notes' => fake()->optional()->sentence(),
-            'estimated_cost' => fake()->optional()->randomFloat(2, 500, 10000),
             'actual_cost' => fake()->optional()->randomFloat(2, 500, 10000),
         ];
     }

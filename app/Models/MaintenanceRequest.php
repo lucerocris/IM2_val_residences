@@ -165,51 +165,12 @@ class MaintenanceRequest extends Model
         ])->get()->toArray();
     }
 
-    public static function getMaintenanceRequests() {
+    public static function getMaintenanceRequests(int $tenant_id) {
         return DB::table('maintenance_requests')
-            ->select('id', 'maintenance_description', 'request_status', 'priority_level', 'request_date', 'scheduled_date')
+            ->where('tenant_id', '=', $tenant_id)
+            ->select('id', 'tenant_id', 'unit_id', 'lease_id', 'request_date', 'maintenance_description', 'request_status', 'priority_level', 'scheduled_date', 'completion_date', 'tenant_remarks', 'scheduled_date', 'completion_date')
             ->get();
 
     }
 }
-//export type MaintenanceRequest = {
-//    id: string
-//    tenant_id: string
-//    unit_id: string
-//    lease_id: string | null
-//    request_date: string
-//    maintenance_description: string
-//    request_status: 'pending' | 'in_progress' | 'completed' | 'cancelled'
-//    priority_level: 'low' | 'medium' | 'high' | 'urgent'
-//    scheduled_date: string | null
-//    completion_date: string | null
-//    tenant_remarks: string | null
-//    landlord_notes: string | null
-//    estimated_cost: number | null
-//    actual_cost: number | null
-//    created_at: string
-//    updated_at: string
-//    // Related data
-//    tenant: {
-//        id: string
-//        user_name: string
-//        email: string
-//        user_contact_number: string
-//    }
-//    unit: {
-//        id: string
-//        address: string
-//        unit_number: string | null
-//        property_type: 'duplex' | 'triplex'
-//        landlord: {
-//            id: string
-//            user_name: string
-//        }
-//    }
-//    lease: {
-//        id: string
-//        start_date: string
-//        end_date: string
-//        lease_status: string
-//    } | null
-//}
+

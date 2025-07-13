@@ -169,7 +169,18 @@ class RentalBill extends Model
         ->toArray();
     }
 
-
-
-
+    public static function getOwnBills(int $lease_id) {
+        return DB::table('rental_bills')->where('lease_id', $lease_id)->select('id', 'lease_id', 'billing_date', 'rent_amount', 'due_date', 'paid_date', 'amount_paid', 'payment_status')->get();
+    }
 }
+
+//export interface RentalBill {
+//id: number,
+//lease_id: number,
+//billing_date: string,
+//rent_amount: string,
+//due_date: string,
+//paid_date: string,
+//amount_paid: number,
+//payment_status: 'pending' | 'paid' | 'overdue' | 'partial',
+//}

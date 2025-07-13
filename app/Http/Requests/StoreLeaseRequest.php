@@ -30,7 +30,6 @@ class StoreLeaseRequest extends FormRequest
             'deposit_amount' => 'nullable|numeric',
             'lease_term' => 'required|integer',
             'lease_status' => 'required|string',
-            'terms_and_conditions' => 'nullable|string',
         ];
     }
 }

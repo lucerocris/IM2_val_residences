@@ -9,53 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import InputLabel from "./contact-landlord-inputs";
 import { Textarea } from "@/components/ui/textarea";
+import { Lease, RentalBill } from '@/types/tenantDashboard.types';
 
-interface leaseData {
-    id: number;
-    tenant_id: number;
-    unit_id: number;
-    start_date: string;
-    end_date: string;
-    monthly_rent: string;
-    deposit_amount: string;
-    lease_term: number;
-    lease_status: string;
-    terms_and_conditions: string;
-    unit: {
-        id: number;
-        landlord_id: number;
-        address: string;
-        unit_number: string;
-        availability_status: string;
-        floor_area: string;
-        rent_price: string;
-        property_type: string;
-        description: string;
-        amenities: string[];
-    };
-}
-
-interface currentBill {
-    id: number;
-    lease_id: number;
-    billing_date: string;
-    rent_amount: string;
-    due_date: string;
-    paid_date: string | null;
-    amount_paid: string;
-    payment_status: string;
-    // Backward compatibility
-    billingDate: string;
-    rentAmount: string;
-    dueDate: string;
-    paymentStatus: string;
-    amountPaid: string;
-}
 
 interface ButtonSectionProps {
-    leaseData: leaseData;
-    currentBill: currentBill;
+    leaseData: Lease;
+    currentBill: RentalBill;
 }
+
+
 
 const ButtonSection = ({leaseData, currentBill }:ButtonSectionProps) => {
     const [paymentModalOpen, setPaymentModalOpen] = useState(false)
@@ -130,7 +92,7 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
         <>
             <DialogHeader>
                 <DialogTitle>Make Payment</DialogTitle>
-                <DialogDescription>Pay your monthly rent for {leaseData.unit.address}</DialogDescription>
+                <DialogDescription>Pay your monthly rent for {leaseData.units.address}</DialogDescription>
             </DialogHeader>
             <div className = "space-y-4">
                 <div className = "bg-gray-50 p-4 rounded-lg">
@@ -206,7 +168,7 @@ const MaintenanceModal = ({ leaseData, currentBill }: ButtonSectionProps) => {
             <DialogHeader>
                 <DialogTitle>Submit Maintenance Request</DialogTitle>
                 <DialogDescription>
-                    Describe the maintenance issue for {leaseData.unit.address}
+                    Describe the maintenance issue for {leaseData.units.address}
                 </DialogDescription>
             </DialogHeader>
 

@@ -19,7 +19,6 @@ export default function AddLease({ tenants, available_units, lease, isEditing, t
         deposit_amount: lease?.deposit_amount || '',
         lease_term: lease?.lease_term || '12',
         lease_status: lease?.lease_status || 'pending',
-        terms_and_conditions: lease?.terms_and_conditions || '',
     });
 
     const handleInputChange = (field: keyof LeaseFormData, value: string) => {
@@ -126,9 +125,6 @@ export default function AddLease({ tenants, available_units, lease, isEditing, t
                         onInputChange={handleInputChange}
                         errors={errors}
                     />
-
-                    {/* Terms and Conditions */}
-                    <TermsAndConditionCard terms_and_conditions={data.terms_and_conditions} onInputChange={handleInputChange} errors={errors} />
 
                     {/* Submit Buttons */}
                     <LeaseFormAction onCancel={handleCancel} processing={processing} />

@@ -1,18 +1,10 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { DollarSign } from "lucide-react";
 import CurrentBillInfo from "./current-bill-info";
-
-interface currentBill {
-    id: number;
-    billingDate: string;
-    rentAmount: string;
-    dueDate: string;
-    paymentStatus: string;
-    amountPaid: string;
-}
+import { RentalBill } from '@/types/tenantDashboard.types';
 
 interface currentBillProps {
-    currentBill: currentBill;
+    currentBill: RentalBill;
 }
 
 const CurrentBill = ({ currentBill }:currentBillProps) => {
@@ -27,10 +19,10 @@ const CurrentBill = ({ currentBill }:currentBillProps) => {
                 </CardHeader>
                 <CardContent>
                     <div className = "grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <CurrentBillInfo title = "Billing Date" info = {currentBill.billingDate} />
-                        <CurrentBillInfo title = "Due Date" info = {currentBill.dueDate} />
-                        <CurrentBillInfo title = "Amount" info = {currentBill.rentAmount} />
-                        <CurrentBillInfo title = "Status" info = {currentBill.paymentStatus} />
+                        <CurrentBillInfo title = "Billing Date" info = {currentBill.billing_date} />
+                        <CurrentBillInfo title = "Due Date" info = {currentBill.due_date} />
+                        <CurrentBillInfo title = "Amount" info = {currentBill.rent_amount} />
+                        <CurrentBillInfo title = "Status" info = {currentBill.payment_status} />
                     </div>
                 </CardContent>
             </Card>

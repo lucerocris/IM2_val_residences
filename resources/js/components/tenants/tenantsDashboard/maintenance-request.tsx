@@ -1,23 +1,14 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Wrench, Clock, CheckCircle, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-interface MaintenanceRequest {
-    id: number;
-    description: string;
-    status: string;
-    priority: string;
-    requestDate: string;
-    scheduledDate?: string;
-    completionDate?: string;
-}
+import { MaintenanceRequest } from '@/types/tenantDashboard.types';
 
 interface MaintenanceRequestProps {
     maintenanceRequests: MaintenanceRequest[];
 }
 
 const MaintenanceRequestComponent = ({ maintenanceRequests }: MaintenanceRequestProps) => {
-    
+
     const getStatusBadge = (status: string) => {
         const statusConfig = {
             pending: { color: "bg-yellow-100 text-yellow-800", icon: Clock },
@@ -67,26 +58,26 @@ const MaintenanceRequestComponent = ({ maintenanceRequests }: MaintenanceRequest
                             <div key={request.id} className="border rounded-lg p-4 space-y-3">
                                 <div className="flex justify-between items-start">
                                     <div className="flex-1">
-                                        <h4 className="font-semibold text-sm mb-2">{request.description}</h4>
+                                        <h4 className="font-semibold text-sm mb-2">{request.maintenance_description}</h4>
                                         <div className="flex flex-wrap gap-2">
-                                            {getStatusBadge(request.status)}
-                                            {getPriorityBadge(request.priority)}
+                                            {getStatusBadge(request.request_status)}
+                                            {getPriorityBadge(request.priority_level)}
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600">
                                     <div>
-                                        <span className="font-medium">Requested:</span> {new Date(request.requestDate).toLocaleDateString()}
+                                        <span className="font-medium">Requested:</span> {new Date(request.request_date).toLocaleDateString()}
                                     </div>
-                                    {request.scheduledDate && (
+                                    {request.scheduled_date && (
                                         <div>
-                                            <span className="font-medium">Scheduled:</span> {new Date(request.scheduledDate).toLocaleDateString()}
+                                            <span className="font-medium">Scheduled:</span> {new Date(request.scheduled_date).toLocaleDateString()}
                                         </div>
                                     )}
-                                    {request.completionDate && (
+                                    {request.completion_date && (
                                         <div>
-                                            <span className="font-medium">Completed:</span> {new Date(request.completionDate).toLocaleDateString()}
+                                            <span className="font-medium">Completed:</span> {new Date(request.completion_date).toLocaleDateString()}
                                         </div>
                                     )}
                                 </div>
