@@ -114,12 +114,6 @@ class ApplicationApprovalService
             'deposit_amount' => $application->rentalUnit->rent_price, // Typically 1 month rent
             'lease_term' => $leaseTermMonths,
             'lease_status' => 'pending', // Pending until lease is signed
-            'terms_and_conditions' => $this->getDefaultLeaseTerms(),
         ]);
-    }
-
-    private function getDefaultLeaseTerms(): string
-    {
-        return "Standard lease terms and conditions apply. Tenant must sign lease agreement within 7 days of approval.";
     }
 }

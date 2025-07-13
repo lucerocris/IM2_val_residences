@@ -45,7 +45,6 @@ class LeaseFactory extends Factory
             'deposit_amount' => fake()->randomFloat(2, 5000, 20000),
             'lease_term' => 12,
             'lease_status' => $leaseStatus,
-            'terms_and_conditions' => fake()->paragraph(),
             'terminated_date' => $terminatedDate,
             'termination_reason' => $terminationReason,
         ];

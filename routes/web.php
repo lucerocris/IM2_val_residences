@@ -14,6 +14,7 @@ use App\Http\Controllers\LandlordAdmin\LeaseController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\RequestMaintenanceController;
+use App\Http\Controllers\TenantOnboardingController;
 
 Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
@@ -34,8 +35,15 @@ Route::middleware('auth')->group(function () {
 
 //Tenant Routes
 Route::middleware('auth', 'user.type:tenant')->group(function () {
-    Route::get('/tenant/dashboard', [TenantController::class, 'index']);
+    Route::get('/tenant/dashboard', [TenantController::class, 'index'])->name('tenant.dashboard');
     Route::get('/tenant/listings', [TenantController::class, 'listings']);
+
+    // Tenant Onboarding Routes
+    Route::get('/tenant/onboarding', [TenantOnboardingController::class, 'show'])->name('tenant.onboarding');
+    Route::post('/tenant/onboarding/payment', [TenantOnboardingController::class, 'confirmPayment'])->name('tenant.onboarding.payment');
+    Route::post('/tenant/onboarding/signed-lease', [TenantOnboardingController::class, 'uploadSignedLease'])->name('tenant.onboarding.signed-lease');
+    Route::post('/tenant/onboarding/id-upload', [TenantOnboardingController::class, 'uploadId'])->name('tenant.onboarding.id-upload');
+    Route::get('/tenant/lease/{lease}/download', [TenantOnboardingController::class, 'downloadLease'])->name('tenant.lease.download');
 
 
 // Tenant Maintenance Request

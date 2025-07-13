@@ -7,7 +7,6 @@ export interface LeaseFormData {
     deposit_amount: string;
     lease_term: string;
     lease_status: string;
-    terms_and_conditions: string;
     [key: string]: string | number | boolean | File | null | undefined | (string | number | boolean | File | null | undefined)[];
 }
 

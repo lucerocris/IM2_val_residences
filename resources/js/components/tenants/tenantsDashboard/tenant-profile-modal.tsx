@@ -4,23 +4,16 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { User, Mail, Phone, Calendar, Briefcase, Contact, Shield  } from "lucide-react";
 import TenantInfo from "./tenant-info";
+import { Tenant } from '@/types/tenantDashboard.types';
 
-interface TenantData {
-  user_name: string;
-  email: string;
-  user_contact_number: string;
-  user_type: string;
-  move_in_date?: string;
-  employment_status?: string;
-  emergency_contact?: string;
-  tenant_occupation?: string;
-}
+
 
 interface TenantProfileModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    tenantData: TenantData;
+    tenantData: Tenant;
 }
+
 
 const TenantProfileModal = ({ open, onOpenChange, tenantData }:TenantProfileModalProps) => {
     const formatDate = (dateString: string | undefined) => {
@@ -54,25 +47,25 @@ const TenantProfileModal = ({ open, onOpenChange, tenantData }:TenantProfileModa
                             </div>
 
                             <div className = "grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <TenantInfo 
+                                <TenantInfo
                                     icon = {User}
                                     label = "Full Name"
                                     data = {tenantData.user_name}
                                 />
 
-                                <TenantInfo 
+                                <TenantInfo
                                     icon = {Mail}
                                     label = "Email"
                                     data = {tenantData.email}
                                 />
 
-                                <TenantInfo 
+                                <TenantInfo
                                     icon = {Phone}
                                     label = "Contact Number"
                                     data = {tenantData.user_contact_number}
                                 />
 
-                                <TenantInfo 
+                                <TenantInfo
                                     icon = {Calendar}
                                     label = "Move-in Date"
                                     data = {formatDate(tenantData.move_in_date)}
@@ -87,13 +80,13 @@ const TenantProfileModal = ({ open, onOpenChange, tenantData }:TenantProfileModa
                             <h3 className = "text-lg font-semibold">Employment Information</h3>
 
                             <div className = "grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <TenantInfo 
+                                <TenantInfo
                                     icon = {Briefcase}
                                     label = "Occupation"
                                     data = {tenantData.tenant_occupation || 'Not specified'}
                                 />
 
-                                <TenantInfo 
+                                <TenantInfo
                                     icon = {Shield}
                                     label = "Employment Status"
                                     data = {tenantData.employment_status || 'Not specified'}
@@ -106,8 +99,8 @@ const TenantProfileModal = ({ open, onOpenChange, tenantData }:TenantProfileModa
                         {/* Emergency Contact */}
                         <div className = "space-y-4">
                             <h3 className = "text-lg font-semibold">Emergency Contact</h3>
-                            
-                            <TenantInfo 
+
+                            <TenantInfo
                                 icon = {Contact}
                                 label = "Emergency Contact"
                                 data = {tenantData.emergency_contact || 'Not specified'}

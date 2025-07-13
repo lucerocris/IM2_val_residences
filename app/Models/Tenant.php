@@ -54,9 +54,9 @@ class Tenant extends User
         return DB::table('users')->where('user_type', '=', 'tenant')->select('id', 'user_name', 'email')->get();
     }
 
-    public static function getSelfInfo() //Gets Tenant Info but for himself!!
+    public static function getSelfInfo(int $tenant_id) //Gets Tenant Info but for himself!!
     {
-        return DB::table('users')->where('id', Auth::id())->select('user_name', 'email', 'user_contact_number', 'user_type', 'move_in_date', 'employment_status', 'emergency_contact', 'tenant_occupation')->get();
+        return DB::table('users')->where('id', '=', $tenant_id)->select('user_name', 'email', 'user_contact_number', 'user_type', 'move_in_date', 'employment_status', 'emergency_contact', 'tenant_occupation')->get();
     }
-
 }
+

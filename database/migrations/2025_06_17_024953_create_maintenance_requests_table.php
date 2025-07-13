@@ -24,7 +24,6 @@ return new class extends Migration
             $table->date('completion_date')->nullable();
             $table->text('tenant_remarks')->nullable();
             $table->text('landlord_notes')->nullable();
-            $table->decimal('estimated_cost', 10, 2)->nullable();
             $table->decimal('actual_cost', 10, 2)->nullable();
             $table->timestamps();
 
