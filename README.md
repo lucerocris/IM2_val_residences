@@ -32,7 +32,6 @@ This platform provides a complete ecosystem for rental property management, feat
 - Application submission system for prospective tenants
 - Application status tracking
 - Landlord application review and approval workflow
-- Messaging system between landlords and applicants
 
 #### 📄 Lease Management
 - Digital lease creation and management
@@ -43,8 +42,8 @@ This platform provides a complete ecosystem for rental property management, feat
 #### 🎯 Tenant Onboarding
 - Comprehensive pre-lease activation process
 - Payment collection (deposits, first month rent)
-- Document upload and verification
-- ID verification system
+- Document upload and verification (checked manually by landlord)
+- ID verification (checked manually by landlord)
 - Progress tracking for landlords
 
 #### 💰 Billing & Payment System
@@ -58,8 +57,7 @@ This platform provides a complete ecosystem for rental property management, feat
 - Tenant maintenance request submission
 - Status tracking (pending, in progress, completed)
 - Landlord request management and updates
-- Cost estimation and tracking
-- Communication system for maintenance issues
+
 
 #### 📊 Financial Reporting & Analytics
 - Revenue tracking by property and time period
@@ -78,16 +76,16 @@ This platform provides a complete ecosystem for rental property management, feat
 
 - **Backend**: Laravel
 - **Frontend**: React with Inertia.js
-- **Database**: MySQL/PostgreSQL
-- **Authentication**: Laravel Sanctum
+- **Database**: MySQL
+- **Authentication**: Custom Authentication
 - **File Storage**: Laravel Storage
-- **Payment Processing**: GCash, PayMaya, Bank Transfer integrations
+- **Payment Processing**: GCash, PayMaya, Bank Transfer integrations (manually sent)
 
 ## 📦 Installation
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/rental-platform.git
+git clone https://github.com/lucerocris/rental-platform.git
 cd rental-platform
 ```
 
@@ -209,7 +207,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## 📞 Support
 
-For support, please contact [your-email@example.com] or create an issue in the GitHub repository.
+For support, please contact [lucerocris22@gmail.com] or create an issue in the GitHub repository.
 
 ## 🙏 Acknowledgments
 
