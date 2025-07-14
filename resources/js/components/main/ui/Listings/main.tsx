@@ -47,9 +47,9 @@ const ListingsMain = ({ ListingsData }: ListingsMainProps) => {
 
             const matchesMaxRent =
                 maxRentFilter === 'all' ||
-                (maxRentFilter === '1000' && listing.rent_price <= 1000) ||
-                (maxRentFilter === '1500' && listing.rent_price <= 1500) ||
-                (maxRentFilter === '2000' && listing.rent_price <= 2000);
+                (maxRentFilter === '20000' && listing.rent_price <= 20000) ||
+                (maxRentFilter === '25000' && listing.rent_price <= 25000) ||
+                (maxRentFilter === '30000' && listing.rent_price <= 30000);
 
             return matchesPropertyType && matchesMaxRent;
         });

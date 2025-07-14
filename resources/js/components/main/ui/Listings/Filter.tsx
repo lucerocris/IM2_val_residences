@@ -56,9 +56,9 @@ const ListingsFilter = ({ propertyTypeFilter, setPropertyTypeFilter, maxRentFilt
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value = "all">Any Price</SelectItem>
-                            <SelectItem value = "1000">Under $1,000</SelectItem>
-                            <SelectItem value = "1500">Under $1,500</SelectItem>
-                            <SelectItem value = "2000">Under $2,000</SelectItem>
+                            <SelectItem value = "20000">Under ₱20,000</SelectItem>
+                            <SelectItem value = "25000">Under ₱25,000</SelectItem>
+                            <SelectItem value = "30000">Under ₱30,000</SelectItem>
                         </SelectContent>
                     </Select>
 
