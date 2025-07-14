@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\MaintenanceRequest;
 
 class MaintenanceRequestReceived extends Notification
 {
@@ -14,7 +15,7 @@ class MaintenanceRequestReceived extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct( private MaintenanceRequest $maintenanceRequest)
     {
         //
     }
@@ -34,10 +35,22 @@ class MaintenanceRequestReceived extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+        $request = $this->maintenanceRequest;
+        $unit = $request->unit;
+        $tenant = $request->tenant;
+
+        return(new MailMessage)
+        ->subject('New Maintenance Request Received')
+        ->greeting('Hello ' . $notifiable->user_name . ',')
+        ->line('A new maintenance request has been submitted for one of your properties.')
+        ->line('<strong>Property:</strong> ' . $unit->address . ' - Unit ' . $unit->unit_number)
+        ->line('<strong>Tenant:</strong> ' . $tenant->user_name)
+        ->line('<strong>Priority Level:</strong> ' . ucfirst($request->priority_level))
+        ->line('<strong>Description:</strong>')
+        ->line($request->maintenance_description)
+        ->line('<strong>Request Date:</strong> ' . $request->request_date->format('F j, Y'))
+        ->action('View Request Details', url('/landlord/maintenance/requests'))
+        ->line('Please review and schedule the maintenance at your earliest convenience.');
     }
 
     /**
