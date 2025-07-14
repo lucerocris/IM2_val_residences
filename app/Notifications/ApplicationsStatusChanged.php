@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\RentalApplication;
 
 class ApplicationsStatusChanged extends Notification
 {
@@ -14,7 +15,7 @@ class ApplicationsStatusChanged extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct( private RentalApplication $application)
     {
         //
     }
@@ -34,10 +35,41 @@ class ApplicationsStatusChanged extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+        $application = $this->application;
+        $unit = $application->rentalUnit;
+        $status = $application->application_status;
+
+        $message = (new MailMessage)
+            ->greeting('Dear ' . $notifiable->user_name . ',');
+
+        if($status === 'approved') {
+            $message->subject('Application Approved!')
+                ->line('<strong style = "color:#28a745;">Congratulations! Your rental application has been approved!</strong>')
+                ->line('<strong>Property: </strong> ' . $unit->address . ' - Unit ' . $unit->unit_number)
+                ->line('<strong>Monthly Rent:</strong> ₱' . number_format($unit->rent_price, 2))
+                ->line('<strong>Move-in Date:</strong> ' . $application->preferred_move_in_date)
+                ->line('Next steps:')
+                ->line('• Sign the lease agreement')
+                ->line('• Submit security deposit')
+                ->line('• Schedule move-in inspection')
+                ->action('Complete Onboarding', url('/tenant/dashboard'));
+        } else {
+            $message->subject('Application Status Update')
+                ->line('Thank you for your interest in our property.')
+                ->line('<strong>Property:</strong> ' . $unit->address . ' - Unit ' . $unit->unit_number)
+                ->line('<strong>Application Status:</strong> ' . ucfirst($status))
+                ->line('We appreciate the time you took to apply.');
+
+            if($application->review_notes) {
+                $message->line('<strong>Review Notes:</strong> ' . $application->review_notes);
+            }
+        }
+
+        if($status !== 'approved') {
+            $message->action('Browse Other Properties', url('/tenant/listings'));
+        }
+
+        return $message->line('If you have any questions, please don\'t hesitate to contact us.');
     }
 
     /**
