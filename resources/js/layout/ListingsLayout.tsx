@@ -2,6 +2,7 @@ import Header from '@/components/main/ui/Header';
 import Footer from '@/components/main/ui/Footer';
 import Hero from '@/components/main/ui/Hero';
 import { ReactNode, useState } from 'react';
+import { useFlashMessages } from '@/hooks/use-flash-messages';
 
 interface ListingsLayoutProps {
     children: ReactNode;
@@ -15,6 +16,7 @@ interface ListingsLayoutProps {
 
 const ListingsLayout = ({ children, title, subtitle, buttonLabel, headerLinks, headerLinks2, headerActions }: ListingsLayoutProps) => {
     const [headerVisible, setHeaderVisible] = useState(false);
+    useFlashMessages();
 
     return (
         <div className="overflow-x-hidden">
@@ -26,9 +28,9 @@ const ListingsLayout = ({ children, title, subtitle, buttonLabel, headerLinks, h
             </div>
 
             {/* Hero Section */}
-            <Hero 
-                title={title} 
-                subtitle={subtitle} 
+            <Hero
+                title={title}
+                subtitle={subtitle}
                 buttonLabel={buttonLabel}
                 onHeaderToggle={setHeaderVisible}
                 showScrollButton={true}

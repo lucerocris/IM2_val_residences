@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class RentalUnit extends Model
 {
@@ -64,6 +66,63 @@ class RentalUnit extends Model
     public function applications()
     {
         return $this->hasMany(RentalApplication::class, 'unit_id');
+    }
+
+
+    /**
+     * Get unit photos from existing folder structure
+     */
+    public function getUnitPhotos(): array
+    {
+        $photoUrls = [];
+
+        // Get folder mapping
+        $folderName = $this->getMappedFolderName();
+
+        if ($folderName && Storage::disk('public')->exists("rental_units/{$folderName}")) {
+            // Get all image files from the mapped folder
+            $files = Storage::disk('public')->files("rental_units/{$folderName}");
+
+            // Filter for image files and sort them (main.JPG first)
+            $imageFiles = collect($files)->filter(function ($file) {
+                return in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'jfif']);
+            })->sort(function ($a, $b) {
+                $aName = strtolower(basename($a, '.' . pathinfo($a, PATHINFO_EXTENSION)));
+                $bName = strtolower(basename($b, '.' . pathinfo($b, PATHINFO_EXTENSION)));
+
+                // Put main first, then sort alphabetically
+                if ($aName === 'main') return -1;
+                if ($bName === 'main') return 1;
+                return strcmp($aName, $bName);
+            });
+
+            // Convert to URLs
+            foreach ($imageFiles as $file) {
+                $photoUrls[] = Storage::url($file);
+            }
+        }
+
+        // Fallback to old unit_photos field if no folder mapping exists
+        if (empty($photoUrls) && !empty($this->unit_photos)) {
+            $photoUrls = is_array($this->unit_photos) ? $this->unit_photos : json_decode($this->unit_photos, true) ?? [];
+        }
+
+        return $photoUrls;
+    }
+
+    /**
+     * Get the mapped folder name for this unit
+     */
+    private function getMappedFolderName(): ?string
+    {
+        $mappingFile = storage_path('app/unit_folder_mappings.json');
+
+        if (File::exists($mappingFile)) {
+            $mappings = json_decode(File::get($mappingFile), true) ?? [];
+            return $mappings[$this->id] ?? null;
+        }
+
+        return null;
     }
 
     public static function getPropertyPerformanceData()
@@ -165,7 +224,7 @@ class RentalUnit extends Model
                 'property_type' => $unit->property_type,
                 'description' => $unit->description,
                 'amenities' => $unit->amenities ?? [],
-                'unit_photos' => $unit->unit_photos ?? [],
+                'unit_photos' => $unit->getUnitPhotos(),
                 'created_at' => $unit->created_at->toISOString(),
                 'updated_at' => $unit->updated_at->toISOString(),
             ];
@@ -198,7 +257,7 @@ class RentalUnit extends Model
                     'property_type' => $unit->property_type,
                     'description' => $unit->description,
                     'amenities' => $unit->amenities ?? [],
-                    'unit_photos' => $unit->unit_photos ?? [],
+                    'unit_photos' => $unit->getUnitPhotos(),
                 ];
             })
             ->toArray();
