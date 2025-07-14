@@ -112,4 +112,17 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
     Route::get('/landlord/applications', [RentalApplicationController::class, 'index'])->name('landlord.applications.index');
     Route::patch('/landlord/applications/{application}/status', [RentalApplicationController::class, 'updateStatus'])->name('landlord.applications.update-status');
     Route::post('/landlord/applications/{application}/message', [RentalApplicationController::class, 'sendMessage'])->name('landlord.applications.send-message');
+
+// Landlord Document Viewing
+    Route::get('/document-review', [DocumentReviewController::class, 'index'])
+        ->name('landlord.document-review');
+    Route::get('/document-review/{lease}', [DocumentReviewController::class, 'show'])
+        ->name('landlord.document-review.show');
+    Route::post('/document-review/{lease}/approve', [DocumentReviewController::class, 'approve'])
+        ->name('landlord.document-review.approve');
+    Route::post('/document-review/{lease}/reject', [DocumentReviewController::class, 'reject'])
+        ->name('landlord.document-review.reject');
+    Route::get('/document-review/{lease}/download/{documentType}', [DocumentReviewController::class, 'downloadDocument'])
+        ->name('landlord.document-review.download');
+
 });

@@ -41,12 +41,15 @@ class TenantController extends Controller
             'rentalBill' => $rentalBill,
             'onboardingLease' => $pendingLease ? [
                 'id' => $pendingLease->id,
+                'status' => $pendingLease->getOnboardingStatus(),
                 'completion_percentage' => $pendingLease->getOnboardingCompletionPercentage(),
                 'onboarding_steps' => $pendingLease->getOnboardingSteps(),
                 'required_fees_amount' => $pendingLease->required_fees_amount,
                 'monthly_rent' => $pendingLease->monthly_rent,
                 'deposit_amount' => $pendingLease->deposit_amount,
                 'pending_requirements' => $pendingLease->getPendingOnboardingRequirements(),
+                'landlord_review_status' => $pendingLease->landlord_review_status,
+                'landlord_review_notes' => $pendingLease->landlord_review_notes,
             ] : null,
         ]);
     }

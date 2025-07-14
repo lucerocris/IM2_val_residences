@@ -73,4 +73,49 @@ class TenantOnboardingService
     {
         return $this->getPendingOnboardingLease($tenant) !== null;
     }
+
+    public function getOnboardingStatus(User $tenant): ?array
+    {
+        $lease = $this->getPendingOnboardingLease($tenant);
+
+        if (!$lease) {
+            return null;
+        }
+
+        return [
+            'lease_id' => $lease->id,
+            'status' => $lease->getOnboardingStatus(),
+            'completion_percentage' => $lease->getOnboardingCompletionPercentage(),
+            'onboarding_steps' => $lease->getOnboardingSteps(),
+            'landlord_review_status' => $lease->landlord_review_status,
+            'landlord_review_notes' => $lease->landlord_review_notes,
+            'pending_requirements' => $lease->getPendingOnboardingRequirements(),
+        ];
+    }
+
+    /**
+    * Check if tenant can re-upload documents after rejection
+    */
+    public function canReuploadDocuments(User $tenant): bool
+    {
+        $lease = $this->getPendingOnboardingLease($tenant);
+        return $lease && $lease->landlord_review_status === 'rejected';
+    }
+
+/**
+ * Reset rejected documents for re-upload
+ */
+    public function resetRejectedDocuments(Lease $lease): bool
+    {
+        if ($lease->landlord_review_status === 'rejected') {
+            $lease->update([
+                'landlord_review_status' => 'pending',
+                'landlord_review_notes' => null,
+                'landlord_reviewed_at' => null,
+                'landlord_reviewed_by' => null,
+            ]);
+            return true;
+        }
+        return false;
+    }
 }
