@@ -240,18 +240,49 @@ export const propertyColumns: ColumnDef<Unit>[] = [
         accessorKey: 'amenities',
         header: 'Amenities',
         cell: ({ row }) => {
-            const amenities = row.getValue('amenities') as string[] | null;
+            const amenities = row.getValue('amenities') as Record<string, any> | null;
 
-            // Ensure amenities is actually an array
-            if (!amenities || !Array.isArray(amenities) || amenities.length === 0) {
+            // Check if amenities exists and is an object
+            if (!amenities || typeof amenities !== 'object') {
                 return <span className="text-muted-foreground">None listed</span>;
             }
 
-            console.log(amenities);
+            // Convert amenities object to display-friendly format
+            const amenityDisplays: string[] = [];
+
+            // Handle specific amenities with better formatting
+            if (amenities.floors) {
+                amenityDisplays.push(`${amenities.floors} Floor${amenities.floors > 1 ? 's' : ''}`);
+            }
+            if (amenities.bedrooms) {
+                amenityDisplays.push(`${amenities.bedrooms} BR`);
+            }
+            if (amenities.bathrooms) {
+                amenityDisplays.push(`${amenities.bathrooms} Bath`);
+            }
+            if (amenities.balcony === true) {
+                amenityDisplays.push('Balcony');
+            }
+            if (amenities.parking === true) {
+                amenityDisplays.push('Parking');
+            }
+            if (amenities.tile_floors === true) {
+                amenityDisplays.push('Tile Floors');
+            }
+            if (amenities.dirty_kitchen === true) {
+                amenityDisplays.push('Dirty Kitchen');
+            }
+            if (amenities.pet_friendly === true) {
+                amenityDisplays.push('Pet Friendly');
+            }
+
+            if (amenityDisplays.length === 0) {
+                return <span className="text-muted-foreground">None listed</span>;
+            }
 
             return (
                 <div className="flex flex-wrap gap-1">
-                    {amenities.slice(0, 2).map((amenity, index) => (
+                    {amenityDisplays.slice(0, 3).map((amenity, index) => (
                         <Badge
                             key={index}
                             variant="secondary"
@@ -266,7 +297,7 @@ export const propertyColumns: ColumnDef<Unit>[] = [
                             {amenity}
                         </Badge>
                     ))}
-                    {amenities.length > 2 && (
+                    {amenityDisplays.length > 3 && (
                         <Badge
                             variant="secondary"
                             className="text-xs font-medium"
@@ -277,7 +308,7 @@ export const propertyColumns: ColumnDef<Unit>[] = [
                                 border: '1px solid',
                             }}
                         >
-                            +{amenities.length - 2} more
+                            +{amenityDisplays.length - 3} more
                         </Badge>
                     )}
                 </div>

@@ -5,6 +5,7 @@ import LoginModal from '@/components/main/ui/LoginModal';
 import SignUpModal from '@/components/main/ui/SignUpModal';
 import { ReactNode, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useFlashMessages } from '@/hooks/use-flash-messages';
 
 interface LandingLayoutProps {
     children: ReactNode;
@@ -15,6 +16,7 @@ interface LandingLayoutProps {
 
 const LandingLayout = ({ children, title, subtitle, buttonLabel }: LandingLayoutProps) => {
     const [headerVisible, setHeaderVisible] = useState(false);
+    useFlashMessages();
 
     const headerLinks = [
         { label: "Home", href: "/" },
@@ -44,9 +46,9 @@ const LandingLayout = ({ children, title, subtitle, buttonLabel }: LandingLayout
             </div>
 
             {/* Hero Section */}
-            <Hero 
-                title={title} 
-                subtitle={subtitle} 
+            <Hero
+                title={title}
+                subtitle={subtitle}
                 buttonLabel={buttonLabel}
                 onHeaderToggle={setHeaderVisible}
                 showScrollButton={true}
@@ -62,4 +64,4 @@ const LandingLayout = ({ children, title, subtitle, buttonLabel }: LandingLayout
     );
 };
 
-export default LandingLayout; 
+export default LandingLayout;

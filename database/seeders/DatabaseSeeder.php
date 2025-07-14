@@ -12,12 +12,53 @@ use App\Models\MaintenanceRequest;
 use App\Models\RentalApplication;
 use App\Models\VacancySubscription;
 use App\Models\VacancyNotification;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
+    /**
+     * Get photos for a specific unit with main.jpg as primary
+     */
+    private function getUnitPhotos($unitId): array
+    {
+        $unitFolder = "rental-units/unit-{$unitId}";
+        $fullPath = storage_path("app/public/{$unitFolder}");
+
+        if (!File::exists($fullPath)) {
+            return [];
+        }
+
+        $files = File::files($fullPath);
+        $photos = [];
+        $mainPhoto = null;
+
+        foreach ($files as $file) {
+            $extension = strtolower($file->getExtension());
+            $filename = $file->getFilename();
+
+            if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                $photoPath = "{$unitFolder}/{$filename}";
+
+                // Check if this is the main photo
+                if (strtolower(pathinfo($filename, PATHINFO_FILENAME)) === 'main') {
+                    $mainPhoto = $photoPath;
+                } else {
+                    $photos[] = $photoPath;
+                }
+            }
+        }
+
+        // Put main photo first if it exists
+        if ($mainPhoto) {
+            array_unshift($photos, $mainPhoto);
+        }
+
+        return $photos;
+    }
+
     /**
      * Seed the application's database.
      */
@@ -42,15 +83,303 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('prostenant123'),
         ]);
 
-        // Create rental units owned by the test landlord
-        $units = RentalUnit::factory(8)->create([
-            'landlord_id' => $testLandlord->id,
-            'availability_status' => 'available',
-        ]);
-
         // Create tenants and prospective tenants
         $tenants = Tenant::factory(5)->create();
         $prospects = ProspectiveTenant::factory(7)->create();
+
+        // Create real rental units
+        $rentalUnitsData = [
+            [
+                'unit_number' => 'Ph. 4, Lot 6, Block 8, Unit 1',
+                'address' => 'Ph. 4, Lot 6, Block 8, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 80.00,
+                'rent_price' => 20000.00,
+                'property_type' => 'duplex',
+                'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 2,
+                    'bedrooms' => 3,
+                    'bathrooms' => 2,
+                    'balcony' => false,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Ph. 4, Lot 6, Block 8, Unit 2',
+                'address' => 'Ph. 4, Lot 6, Block 8, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 20.00,
+                'rent_price' => 11000.00,
+                'property_type' => 'studio',
+                'description' => '1 Floor, 1 Bedroom, 1 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 1,
+                    'bedrooms' => 1,
+                    'bathrooms' => 1,
+                    'balcony' => false,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Ph. 4, Lot 6, Block 8, Unit 3',
+                'address' => 'Ph. 4, Lot 6, Block 8, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 70.00,
+                'rent_price' => 20000.00,
+                'property_type' => 'duplex',
+                'description' => '2 Floors, 3 Bedrooms, 2 T&B, With balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 2,
+                    'bedrooms' => 3,
+                    'bathrooms' => 2,
+                    'balcony' => true,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Ph. 2, Lot 5, Block 3, Unit 1',
+                'address' => 'Ph. 2, Lot 5, Block 3, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 70.00,
+                'rent_price' => 20000.00,
+                'property_type' => 'duplex',
+                'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 2,
+                    'bedrooms' => 3,
+                    'bathrooms' => 2,
+                    'balcony' => false,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Ph. 2, Lot 5, Block 3, Unit 2',
+                'address' => 'Ph. 2, Lot 5, Block 3, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 70.00,
+                'rent_price' => 20000.00,
+                'property_type' => 'duplex',
+                'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 2,
+                    'bedrooms' => 3,
+                    'bathrooms' => 2,
+                    'balcony' => false,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Ph. 2, Lot 5, Block 3, Unit 3',
+                'address' => 'Ph. 2, Lot 5, Block 3, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 70.00,
+                'rent_price' => 20000.00,
+                'property_type' => 'duplex',
+                'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 2,
+                    'bedrooms' => 3,
+                    'bathrooms' => 2,
+                    'balcony' => false,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Escala, Block 1, Lot 67, Unit 1',
+                'address' => 'Escala, Block 1, Lot 67, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 60.00,
+                'rent_price' => 16000.00,
+                'property_type' => 'duplex',
+                'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 2,
+                    'bedrooms' => 3,
+                    'bathrooms' => 2,
+                    'balcony' => false,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Escala, Block 1, Lot 67, Unit 2',
+                'address' => 'Escala, Block 1, Lot 67, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 60.00,
+                'rent_price' => 16000.00,
+                'property_type' => 'duplex',
+                'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 2,
+                    'bedrooms' => 3,
+                    'bathrooms' => 2,
+                    'balcony' => false,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Ph. 3, Block 3, Lot 16, Unit 1',
+                'address' => 'Ph. 3, Block 3, Lot 16, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 70.00,
+                'rent_price' => 20000.00,
+                'property_type' => 'duplex',
+                'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 2,
+                    'bedrooms' => 3,
+                    'bathrooms' => 2,
+                    'balcony' => false,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Ph. 3, Block 3, Lot 16, Unit 2',
+                'address' => 'Ph. 3, Block 3, Lot 16, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 18.00,
+                'rent_price' => 10000.00,
+                'property_type' => 'studio',
+                'description' => '1 Floor, 1 Bedroom, 1 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 1,
+                    'bedrooms' => 1,
+                    'bathrooms' => 1,
+                    'balcony' => false,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Ph. 3, Block 3, Lot 16, Unit 3',
+                'address' => 'Ph. 3, Block 3, Lot 16, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 70.00,
+                'rent_price' => 20000.00,
+                'property_type' => 'duplex',
+                'description' => '2 Floors, 3 Bedrooms, 2 T&B, With balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 2,
+                    'bedrooms' => 3,
+                    'bathrooms' => 2,
+                    'balcony' => true,
+                    'parking' => true,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => true,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ],
+            [
+                'unit_number' => 'Ph. 3, Block 3, Lot 16, Unit 4',
+                'address' => 'Ph. 3, Block 3, Lot 16, Pooc, Corona del Mar, Talisay City, Cebu',
+                'floor_area' => 12.00,
+                'rent_price' => 12000.00,
+                'property_type' => 'loft',
+                'description' => '1 Floor, 1 Bedroom, 1 T&B, With balcony, No parking, With tile floors, No dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
+                'amenities' => [
+                    'floors' => 1,
+                    'bedrooms' => 1,
+                    'bathrooms' => 1,
+                    'balcony' => true,
+                    'parking' => false,
+                    'tile_floors' => true,
+                    'dirty_kitchen' => false,
+                    'pet_friendly' => true,
+                    'lease_term' => '1 year',
+                    'advance_payment' => '1 month',
+                    'deposit' => '2 months'
+                ],
+                'availability_status' => 'available'
+            ]
+        ];
+
+        $units = collect();
+        foreach ($rentalUnitsData as $index => $unitData) {
+            $unit = RentalUnit::create([
+                'landlord_id' => $testLandlord->id,
+                'unit_number' => $unitData['unit_number'],
+                'address' => $unitData['address'],
+                'floor_area' => $unitData['floor_area'],
+                'rent_price' => $unitData['rent_price'],
+                'property_type' => $unitData['property_type'],
+                'description' => $unitData['description'],
+                'amenities' => $unitData['amenities'],
+                'unit_photos' => [], // Will be updated after creation
+                'availability_status' => $unitData['availability_status']
+            ]);
+
+            // Get photos for this unit and update the unit_photos field
+            $unitPhotos = $this->getUnitPhotos($unit->id);
+            $unit->update(['unit_photos' => $unitPhotos]);
+
+            $units->push($unit);
+
+            // Log the photos found for this unit
+            $photoCount = count($unitPhotos);
+            $this->command->info("Unit {$unit->id} ({$unit->unit_number}): {$photoCount} photos found");
+        }
 
         // Create leases for some units with tenants
         $occupiedUnits = $units->take(4);
@@ -126,7 +455,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Get available units (should be 6 remaining now: 4 original + 2 from terminated leases)
+        // Get available units
         $availableUnits = $units->where('availability_status', 'available');
 
         // Add safety check to prevent the error
@@ -144,36 +473,9 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Create vacancy subscriptions
-        VacancySubscription::factory(10)->create();
-
-        // Some subscriptions for existing users
-        foreach ($prospects->take(3) as $prospect) {
-            VacancySubscription::factory()->create([
-                'user_id' => $prospect->id,
-                'email' => $prospect->email,
-            ]);
-        }
-
-        // Create vacancy notifications for some subscriptions
-        $subscriptions = VacancySubscription::all();
-        if ($subscriptions->isNotEmpty() && $availableUnits->isNotEmpty()) {
-            foreach ($subscriptions->take(5) as $subscription) {
-                $randomUnit = $availableUnits->random();
-
-                VacancyNotification::create([
-                    'subscription_id' => $subscription->id,
-                    'unit_id' => $randomUnit->id,
-                    'email' => $subscription->email,
-                    'message' => "New rental unit available: {$randomUnit->address} - ₱" . number_format($randomUnit->rent_price, 2),
-                    'sent_at' => now(),
-                ]);
-            }
-        }
-
         $this->command->info('Database seeded successfully!');
         $this->command->info("Created: 1 Test Landlord, {$tenants->count()} Tenants, {$prospects->count()} Prospective Tenants");
-        $this->command->info("Created: {$units->count()} Rental Units, {$occupiedUnits->count()} Active Leases, 2 Terminated Leases");
+        $this->command->info("Created: {$units->count()} Real Rental Units, {$occupiedUnits->count()} Active Leases, 2 Terminated Leases");
         $this->command->info("Available units: {$availableUnits->count()}");
     }
 }
