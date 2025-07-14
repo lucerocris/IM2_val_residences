@@ -9,7 +9,7 @@ use App\Models\RentalUnit;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
-use App\Notifications\ApplicationsStatusChanged;
+use App\Notifications\ApplicationStatusChanged;
 
 class ApplicationApprovalService
 {
@@ -24,7 +24,7 @@ class ApplicationApprovalService
                     'review_notes' => $reviewNotes,
                 ]);
 
-                $application->prospectiveTenant->notify(new ApplicationsStatusChanged($application));
+                $application->prospectiveTenant->notify(new ApplicationStatusChanged($application));
 
                 // 2. Convert prospective_tenant to tenant
                 $prospectiveTenant = $application->prospectiveTenant;
@@ -37,7 +37,7 @@ class ApplicationApprovalService
                 $rejectedApplications = $this->rejectOtherApplicationsForUnit($application->unit_id, $application->id);
 
                 foreach ($rejectedApplications as $rejectedApp) {
-                    $rejectedApp->prospectiveTenant->notify(new ApplicationsStatusChanged($rejectedApp));
+                    $rejectedApp->prospectiveTenant->notify(new ApplicationStatusChanged($rejectedApp));
                 }
 
                 // 5. Create lease record (optional - you might want to do this separately)
@@ -122,7 +122,7 @@ class ApplicationApprovalService
                 'review_notes' => $reviewNotes ?? 'Application not approved at this time',
             ]);
 
-            $application->prospectiveTenant->notify(new ApplicationsStatusChanged($application));
+            $application->prospectiveTenant->notify(new ApplicationStatusChanged($application));
 
             return [
                 'success' => true,

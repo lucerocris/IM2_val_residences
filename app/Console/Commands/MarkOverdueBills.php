@@ -41,7 +41,7 @@ class MarkOverdueBills extends Command
 
         $today = Carbon::today();
 
-        $overdueBills = RentalBill::with(['lease.tenant'])
+        $overdueBills = RentalBill::with(['lease.tenant', 'lease.units'])
             ->where('due_date', '<', $today)
             ->whereRaw('amount_paid < rent_amount')
             ->where('payment_status', '!=', 'overdue')
