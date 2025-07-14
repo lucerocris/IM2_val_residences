@@ -43,12 +43,12 @@ class MaintenanceRequestReceived extends Notification
         ->subject('New Maintenance Request Received')
         ->greeting('Hello ' . $notifiable->user_name . ',')
         ->line('A new maintenance request has been submitted for one of your properties.')
-        ->line('<strong>Property:</strong> ' . $unit->address . ' - Unit ' . $unit->unit_number)
-        ->line('<strong>Tenant:</strong> ' . $tenant->user_name)
-        ->line('<strong>Priority Level:</strong> ' . ucfirst($request->priority_level))
-        ->line('<strong>Description:</strong>')
+        ->line('**Property:**' . $unit->address . ' - Unit ' . $unit->unit_number)
+        ->line('**Tenant:**' . $tenant->user_name)
+        ->line('**Priority Level:**' . ucfirst($request->priority_level))
+        ->line('**Description:</strong>')
         ->line($request->maintenance_description)
-        ->line('<strong>Request Date:</strong> ' . $request->request_date->format('F j, Y'))
+        ->line('**Request Date:**' . $request->request_date->format('F j, Y'))
         ->action('View Request Details', url('/landlord/maintenance/requests'))
         ->line('Please review and schedule the maintenance at your earliest convenience.');
     }
