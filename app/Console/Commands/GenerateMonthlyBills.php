@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\RentalBill;
 use Carbon\Carbon;
 use App\Models\Lease;
+use App\Notifications\RentalBillGenerated;
 
 class GenerateMonthlyBills extends Command
 {
@@ -27,32 +28,63 @@ class GenerateMonthlyBills extends Command
      */
     public function handle()
     {
+        // $today = Carbon::now();
+        // $activeLeases = Lease::where('lease_status', 'active')->get();
+
+        // $count = 0;
+
+        // foreach ($activeLeases as $lease) {
+        //     $existingBill = RentalBill::where('lease_id', $lease->id)
+        //         ->whereMonth('billing_date', $today->month)
+        //         ->whereYear('billing_date', $today->year)
+        //         ->first();
+
+        //     if (!$existingBill) {
+        //         RentalBill::create([
+        //             'lease_id' => $lease->id,
+        //             'billing_date' => $today->startOfMonth(),
+        //             'rent_amount' => $lease->monthly_rent,
+        //             'due_date' => $today->startOfMonth()->addDays(15),
+        //             'payment_status' => 'pending',
+        //             'amount_paid' => 0,
+        //         ]);
+
+        //         $count++;
+        //     }
+
         $today = Carbon::now();
-        $activeLeases = Lease::where('lease_status', 'active')->get();
+        $activeLeases = Lease::with(['tenant', 'units'])->where('lease_status', 'active')->get();
 
         $count = 0;
 
-        foreach ($activeLeases as $lease) {
+        foreach($activeLeases as $lease) {
             $existingBill = RentalBill::where('lease_id', $lease->id)
                 ->whereMonth('billing_date', $today->month)
                 ->whereYear('billing_date', $today->year)
                 ->first();
 
-            if (!$existingBill) {
-                RentalBill::create([
+            if(!$existingBill) {
+                $bill = RentalBill::create([
                     'lease_id' => $lease->id,
                     'billing_date' => $today->startOfMonth(),
                     'rent_amount' => $lease->monthly_rent,
                     'due_date' => $today->startOfMonth()->addDays(15),
                     'payment_status' => 'pending',
-                    'amount_paid' => 0,
+                    'amount_paid' => 0
                 ]);
 
+                if($lease->tenant) {
+                    $lease->tenant->notify(new RentalBillGenerated($bill));
+                }
                 $count++;
             }
         }
 
-        $this->info("Generated {$count} new bills");
+        $this->info("Generated {$count} new bills and sent notifications");
         return Command::SUCCESS;
     }
+
+        // $this->info("Generated {$count} new bills");
+        // return Command::SUCCESS;
 }
+
