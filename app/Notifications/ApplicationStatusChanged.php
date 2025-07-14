@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\RentalApplication;
 
-class ApplicationsStatusChanged extends Notification
+class ApplicationStatusChanged extends Notification
 {
     use Queueable;
 
@@ -44,10 +44,10 @@ class ApplicationsStatusChanged extends Notification
 
         if($status === 'approved') {
             $message->subject('Application Approved!')
-                ->line('<strong style = "color:#28a745;">Congratulations! Your rental application has been approved!</strong>')
-                ->line('<strong>Property: </strong> ' . $unit->address . ' - Unit ' . $unit->unit_number)
-                ->line('<strong>Monthly Rent:</strong> ₱' . number_format($unit->rent_price, 2))
-                ->line('<strong>Move-in Date:</strong> ' . $application->preferred_move_in_date)
+                ->line('**Congratulations! Your rental application has been approved!**')
+                ->line('**Property: **' . $unit->address . ' - Unit ' . $unit->unit_number)
+                ->line('**Monthly Rent:**₱' . number_format($unit->rent_price, 2))
+                ->line('**Move-in Date:**' . $application->preferred_move_in_date)
                 ->line('Next steps:')
                 ->line('• Sign the lease agreement')
                 ->line('• Submit security deposit')
@@ -56,12 +56,12 @@ class ApplicationsStatusChanged extends Notification
         } else {
             $message->subject('Application Status Update')
                 ->line('Thank you for your interest in our property.')
-                ->line('<strong>Property:</strong> ' . $unit->address . ' - Unit ' . $unit->unit_number)
-                ->line('<strong>Application Status:</strong> ' . ucfirst($status))
+                ->line('**Property:**' . $unit->address . ' - Unit ' . $unit->unit_number)
+                ->line('**Application Status:**' . ucfirst($status))
                 ->line('We appreciate the time you took to apply.');
 
             if($application->review_notes) {
-                $message->line('<strong>Review Notes:</strong> ' . $application->review_notes);
+                $message->line('**Review Notes:**' . $application->review_notes);
             }
         }
 
