@@ -13,10 +13,10 @@ interface Listing {
     amenities: string[];
     unit_photos: string[];
 }
-interface landingProps {
+
+interface landingProps{
     ListingsData: Listing[];
 }
-
 
 const landing = ({ListingsData}: landingProps) => {
     const desc = "Wake up to refreshing mornings in our apartments at Corona del Mar, a Spanish Mediterranean-inspired seaside community in Cebu.";
@@ -30,7 +30,7 @@ const landing = ({ListingsData}: landingProps) => {
                 subtitle={desc}
                 buttonLabel={btnLabel}
             >
-                <ListingsMain ListingsData={ListingsData} />
+                <ListingsMain ListingsData={ListingsData} redirectToLoginIfUnauthenticated={true} />
             </LandingLayout>
         </>
     )
