@@ -37,6 +37,7 @@ class TenantController extends Controller
 
 
         return Inertia::render('tenant/Landing', [
+
             'maintenanceRequests' => $maintenanceData,
             'tenantData' => $tenantData,
             'userInfo' => $userInfo,

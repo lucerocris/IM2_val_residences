@@ -44,10 +44,10 @@ class RentalApplication extends Model
         return DB::table('rental_applications')->where('application_status', '=', 'pending')->get()->count();
     }
 
-    public static function getOwnApplication()
+    public static function getOwnApplication(int $userID)
     {
         return DB::table('rental_applications')
-            ->where('prospective_tenant_id', '=', Auth::id())
+            ->where('prospective_tenant_id', '=', $userID)
             ->join('rental_units', 'rental_applications.unit_id', '=', 'rental_units.id')
             ->select('rental_applications.id', 'rental_units.id', 'rental_units.address', 'rental_units.unit_number', 'rental_units.rent_price', 'rental_units.property_type', 'rental_units.floor_area')
             ->get()->toArray();
