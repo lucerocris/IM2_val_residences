@@ -33,14 +33,14 @@ return new class extends Migration
             $table->timestamp('documents_submitted_at')->nullable()->after('documents_submitted_for_review');
 
             // Add index for landlord queries
-            $table->index(['landlord_review_status', 'documents_submitted_for_review']);
+            $table->index(['landlord_review_status', 'documents_submitted_for_review'], 'leases_landlord_review_idx');
         });
     }
 
     public function down(): void
     {
         Schema::table('leases', function (Blueprint $table) {
-            $table->dropIndex(['landlord_review_status', 'documents_submitted_for_review']);
+            $table->dropIndex('leases_landlord_review_idx');
             $table->dropForeign(['landlord_reviewed_by']);
             $table->dropColumn([
                 'landlord_review_status',

@@ -24,7 +24,7 @@ class TenantOnboardingController extends Controller
         //so if the $pendingLease is null that means the current tenant already completed the onboarding. if he/she already completed the onboarding, he/she is redirected to the tenant dashboard
 
         if (!$pendingLease) {
-            return redirect()->route('tenant.dashboard')->with('info', 'No pending onboarding required.');
+            return redirect()->route('tenant.dashboard');
         }
 
 
@@ -47,7 +47,7 @@ class TenantOnboardingController extends Controller
         // this gets the request and ensures that the request sent meets these requirements
         $request->validate([
             'payment_amount' => 'required|numeric|min:0',
-            'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'lease_id' => 'required|exists:leases,id',
         ]);
 
@@ -93,7 +93,7 @@ class TenantOnboardingController extends Controller
     public function uploadId(Request $request)
     {
         $request->validate([
-            'id_document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120', // 5MB max
+            'id_document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240', // 5MB max
             'lease_id' => 'required|exists:leases,id',
         ]);
 

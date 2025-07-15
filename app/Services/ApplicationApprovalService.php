@@ -23,6 +23,8 @@ class ApplicationApprovalService
                     'review_notes' => $reviewNotes,
                 ]);
 
+
+
                 // 2. Convert prospective_tenant to tenant
                 $prospectiveTenant = $application->prospectiveTenant;
                 $this->convertProspectiveTenantToTenant($prospectiveTenant, $application);

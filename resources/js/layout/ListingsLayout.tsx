@@ -3,6 +3,7 @@ import Footer from '@/components/main/ui/Footer';
 import Hero from '@/components/main/ui/Hero';
 import { ReactNode, useState } from 'react';
 import { useFlashMessages } from '@/hooks/use-flash-messages';
+import { Toaster } from 'sonner';
 
 interface ListingsLayoutProps {
     children: ReactNode;
@@ -20,6 +21,7 @@ const ListingsLayout = ({ children, title, subtitle, buttonLabel, headerLinks, h
 
     return (
         <div className="overflow-x-hidden">
+            <Toaster duration={4000}/>
             {/* Dynamic Header */}
             <div className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
                 headerVisible ? 'translate-y-0' : '-translate-y-full'

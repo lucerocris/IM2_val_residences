@@ -1,16 +1,14 @@
-
-import React, { useState } from 'react';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
-import TenantLayout from '@/layout/TenantLayout';
 import Header from '@/components/main/ui/Header';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { CheckCircle, CreditCard, FileText, Upload, AlertCircle, Download, CheckCircle2 } from 'lucide-react';
+import TenantLayout from '@/layout/TenantLayout';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
+import { AlertCircle, CheckCircle, CheckCircle2, CreditCard, Download, FileText, Upload } from 'lucide-react';
+import React from 'react';
 
 interface OnboardingStep {
     completed: boolean;
@@ -23,6 +21,9 @@ interface OnboardingProps {
     lease: {
         id: number;
         completion_percentage: number;
+        status?: string;
+        landlord_review_status?: string;
+        landlord_review_notes?: string;
         onboarding_steps: {
             fees: OnboardingStep;
             signed_lease: OnboardingStep;
@@ -106,7 +107,7 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
         },
     ];
 
-    const completedSteps = steps.filter(step => step.completed).length;
+    const completedSteps = steps.filter((step) => step.completed).length;
     const allStepsCompleted = completedSteps === steps.length;
 
     const handlePaymentSubmit = (e: React.FormEvent) => {
@@ -135,7 +136,7 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
 
     const handleIdSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        router.post('/tenant/onboarding/id-upload', idData,  {
+        router.post('/tenant/onboarding/id-upload', idData, {
             onSuccess: () => {
                 resetId('id_document');
                 // Clear the file input
@@ -154,32 +155,26 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
             <Head title="Complete Your Lease Activation" />
             <Header
                 links={[
-                    { label: "TENANT DASHBOARD", href: "/tenant/dashboard" },
-                    { label: "VIEW LISTINGS", href: "/tenant/listings" },
+                    { label: 'TENANT DASHBOARD', href: '/tenant/dashboard' },
+                    { label: 'VIEW LISTINGS', href: '/tenant/listings' },
                 ]}
-                links2={[
-                    { label: "LOG OUT", href: "/logout", method: 'post' }
-                ]}
+                links2={[{ label: 'LOG OUT', href: '/logout', method: 'post' }]}
             />
 
             <TenantLayout>
-                <div className="px-4 sm:px-6 lg:px-12 py-8 max-w-4xl mx-auto">
+                <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-12">
                     {/* Flash Messages */}
                     {flash.success && (
                         <Alert className="mb-6 border-green-200 bg-green-50">
                             <CheckCircle2 className="h-4 w-4 text-green-600" />
-                            <AlertDescription className="text-green-800">
-                                {flash.success}
-                            </AlertDescription>
+                            <AlertDescription className="text-green-800">{flash.success}</AlertDescription>
                         </Alert>
                     )}
 
                     {flash.error && (
                         <Alert className="mb-6 border-red-200 bg-red-50">
                             <AlertCircle className="h-4 w-4 text-red-600" />
-                            <AlertDescription className="text-red-800">
-                                {flash.error}
-                            </AlertDescription>
+                            <AlertDescription className="text-red-800">{flash.error}</AlertDescription>
                         </Alert>
                     )}
 
@@ -192,13 +187,29 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                         </Alert>
                     )}
 
+                    {lease.landlord_review_status === 'rejected' && (
+                        <Alert className="mb-6 border-red-200 bg-red-50">
+                            <AlertCircle className="h-4 w-4 text-red-600" />
+                            <AlertDescription className="text-red-800">
+                                <strong>Documents Rejected:</strong> {lease.landlord_review_notes}
+                                <br />
+                                <span className="text-sm">Please review the feedback and re-upload the required documents.</span>
+                            </AlertDescription>
+                        </Alert>
+                    )}
+
+                    {lease.status === 'awaiting_landlord_review' && (
+                        <Alert className="mb-6 border-yellow-200 bg-yellow-50">
+                            <AlertCircle className="h-4 w-4 text-yellow-600" />
+                            <AlertDescription className="text-yellow-800">
+                                Your documents have been submitted for landlord review. You will be notified once they are reviewed.
+                            </AlertDescription>
+                        </Alert>
+                    )}
+
                     <div className="mb-8">
-                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                            Complete Your Lease Activation
-                        </h1>
-                        <p className="text-gray-600">
-                            Complete the following steps to activate your lease and gain full access to your rental unit.
-                        </p>
+                        <h1 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl">Complete Your Lease Activation</h1>
+                        <p className="text-gray-600">Complete the following steps to activate your lease and gain full access to your rental unit.</p>
 
                         <div className="mt-4">
                             <Progress value={lease.completion_percentage} className="mb-2" />
@@ -218,21 +229,17 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                                         ) : (
                                             <step.icon className="h-6 w-6 text-gray-400" />
                                         )}
-                                        <span className={step.completed ? 'text-green-800' : 'text-gray-900'}>
-                      {step.title}
-                    </span>
+                                        <span className={step.completed ? 'text-green-800' : 'text-gray-900'}>{step.title}</span>
                                     </CardTitle>
-                                    <p className="text-sm text-gray-600 ml-9">
-                                        {step.description}
-                                    </p>
+                                    <p className="ml-9 text-sm text-gray-600">{step.description}</p>
                                 </CardHeader>
 
                                 {!step.completed && (
                                     <CardContent className="ml-9">
                                         {step.id === 'fees' && (
                                             <form onSubmit={handlePaymentSubmit} className="space-y-4">
-                                                <div className="bg-blue-50 p-4 rounded-lg">
-                                                    <div className="flex items-center space-x-2 mb-2">
+                                                <div className="rounded-lg bg-blue-50 p-4">
+                                                    <div className="mb-2 flex items-center space-x-2">
                                                         <AlertCircle className="h-5 w-5 text-blue-600" />
                                                         <h4 className="font-semibold text-blue-800">Payment Breakdown</h4>
                                                     </div>
@@ -245,19 +252,19 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                                                             <span>Security Deposit:</span>
                                                             <span>₱{lease.deposit_amount.toLocaleString()}</span>
                                                         </div>
-                                                        <div className="flex justify-between font-semibold border-t pt-1">
+                                                        <div className="flex justify-between border-t pt-1 font-semibold">
                                                             <span>Total Required:</span>
                                                             <span>₱{lease.required_fees_amount.toLocaleString()}</span>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div className="bg-yellow-50 p-4 rounded-lg">
-                                                    <div className="flex items-center space-x-2 mb-2">
+                                                <div className="rounded-lg bg-yellow-50 p-4">
+                                                    <div className="mb-2 flex items-center space-x-2">
                                                         <AlertCircle className="h-5 w-5 text-yellow-600" />
                                                         <h4 className="font-semibold text-yellow-800">Payment Instructions</h4>
                                                     </div>
-                                                    <div className="text-sm text-yellow-700 space-y-1">
+                                                    <div className="space-y-1 text-sm text-yellow-700">
                                                         <p>1. Make the payment using your preferred method (bank transfer, GCash, etc.)</p>
                                                         <p>2. Take a screenshot or photo of the payment receipt</p>
                                                         <p>3. Upload the proof of payment below</p>
@@ -265,7 +272,7 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                                                     </div>
                                                 </div>
 
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                                     <div>
                                                         <Label htmlFor="payment_amount">Payment Amount</Label>
                                                         <Input
@@ -278,7 +285,7 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                                                             className="mt-1"
                                                         />
                                                         {paymentErrors.payment_amount && (
-                                                            <p className="text-sm text-red-600 mt-1">{paymentErrors.payment_amount}</p>
+                                                            <p className="mt-1 text-sm text-red-600">{paymentErrors.payment_amount}</p>
                                                         )}
                                                     </div>
 
@@ -291,11 +298,11 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                                                             onChange={(e) => setPaymentData('proof_of_payment', e.target.files?.[0] || null)}
                                                             className="mt-1"
                                                         />
-                                                        <p className="text-sm text-gray-500 mt-1">
+                                                        <p className="mt-1 text-sm text-gray-500">
                                                             Upload receipt screenshot (JPG, PNG, PDF - Max 5MB)
                                                         </p>
                                                         {paymentErrors.proof_of_payment && (
-                                                            <p className="text-sm text-red-600 mt-1">{paymentErrors.proof_of_payment}</p>
+                                                            <p className="mt-1 text-sm text-red-600">{paymentErrors.proof_of_payment}</p>
                                                         )}
                                                     </div>
                                                 </div>
@@ -312,13 +319,14 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
 
                                         {step.id === 'signed_lease' && (
                                             <div className="space-y-4">
-                                                <div className="bg-blue-50 p-4 rounded-lg">
-                                                    <div className="flex items-center space-x-2 mb-2">
+                                                <div className="rounded-lg bg-blue-50 p-4">
+                                                    <div className="mb-2 flex items-center space-x-2">
                                                         <Download className="h-5 w-5 text-blue-600" />
                                                         <h4 className="font-semibold text-blue-800">Download & Sign Your Lease</h4>
                                                     </div>
-                                                    <p className="text-sm text-blue-700 mb-3">
-                                                        Download the lease contract, sign it electronically (using your preferred PDF signing tool), and upload it back.
+                                                    <p className="mb-3 text-sm text-blue-700">
+                                                        Download the lease contract, sign it electronically (using your preferred PDF signing tool),
+                                                        and upload it back.
                                                     </p>
                                                     <Button
                                                         type="button"
@@ -327,7 +335,7 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                                                         onClick={handleDownloadLease}
                                                         className="border-blue-300 text-blue-700 hover:bg-blue-50"
                                                     >
-                                                        <Download className="h-4 w-4 mr-2" />
+                                                        <Download className="mr-2 h-4 w-4" />
                                                         Download Lease Contract
                                                     </Button>
                                                 </div>
@@ -342,19 +350,15 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                                                             onChange={(e) => setLeaseData('signed_lease', e.target.files?.[0] || null)}
                                                             className="mt-1"
                                                         />
-                                                        <p className="text-sm text-gray-500 mt-1">
+                                                        <p className="mt-1 text-sm text-gray-500">
                                                             Upload the e-signed lease document in PDF format (Max 10MB)
                                                         </p>
                                                         {leaseErrors.signed_lease && (
-                                                            <p className="text-sm text-red-600 mt-1">{leaseErrors.signed_lease}</p>
+                                                            <p className="mt-1 text-sm text-red-600">{leaseErrors.signed_lease}</p>
                                                         )}
                                                     </div>
 
-                                                    <Button
-                                                        type="submit"
-                                                        disabled={processingLease || !leaseData.signed_lease}
-                                                        className="w-full"
-                                                    >
+                                                    <Button type="submit" disabled={processingLease || !leaseData.signed_lease} className="w-full">
                                                         {processingLease ? 'Uploading...' : 'Upload Signed Lease'}
                                                     </Button>
                                                 </form>
@@ -372,19 +376,13 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                                                         onChange={(e) => setIdData('id_document', e.target.files?.[0] || null)}
                                                         className="mt-1"
                                                     />
-                                                    <p className="text-sm text-gray-500 mt-1">
+                                                    <p className="mt-1 text-sm text-gray-500">
                                                         Upload a clear photo or scan of your valid government ID (PDF, PNG, JPG, JPEG - Max 5MB)
                                                     </p>
-                                                    {idErrors.id_document && (
-                                                        <p className="text-sm text-red-600 mt-1">{idErrors.id_document}</p>
-                                                    )}
+                                                    {idErrors.id_document && <p className="mt-1 text-sm text-red-600">{idErrors.id_document}</p>}
                                                 </div>
 
-                                                <Button
-                                                    type="submit"
-                                                    disabled={processingId || !idData.id_document}
-                                                    className="w-full"
-                                                >
+                                                <Button type="submit" disabled={processingId || !idData.id_document} className="w-full">
                                                     {processingId ? 'Uploading...' : 'Upload ID Document'}
                                                 </Button>
                                             </form>
@@ -396,20 +394,16 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                     </div>
 
                     {allStepsCompleted && (
-                        <Card className="border-green-200 bg-green-50 mt-6">
+                        <Card className="mt-6 border-green-200 bg-green-50">
                             <CardContent className="pt-6">
                                 <div className="text-center">
-                                    <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
-                                    <h3 className="text-xl font-semibold text-green-800 mb-2">
-                                        Congratulations! Your lease is now active.
-                                    </h3>
-                                    <p className="text-green-700 mb-4">
+                                    <CheckCircle className="mx-auto mb-4 h-16 w-16 text-green-600" />
+                                    <h3 className="mb-2 text-xl font-semibold text-green-800">Congratulations! Your lease is now active.</h3>
+                                    <p className="mb-4 text-green-700">
                                         You have successfully completed all requirements. You can now access all tenant features.
                                     </p>
                                     <Button asChild className="bg-green-600 hover:bg-green-700">
-                                        <Link href="/tenant/dashboard">
-                                            Go to Dashboard
-                                        </Link>
+                                        <Link href="/tenant/dashboard">Go to Dashboard</Link>
                                     </Button>
                                 </div>
                             </CardContent>

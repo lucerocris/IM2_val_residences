@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RequestMaintenanceRequest;
 use App\Models\RentalBill;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -23,6 +24,8 @@ class TenantController extends Controller
     {
 
         $user = Auth::user();
+        $unitID = Lease::getOwnUnit(Auth::id());
+        $tenantID = Auth::id();
         $pendingLease = $this->onboardingService->getPendingOnboardingLease($user);
 
         $leaseID = Lease::getOwnLeaseID(Auth::id());
@@ -34,11 +37,14 @@ class TenantController extends Controller
 
 
 
+
         return Inertia::render('tenant/Landing', [
             'maintenanceRequests' => $maintenanceData,
             'tenantData' => $tenantData,
             'leaseData' => $leaseInfo,
             'rentalBill' => $rentalBill,
+            'tenantID' => $tenantID,
+            'unitID' => $unitID,
             'onboardingLease' => $pendingLease ? [
                 'id' => $pendingLease->id,
                 'status' => $pendingLease->getOnboardingStatus(),
@@ -52,6 +58,11 @@ class TenantController extends Controller
                 'landlord_review_notes' => $pendingLease->landlord_review_notes,
             ] : null,
         ]);
+    }
+
+    public function storeMaintenance(RequestMaintenanceRequest $request) {
+        MaintenanceRequest::create($request->validated());
+        return redirect()->route('tenant.dashboard')->with('success', 'Request added successfully');
     }
 
     public function listings()

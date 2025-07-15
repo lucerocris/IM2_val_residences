@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\RequestMaintenanceController;
 use App\Http\Controllers\TenantOnboardingController;
+use App\Http\Controllers\LandlordAdmin\DocumentReviewController;
 
 Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
@@ -47,7 +48,7 @@ Route::middleware('auth', 'user.type:tenant')->group(function () {
 
 
 // Tenant Maintenance Request
-    Route::post('/tenant/maintenanceRequest', [RequestMaintenanceController::class, 'store']);
+    Route::post('/tenant/maintenanceRequest', [TenantController::class, 'storeMaintenance']);
 
 // Tenant Payment Upload
     Route::get('/tenant/payments/gcash', [TenantController::class, 'gcash']);
@@ -114,9 +115,9 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
     Route::post('/landlord/applications/{application}/message', [RentalApplicationController::class, 'sendMessage'])->name('landlord.applications.send-message');
 
 // Landlord Document Viewing
-    Route::get('/document-review', [DocumentReviewController::class, 'index'])
+    Route::get('/landlord/document-review', [DocumentReviewController::class, 'index'])
         ->name('landlord.document-review');
-    Route::get('/document-review/{lease}', [DocumentReviewController::class, 'show'])
+    Route::get('/landlord/document-review/{lease}', [DocumentReviewController::class, 'show'])
         ->name('landlord.document-review.show');
     Route::post('/document-review/{lease}/approve', [DocumentReviewController::class, 'approve'])
         ->name('landlord.document-review.approve');

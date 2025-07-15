@@ -15,7 +15,7 @@ class DocumentReviewController extends Controller
         $landlordId = Auth::id();
         $pendingReviews = Lease::getPendingReviewLeases($landlordId);
 
-        return Inertia::render('landlord\DocumentReview', [
+        return Inertia::render('landlord/DocumentReviewPage', [
             'pendingReviews' => $pendingReviews->map(function ($lease) {
                 return [
                     'id' => $lease->id,
@@ -31,7 +31,33 @@ class DocumentReviewController extends Controller
                         'payment_proof' => $lease->onboarding_payment_proof_path,
                     ],
                 ];
-            });
+            })
+        ]);
+    }
+
+    public function show(Lease $lease)
+    {
+        // Ensure landlord owns the unit
+        if ($lease->units->landlord_id !== Auth::id()) {
+            abort(403, 'Unauthorized access');
+        }
+
+        return Inertia::render('landlord/DocumentReviewDetail', [
+            'lease' => [
+                'id' => $lease->id,
+                'tenant' => $lease->tenant,
+                'unit' => $lease->units,
+                'monthly_rent' => $lease->monthly_rent,
+                'deposit_amount' => $lease->deposit_amount,
+                'required_fees_amount' => $lease->required_fees_amount,
+                'documents_submitted_at' => $lease->documents_submitted_at,
+                'onboarding_fees_amount' => $lease->onboarding_fees_amount,
+                'document_paths' => [
+                    'signed_lease' => $lease->onboarding_signed_lease_path,
+                    'id_document' => $lease->onboarding_id_document_path,
+                    'payment_proof' => $lease->onboarding_proof_of_payment_path,
+                ],
+            ],
         ]);
     }
 
@@ -69,7 +95,7 @@ class DocumentReviewController extends Controller
         $success = $lease->rejectDocuments(Auth::id(), $request->reason);
 
         if ($success) {
-            return back()->with('success', 'Documents rejected. Tenant will be notified to re-upload.');
+            return redirect('landlord.document-review')->with('success', 'Documents rejected. Tenant will be notified to re-upload.');
         } else {
             return back()->with('error', 'Failed to reject documents.');
         }
