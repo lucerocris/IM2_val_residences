@@ -29,4 +29,11 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'User Application added successfully');
     }
 
+    public function applications() {
+        $Applications = RentalApplication::getOwnApplication();
+        return Inertia::render('user/Landing', [
+            'ApplicationData' => $Applications,
+        ])
+    }
+
 }

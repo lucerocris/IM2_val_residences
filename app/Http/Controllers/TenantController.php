@@ -67,7 +67,11 @@ class TenantController extends Controller
 
     public function listings()
     {
-        return Inertia::render('tenant/Listings');
+        $ListingsData = RentalUnit::getListingsData();
+
+        return Inertia::render('tenant/Listings', [
+            'ListingsData' => $ListingsData,
+        ]);
     }
 
     public function gcash()
