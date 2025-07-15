@@ -4,8 +4,9 @@ import ListingsMain from "@/components/main/ui/Listings/main";
 import TenantProfileModal from "@/components/tenants/tenantsDashboard/tenant-profile-modal";
 import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TenantDashboardProps } from "@/types/tenantDashboard.types";
 
-const TenantListings = () => {
+const TenantListings = ({ userInfo }:TenantDashboardProps) => {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
 
     const title = "Welcome, Jose"
@@ -57,6 +58,7 @@ const TenantListings = () => {
                 open={profileModalOpen}
                 onOpenChange={setProfileModalOpen}
                 tenantData={tenantData}
+                userInfo = {userInfo}
             />
         </>
     );
