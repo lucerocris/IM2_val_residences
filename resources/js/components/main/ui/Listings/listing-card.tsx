@@ -28,9 +28,9 @@ interface ListingCardProps {
 
 const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: ListingCardProps) => {
     const formatPrice = (price: number) => {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('en-PH', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'PHP',
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
         }).format(price);
@@ -68,14 +68,14 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
     if (featured) {
         return (
             <>
-                <Card className="overflow-hidden border-gray-200 bg-white">
+                <Card className="overflow-hidden border-gray-200 bg-white py-0">
                     <div className="flex flex-col lg:flex-row">
                         <div className="relative lg:w-1/2">
                             {/* Image */}
                             <img
                                 src={photosArray[0] || '/placeholder.svg'}
                                 alt={`${listing.address} - Unit ${listing.unit_number}`}
-                                className="h-64 w-full object-cover lg:h-full"
+                                className="h-64 w-full object-cover lg:h-100"
                             />
 
                             {/* Badges on the image */}
@@ -87,7 +87,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
                         {/* Rent price */}
                         <div className="p-6 lg:w-1/2 flex flex-col">
                             <div className="mb-4">
-                                <p className="text-3xl font-bold text-orange-500">
+                                <p className="text-3xl font-bold text-[#3b3b3b]">
                                     {formatPrice(listing.rent_price)}
                                     <span className="text-sm font-normal text-gray-500">/month</span>
                                 </p>
@@ -140,20 +140,20 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
 
     // Regular listing card
     return (
-        <Card className="overflow-hidden border-gray-200 bg-white transition-shadow hover:shadow-lg flex flex-col h-full">
+        <Card className="flex h-full flex-col overflow-hidden border-gray-200 bg-white py-0 transition-shadow hover:shadow-lg">
             <div className="relative">
                 <img
                     src={photosArray[0] || '/placeholder.svg'}
                     alt={`${listing.address} - Unit ${listing.unit_number}`}
                     className="h-48 w-full object-cover"
                 />
-                <Badge className="absolute top-3 left-3 bg-emerald-600 text-white">{listing.availability_status}</Badge>
+                <Badge className={ `absolute top-3 left-3 ${listing.availability_status === 'available' ? 'bg-emerald-600' : 'bg-red-600'} text-white`}>{listing.availability_status}</Badge>
                 <Badge className="absolute top-3 right-3 bg-blue-600 text-white">{listing.property_type}</Badge>
             </div>
 
-            <div className="p-4 flex flex-col flex-1">
+            <div className="flex flex-1 flex-col p-4">
                 <div className="mb-3">
-                    <p className="text-2xl font-bold text-orange-500">
+                    <p className="text-2xl font-bold text-[#3b3b3b]">
                         {formatPrice(listing.rent_price)}
                         <span className="text-sm font-normal text-gray-500">/month</span>
                     </p>
@@ -187,7 +187,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
                     </div>
                 </div>
 
-                <div className="flex gap-2 mt-auto">
+                <div className="mt-auto flex gap-2">
                     <Button onClick={() => onViewDetails(listing)} variant="outline" className="flex-1">
                         View Details
                     </Button>

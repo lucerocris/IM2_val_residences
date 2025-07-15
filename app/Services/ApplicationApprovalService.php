@@ -9,6 +9,7 @@ use App\Models\RentalUnit;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Notifications\ApplicationStatusChanged;
 
 class ApplicationApprovalService
 {
@@ -24,6 +25,8 @@ class ApplicationApprovalService
                 ]);
 
 
+                $application->prospectiveTenant->notify(new ApplicationStatusChanged($application));
+
 
                 // 2. Convert prospective_tenant to tenant
                 $prospectiveTenant = $application->prospectiveTenant;
@@ -33,7 +36,11 @@ class ApplicationApprovalService
                 $this->updateUnitAvailability($application->rentalUnit);
 
                 // 4. Reject other pending applications for this unit
-                $this->rejectOtherApplicationsForUnit($application->unit_id, $application->id);
+                $rejectedApplications = $this->rejectOtherApplicationsForUnit($application->unit_id, $application->id);
+
+                foreach ($rejectedApplications as $rejectedApp) {
+                    $rejectedApp->prospectiveTenant->notify(new ApplicationStatusChanged($rejectedApp));
+                }
 
                 // 5. Create lease record (optional - you might want to do this separately)
                 $lease = $this->createLeaseRecord($application);
@@ -90,16 +97,46 @@ class ApplicationApprovalService
         ]);
     }
 
-    private function rejectOtherApplicationsForUnit(int $unitId, int $approvedApplicationId): void
+    private function rejectOtherApplicationsForUnit(int $unitId, int $approvedApplicationId): array
     {
-        RentalApplication::where('unit_id', $unitId)
+        $applicationsToReject = RentalApplication::with('prospectiveTenant')
+            ->where('unit_id', $unitId)
             ->where('id', '!=', $approvedApplicationId)
             ->where('application_status', 'pending')
-            ->update([
+            ->get();
+
+        foreach($applicationsToReject as $application) {
+            $application->update([
                 'application_status' => 'rejected',
                 'reviewed_date' => now(),
                 'review_notes' => 'Automatically rejected - unit has been leased to another applicant',
             ]);
+        }
+        return $applicationsToReject->toArray();
+    }
+
+    public function rejectApplication(RentalApplication $application, string $reviewNotes = null): array
+    {
+        try{
+            $application->update([
+                'application_status' => 'rejected',
+                'reviewed_date' => now(),
+                'review_notes' => $reviewNotes ?? 'Application not approved at this time',
+            ]);
+
+            $application->prospectiveTenant->notify(new ApplicationStatusChanged($application));
+
+            return [
+                'success' => true,
+                'message' => 'Application rejected successfully',
+            ];
+        } catch (\Exception $e) {
+            Log::error('Application rejection failed: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Failed to reject application: ' . $e->getMessage(),
+            ];
+        }
     }
 
     private function createLeaseRecord(RentalApplication $application): Lease
