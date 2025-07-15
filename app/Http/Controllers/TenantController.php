@@ -66,9 +66,8 @@ class TenantController extends Controller
 
     public function listings()
     {
-        $ListingsData = RentalUnit::getListingsData();
+        $ListingsData = RentalUnit::getAvailableUnits();
         $userInfo = Tenant::getSelfInfo(Auth::id());
-
         return Inertia::render('tenant/Listings', [
             'ListingsData' => $ListingsData,
             'userInfo' => $userInfo,
