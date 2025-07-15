@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { User, Mail, Phone, Calendar, Briefcase, Contact, Shield  } from "lucide-react";
 import TenantInfo from "./tenant-info";
 import { Tenant } from '@/types/tenantDashboard.types';
+import { UserInfo } from '@/types/tenantDashboard.types';
 
 
 
@@ -12,10 +13,11 @@ interface TenantProfileModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     tenantData: Tenant;
+    userInfo: UserInfo[];
 }
 
 
-const TenantProfileModal = ({ open, onOpenChange, tenantData }:TenantProfileModalProps) => {
+const TenantProfileModal = ({ open, onOpenChange, tenantData, userInfo }:TenantProfileModalProps) => {
     const formatDate = (dateString: string | undefined) => {
         if(!dateString) return 'Not Specified';
         return new Date(dateString).toLocaleString('en-US', {
@@ -24,6 +26,8 @@ const TenantProfileModal = ({ open, onOpenChange, tenantData }:TenantProfileModa
             day: 'numeric'
         });
     };
+
+    console.log(userInfo);
 
     return(
         <>
@@ -42,7 +46,7 @@ const TenantProfileModal = ({ open, onOpenChange, tenantData }:TenantProfileModa
                             <div className = "flex items-center justify-between">
                                 <h3 className = "text-lg font-semibold">Basic Information</h3>
                                 <Badge variant = "secondary" className = "capitalize">
-                                    {tenantData.user_type}
+                                    {userInfo[0].user_type}
                                 </Badge>
                             </div>
 
@@ -50,25 +54,25 @@ const TenantProfileModal = ({ open, onOpenChange, tenantData }:TenantProfileModa
                                 <TenantInfo
                                     icon = {User}
                                     label = "Full Name"
-                                    data = {tenantData.user_name}
+                                    data = {userInfo[0].user_name}
                                 />
 
                                 <TenantInfo
                                     icon = {Mail}
                                     label = "Email"
-                                    data = {tenantData.email}
+                                    data = {userInfo[0].email}
                                 />
 
                                 <TenantInfo
                                     icon = {Phone}
                                     label = "Contact Number"
-                                    data = {tenantData.user_contact_number}
+                                    data = {userInfo[0].user_contact_number || "Not specified"}
                                 />
 
                                 <TenantInfo
                                     icon = {Calendar}
                                     label = "Move-in Date"
-                                    data = {formatDate(tenantData.move_in_date)}
+                                    data = {formatDate(userInfo[0].move_in_date) || "Not specified"}
                                 />
                             </div>
                         </div>
@@ -83,13 +87,13 @@ const TenantProfileModal = ({ open, onOpenChange, tenantData }:TenantProfileModa
                                 <TenantInfo
                                     icon = {Briefcase}
                                     label = "Occupation"
-                                    data = {tenantData.tenant_occupation || 'Not specified'}
+                                    data = {userInfo[0].tenant_occupation || 'Not specified'}
                                 />
 
                                 <TenantInfo
                                     icon = {Shield}
                                     label = "Employment Status"
-                                    data = {tenantData.employment_status || 'Not specified'}
+                                    data = {userInfo[0].employment_status || 'Not specified'}
                                 />
                             </div>
                         </div>
@@ -103,7 +107,7 @@ const TenantProfileModal = ({ open, onOpenChange, tenantData }:TenantProfileModa
                             <TenantInfo
                                 icon = {Contact}
                                 label = "Emergency Contact"
-                                data = {tenantData.emergency_contact || 'Not specified'}
+                                data = {userInfo[0].emergency_contact || 'Not specified'}
                             />
                         </div>
 

@@ -23,7 +23,7 @@ interface ExtendedTenantDashboardProps extends TenantDashboardProps {
     } | null;
 }
 
-const TenantDashboard = ({ tenantData, leaseData, rentalBill, maintenanceRequests, onboardingLease, tenantID, unitID }: ExtendedTenantDashboardProps) => {
+const TenantDashboard = ({ tenantData, leaseData, rentalBill, maintenanceRequests, onboardingLease, tenantID, unitID, userInfo }: ExtendedTenantDashboardProps) => {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
     const [showAllLeases, setShowAllLeases] = useState(false);
 
@@ -80,7 +80,7 @@ const TenantDashboard = ({ tenantData, leaseData, rentalBill, maintenanceRequest
 
             </TenantLayout>
 
-            <TenantProfileModal open={profileModalOpen} onOpenChange={setProfileModalOpen} tenantData={tenantData} />
+            <TenantProfileModal open={profileModalOpen} onOpenChange={setProfileModalOpen} tenantData={tenantData} userInfo = {userInfo} />
         </>
     );
 };

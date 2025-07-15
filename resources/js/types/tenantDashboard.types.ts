@@ -48,6 +48,17 @@ export interface MaintenanceRequest {
     tenant_remarks: string;
 }
 
+export interface UserInfo {
+    user_name: string;
+    email: string;
+    user_contact_number: string;
+    user_type: string;
+    employment_status: string;
+    emergency_contact: string;
+    tenant_occupation: string;
+    move_in_date: string;
+}
+
 export interface RentalBill {
     id: number;
     lease_id: number;
@@ -65,4 +76,5 @@ export interface TenantDashboardProps {
     leaseData: Lease[];
     rentalBill: RentalBill;
     maintenanceRequests: MaintenanceRequest[];
+    userInfo: UserInfo[];
 }

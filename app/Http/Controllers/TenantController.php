@@ -11,6 +11,7 @@ use App\Models\Tenant;
 use Illuminate\Support\Facades\Auth;
 use App\Services\TenantOnboardingService;
 use App\Models\Lease;
+use App\Models\RentalUnit;
 
 class TenantController extends Controller
 {
@@ -24,16 +25,16 @@ class TenantController extends Controller
     {
 
         $user = Auth::user();
+        $userInfo = Tenant::getSelfInfo(Auth::id());
         $unitID = Lease::getOwnUnit(Auth::id());
         $tenantID = Auth::id();
         $pendingLease = $this->onboardingService->getPendingOnboardingLease($user);
-
         $leaseID = Lease::getOwnLeaseID(Auth::id());
         $maintenanceData = MaintenanceRequest::getMaintenanceRequests(Auth::id());
         $tenantData = Tenant::getSelfInfo(Auth::id());
         $leaseInfo = Lease::getOwnLeases(Auth::id());
         $rentalBill = RentalBill::getOwnBills($leaseID);
-        dd($rentalBill);
+        
 
 
 
@@ -42,6 +43,7 @@ class TenantController extends Controller
         return Inertia::render('tenant/Landing', [
             'maintenanceRequests' => $maintenanceData,
             'tenantData' => $tenantData,
+            'userInfo' => $userInfo,
             'leaseData' => $leaseInfo,
             'rentalBill' => $rentalBill,
             'tenantID' => $tenantID,
