@@ -28,8 +28,9 @@ class UserController extends Controller
 
     public function applications() {
         $Applications = RentalApplication::getOwnApplication(Auth::id());
+        // dd($Applications);
         return Inertia::render('user/Applications', [
-            'ApplicationData' => $Applications,
+            'applicationData' => $Applications,
         ]);
     }
 
