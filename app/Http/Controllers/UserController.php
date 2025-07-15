@@ -14,13 +14,9 @@ class UserController extends Controller
         $Listings = RentalUnit::getListingsData();
 
 
-        return Inertia::render('user/Listings',[
+        return Inertia::render('user/Landing',[
             'ListingsData' => $Listings
         ]);
-    }
-
-    public function listings() {
-        return Inertia::render('user/Listings');
     }
 
     public function storeApplication(StoreUserApplicationRequest $request) {
@@ -31,7 +27,7 @@ class UserController extends Controller
 
     public function applications() {
         $Applications = RentalApplication::getOwnApplication();
-        return Inertia::render('user/Landing', [
+        return Inertia::render('user/Application', [
             'ApplicationData' => $Applications,
         ]);
     }

@@ -59,7 +59,7 @@ Route::middleware('auth', 'user.type:tenant')->group(function () {
 //Prospective Routes
 Route::middleware('auth', 'user.type:prospective_tenant')->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
-    Route::get('/user/listings', [UserController::class, 'index'])->name('user.listings');
+    Route::get('/user/application', [UserController::class, 'applications']);
     Route::post('/user/application', [UserController::class, 'storeApplication'])->name('user.applications.store');
 });
 
