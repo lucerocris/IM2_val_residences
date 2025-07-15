@@ -97,18 +97,18 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'duplex',
                 'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 2,
-                    'bedrooms' => 3,
-                    'bathrooms' => 2,
-                    'balcony' => false,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '2 Floors',
+                    '3 Bedrooms',
+                    '2 Bathrooms',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -119,18 +119,18 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'studio',
                 'description' => '1 Floor, 1 Bedroom, 1 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 1,
-                    'bedrooms' => 1,
-                    'bathrooms' => 1,
-                    'balcony' => false,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '1 Floor',
+                    '1 Bedroom',
+                    '1 Bathroom',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -141,18 +141,19 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'duplex',
                 'description' => '2 Floors, 3 Bedrooms, 2 T&B, With balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 2,
-                    'bedrooms' => 3,
-                    'bathrooms' => 2,
-                    'balcony' => true,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '2 Floors',
+                    '3 Bedrooms',
+                    '2 Bathrooms',
+                    'Balcony',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -163,18 +164,18 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'duplex',
                 'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 2,
-                    'bedrooms' => 3,
-                    'bathrooms' => 2,
-                    'balcony' => false,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '2 Floors',
+                    '3 Bedrooms',
+                    '2 Bathrooms',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -185,18 +186,18 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'duplex',
                 'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 2,
-                    'bedrooms' => 3,
-                    'bathrooms' => 2,
-                    'balcony' => false,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '2 Floors',
+                    '3 Bedrooms',
+                    '2 Bathrooms',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -207,18 +208,18 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'duplex',
                 'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 2,
-                    'bedrooms' => 3,
-                    'bathrooms' => 2,
-                    'balcony' => false,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '2 Floors',
+                    '3 Bedrooms',
+                    '2 Bathrooms',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -229,18 +230,18 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'duplex',
                 'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 2,
-                    'bedrooms' => 3,
-                    'bathrooms' => 2,
-                    'balcony' => false,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '2 Floors',
+                    '3 Bedrooms',
+                    '2 Bathrooms',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -251,18 +252,18 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'duplex',
                 'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 2,
-                    'bedrooms' => 3,
-                    'bathrooms' => 2,
-                    'balcony' => false,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '2 Floors',
+                    '3 Bedrooms',
+                    '2 Bathrooms',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -273,18 +274,18 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'duplex',
                 'description' => '2 Floors, 3 Bedrooms, 2 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 2,
-                    'bedrooms' => 3,
-                    'bathrooms' => 2,
-                    'balcony' => false,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '2 Floors',
+                    '3 Bedrooms',
+                    '2 Bathrooms',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -295,18 +296,18 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'studio',
                 'description' => '1 Floor, 1 Bedroom, 1 T&B, No balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 1,
-                    'bedrooms' => 1,
-                    'bathrooms' => 1,
-                    'balcony' => false,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '1 Floor',
+                    '1 Bedroom',
+                    '1 Bathroom',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -317,18 +318,19 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'duplex',
                 'description' => '2 Floors, 3 Bedrooms, 2 T&B, With balcony, With parking, With tile floors, With dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 2,
-                    'bedrooms' => 3,
-                    'bathrooms' => 2,
-                    'balcony' => true,
-                    'parking' => true,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => true,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '2 Floors',
+                    '3 Bedrooms',
+                    '2 Bathrooms',
+                    'Balcony',
+                    'Parking',
+                    'Tile Floors',
+                    'Dirty Kitchen',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ],
             [
@@ -339,24 +341,23 @@ class DatabaseSeeder extends Seeder
                 'property_type' => 'loft',
                 'description' => '1 Floor, 1 Bedroom, 1 T&B, With balcony, No parking, With tile floors, No dirty kitchen, Pet friendly. Lease Term: 1 year, 1 Month advance, 2 Months deposit',
                 'amenities' => [
-                    'floors' => 1,
-                    'bedrooms' => 1,
-                    'bathrooms' => 1,
-                    'balcony' => true,
-                    'parking' => false,
-                    'tile_floors' => true,
-                    'dirty_kitchen' => false,
-                    'pet_friendly' => true,
-                    'lease_term' => '1 year',
-                    'advance_payment' => '1 month',
-                    'deposit' => '2 months'
+                    '1 Floor',
+                    '1 Bedroom',
+                    '1 Bathroom',
+                    'Balcony',
+                    'Tile Floors',
+                    'Pet Friendly',
+                    'Lease Term: 1 year',
+                    'Advance: 1 month',
+                    'Deposit: 2 months'
                 ],
+                'unit_photos' => [],
                 'availability_status' => 'available'
             ]
         ];
 
         $units = collect();
-        foreach ($rentalUnitsData as $index => $unitData) {
+        foreach ($rentalUnitsData as $unitData) {
             $unit = RentalUnit::create([
                 'landlord_id' => $testLandlord->id,
                 'unit_number' => $unitData['unit_number'],
@@ -407,6 +408,35 @@ class DatabaseSeeder extends Seeder
                 'tenant_id' => $tenant->id,
                 'unit_id' => $unit->id,
                 'lease_id' => $lease->id,
+            ]);
+        }
+
+        // Create a lease for the test tenant
+        $availableUnitsForTestTenant = $units->where('availability_status', 'available');
+        if ($availableUnitsForTestTenant->isNotEmpty()) {
+            $testTenantUnit = $availableUnitsForTestTenant->first();
+
+            $testTenantLease = Lease::factory()->create([
+                'tenant_id' => $testTenant->id,
+                'unit_id' => $testTenantUnit->id,
+                'monthly_rent' => $testTenantUnit->rent_price,
+                'lease_status' => 'active',
+            ]);
+
+            // Update unit status
+            $testTenantUnit->update(['availability_status' => 'occupied']);
+
+            // Create rental bills for test tenant's lease
+            RentalBill::factory(3)->create([
+                'lease_id' => $testTenantLease->id,
+                'rent_amount' => $testTenantLease->monthly_rent,
+            ]);
+
+            // Create maintenance requests for test tenant
+            MaintenanceRequest::factory(rand(1, 2))->create([
+                'tenant_id' => $testTenant->id,
+                'unit_id' => $testTenantUnit->id,
+                'lease_id' => $testTenantLease->id,
             ]);
         }
 
@@ -474,8 +504,8 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->command->info('Database seeded successfully!');
-        $this->command->info("Created: 1 Test Landlord, {$tenants->count()} Tenants, {$prospects->count()} Prospective Tenants");
-        $this->command->info("Created: {$units->count()} Real Rental Units, {$occupiedUnits->count()} Active Leases, 2 Terminated Leases");
+        $this->command->info("Created: 1 Test Landlord, 1 Test Tenant (with lease), {$tenants->count()} Tenants, {$prospects->count()} Prospective Tenants");
+        $this->command->info("Created: {$units->count()} Real Rental Units, " . ($occupiedUnits->count() + 1) . " Active Leases (including test tenant), 2 Terminated Leases");
         $this->command->info("Available units: {$availableUnits->count()}");
     }
 }

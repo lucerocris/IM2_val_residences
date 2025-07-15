@@ -11,7 +11,7 @@ class RequestMaintenanceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,12 +22,10 @@ class RequestMaintenanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tenant_id' => 'required|string',
-            'lease_id' => 'required|string',
-            'unit_id' => 'required|string',
+            'tenant_id' => 'required|numeric',
+            'unit_id' => 'required|numeric',
             'request_date' => 'required|date',
             'maintenance_description' => 'required|string',
-            'request_status' => 'required|string',
             'priority_level' => 'required|string',
             'tenant_remarks' => 'nullable|string',
         ];

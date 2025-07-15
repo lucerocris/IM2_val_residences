@@ -100,6 +100,7 @@ const ApplyModal = ({ open, onOpenChange, listing }: ApplyModalProps) => {
         };
 
         router.post('/user/application', updatedData, {
+            preserveScroll: true,
             onSuccess: () => {
                 console.log('success apply');
                 onOpenChange(false);

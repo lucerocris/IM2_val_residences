@@ -262,4 +262,5 @@ class RentalUnit extends Model
             })
             ->toArray();
     }
+
 }

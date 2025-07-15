@@ -59,6 +59,7 @@ export interface RentalBill {
     payment_status: 'pending' | 'paid' | 'overdue' | 'partial';
 }
 export interface TenantDashboardProps {
+    tenantID: number;
     tenantData: Tenant;
     leaseData: Lease[];
     rentalBill: RentalBill;

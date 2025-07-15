@@ -24,7 +24,9 @@ class ApplicationApprovalService
                     'review_notes' => $reviewNotes,
                 ]);
 
+
                 $application->prospectiveTenant->notify(new ApplicationStatusChanged($application));
+
 
                 // 2. Convert prospective_tenant to tenant
                 $prospectiveTenant = $application->prospectiveTenant;

@@ -23,7 +23,7 @@ interface ExtendedTenantDashboardProps extends TenantDashboardProps {
     } | null;
 }
 
-const TenantDashboard = ({ tenantData, leaseData, rentalBill, maintenanceRequests, onboardingLease }: ExtendedTenantDashboardProps) => {
+const TenantDashboard = ({ tenantData, leaseData, rentalBill, maintenanceRequests, onboardingLease, tenantID }: ExtendedTenantDashboardProps) => {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
     const [showAllLeases, setShowAllLeases] = useState(false);
 
@@ -71,7 +71,7 @@ const TenantDashboard = ({ tenantData, leaseData, rentalBill, maintenanceRequest
                         </div>
 
                         <div className="space-y-6">
-                            <ButtonSection leaseData={leaseData[0]} currentBill={rentalBill} />
+                            <ButtonSection leaseData={leaseData[0]} currentBill={rentalBill} tenantID={tenantID}/>
                             <MaintenanceRequestComponent maintenanceRequests={maintenanceRequests} />
                         </div>
                     </div>

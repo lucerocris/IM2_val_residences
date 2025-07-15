@@ -37,10 +37,10 @@ class TenantOnboardingService
             'onboarding_fees_paid' => true,
             'onboarding_fees_paid_at' => now(),
             'onboarding_fees_amount' => $amount,
-            'onboarding_payment_proof_path' => $proofPath,
+            'onboarding_proof_of_payment_path' => $proofPath,
         ]);
 
-        return $lease->activateLeaseIfOnboardingComplete();
+        return $lease->sendLeaseForReview();
     }
 
     public function markSignedLeaseAsUploaded(Lease $lease, UploadedFile $signedLease): bool
@@ -53,7 +53,7 @@ class TenantOnboardingService
             'onboarding_signed_lease_path' => $leasePath,
         ]);
 
-        return $lease->activateLeaseIfOnboardingComplete();
+        return $lease->sendLeaseForReview();
     }
 
     public function markIdAsUploaded(Lease $lease, UploadedFile $idDocument): bool
@@ -66,7 +66,7 @@ class TenantOnboardingService
             'onboarding_id_document_path' => $idPath,
         ]);
 
-        return $lease->activateLeaseIfOnboardingComplete();
+        return $lease->sendLeaseForReview();
     }
 
     public function requiresOnboarding(User $tenant): bool

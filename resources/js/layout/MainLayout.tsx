@@ -8,6 +8,7 @@ import img4 from '../../images/image4.jpg';
 import { ReactNode } from 'react';
 import Hero from '@/components/main/ui/Hero';
 import { useFlashMessages } from '@/hooks/use-flash-messages';
+import { Toaster } from 'sonner';
 
 const slides = [
   <div className="flex items-center justify-center h-100 bg-gray-200 text-3xl font-bold"><img src= {img1} alt="Slide 1" className="w-full h-full object-cover"/></div>,
@@ -24,6 +25,7 @@ const MainLayout = ({ children }:MainLayoutProps) => {
     useFlashMessages();
     return (
         <div className = "overflow-x-hidden">
+            <Toaster duration={4000}/>
             <Hero title = "Val Residences" subtitle = "description" />
             {children}
             <Footer />

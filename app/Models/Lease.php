@@ -172,27 +172,20 @@ class Lease extends Model
     }
 
 
-    public function activateLeaseIfOnboardingComplete(): bool
+    public function sendLeaseForReview(): bool
     {
         if ($this->isOnboardingComplete() && $this->lease_status === 'pending') {
             $this->update([
-                'lease_status' => 'active',
-                'onboarding_completed_at' => now(),
+                'lease_status' => 'pending',
+                'landlord_review_status' => 'pending',
+                'documents_submitted_for_review' => true,
             ]);
             return true;
         }
         return false;
     }
 
-    public function scopePendingOnboarding($query)
-    {
-        return $query->where('lease_status', 'pending')
-            ->where(function ($q) {
-                $q->where('onboarding_fees_paid', false)
-                    ->orWhere('onboarding_signed_lease_uploaded', false)
-                    ->orWhere('onboarding_id_uploaded', false);
-            });
-    }
+
 
     public static function getTableData()
     {
@@ -254,14 +247,14 @@ class Lease extends Model
     public function isReadyForLandlordReview(): bool
     {
         return $this->isOnboardingComplete() &&
-                $this->lease_status === 'pending' &&
-                $this->landlord_review_status === 'pending';
+            $this->lease_status === 'pending' &&
+            $this->landlord_review_status === 'pending';
     }
 
 
-/**
- * New method for landlord to approve and activate lease
- */
+    /**
+     * New method for landlord to approve and activate lease
+     */
     public function approveAndActivateLease(int $landlordId, string $notes = null): bool
     {
         if ($this->isOnboardingComplete() && $this->lease_status === 'pending') {
@@ -278,9 +271,9 @@ class Lease extends Model
         return false;
     }
 
-/**
- * New method for landlord to reject documents
- */
+    /**
+     * New method for landlord to reject documents
+     */
     public function rejectDocuments(int $landlordId, string $reason): bool
     {
         $this->update([
@@ -288,27 +281,64 @@ class Lease extends Model
             'landlord_review_notes' => $reason,
             'landlord_reviewed_at' => now(),
             'landlord_reviewed_by' => $landlordId,
-        // Reset document flags so tenant can re-upload
+            // Reset document flags so tenant can re-upload
             'onboarding_signed_lease_uploaded' => false,
             'onboarding_id_uploaded' => false,
+            'onboarding_fees_paid' => false,
             'documents_submitted_for_review' => false,
             'documents_submitted_at' => null,
         ]);
         return true;
     }
 
-/**
- * Get leases pending landlord review
- */
+    /**
+     * Get leases pending landlord review
+     */
     public static function getPendingReviewLeases(int $landlordId)
     {
         return self::with(['tenant:id,user_name,email,user_contact_number', 'units:id,address,unit_number,landlord_id'])
-            ->whereHas('units', function ($query) use ($landlordId) {
-                $query->where('landlord_id', $landlordId);
-            })
             ->where('documents_submitted_for_review', true)
             ->where('landlord_review_status', 'pending')
             ->orderBy('documents_submitted_at', 'asc')
             ->get();
+    }
+
+    /**
+     * Get the current onboarding status of the lease
+     */
+    public function getOnboardingStatus(): string
+    {
+        // If lease is already active
+        if ($this->lease_status === 'active') {
+            return 'active';
+        }
+
+        // If documents have been submitted for review
+        if ($this->documents_submitted_for_review) {
+            switch ($this->landlord_review_status) {
+                case 'rejected':
+                    return 'documents_rejected';
+                case 'pending':
+                    return 'awaiting_landlord_review';
+                case 'approved':
+                    // This should trigger lease activation
+                    return 'active';
+                default:
+                    return 'awaiting_landlord_review';
+            }
+        }
+
+        // If onboarding is complete but not yet submitted for review
+        if ($this->isOnboardingComplete()) {
+            return 'awaiting_documents'; // Should auto-submit for review
+        }
+
+        // Default: still awaiting documents
+        return 'awaiting_documents';
+    }
+
+    public static function getOwnUnit(int $tenant_id)
+    {
+        return DB::table('leases')->where('tenant_id', $tenant_id)->value('unit_id');
     }
 }

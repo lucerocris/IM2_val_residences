@@ -1,4 +1,4 @@
-import { router } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -15,11 +15,13 @@ import { Lease, RentalBill } from '@/types/tenantDashboard.types';
 interface ButtonSectionProps {
     leaseData: Lease;
     currentBill: RentalBill;
+    tenantID?: number;
+    setMaintenanceModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
 
-const ButtonSection = ({leaseData, currentBill }:ButtonSectionProps) => {
+const ButtonSection = ({leaseData, currentBill, tenantID }:ButtonSectionProps) => {
     const [paymentModalOpen, setPaymentModalOpen] = useState(false)
     const[maintenanceModalOpen, setMaintenanceModalOpen] = useState(false)
 
@@ -49,7 +51,7 @@ const ButtonSection = ({leaseData, currentBill }:ButtonSectionProps) => {
                 </DialogTrigger>
 
                 <DialogContent className = "sm:max-w-lg">
-                    <MaintenanceModal leaseData = {leaseData} currentBill = {currentBill} />
+                    <MaintenanceModal leaseData = {leaseData} currentBill = {currentBill} tenantID={tenantID} setMaintenanceModalOpen={setMaintenanceModalOpen}  />
                 </DialogContent>
             </Dialog>
         </>
@@ -149,17 +151,37 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
     );
 }
 
-const MaintenanceModal = ({ leaseData, currentBill }: ButtonSectionProps) => {
-    const [priorityLevel, setPriorityLevel] = useState("");
-    const [description, setDescription] = useState("");
-    const [remarks, setRemarks] = useState("");
+type MaintenanceFormData =  {
+    tenant_id: number,
+    maintenance_description: string,
+    priority_level: string,
+    tenant_remarks: string;
+    request_date: string;
+};
 
-    const handleMaintenanceSubmit = () => {
-        router.post('/tenant/maintenanceRequest', {
-            priority_level: priorityLevel,
-            description,
-            remarks,
-            lease_id: leaseData.id, // optional: assuming you want to associate the request with a lease
+
+
+const MaintenanceModal = ({ leaseData, currentBill, tenantID, setMaintenanceModalOpen }: ButtonSectionProps) => {
+
+    const { data, setData, post, processing, errors} = useForm<MaintenanceFormData>({
+        tenant_id: tenantID ?? 0,
+        maintenance_description: "",
+        priority_level: "",
+        tenant_remarks: "",
+        request_date: "",
+    });
+
+    console.log(data);
+
+    const handleMaintenanceSubmit = (e) => {
+        e.preventDefault();
+
+        setData('request_date', new Date().toISOString());
+        router.post('/tenant/maintenanceRequest', data, {
+            preserveScroll: true,
+            onSuccess:  () => {
+                setMaintenanceModalOpen(false);
+            }
         });
     };
 
@@ -175,7 +197,7 @@ const MaintenanceModal = ({ leaseData, currentBill }: ButtonSectionProps) => {
             <div className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="priority">Priority Level</Label>
-                    <Select value={priorityLevel} onValueChange={setPriorityLevel}>
+                    <Select value={data.priority_level} onValueChange={value => setData('priority_level', value)}>
                         <SelectTrigger>
                             <SelectValue placeholder="Select your priority level" />
                         </SelectTrigger>
@@ -197,8 +219,8 @@ const MaintenanceModal = ({ leaseData, currentBill }: ButtonSectionProps) => {
                                 id="desc"
                                 placeholder="Please describe the maintenance issue in detail..."
                                 className="min-h-[100px]"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
+                                value={data.maintenance_description}
+                                onChange={(e) => setData('maintenance_description', e.target.value)}
                             />
                         }
                     />
@@ -213,8 +235,8 @@ const MaintenanceModal = ({ leaseData, currentBill }: ButtonSectionProps) => {
                                 id="tenant-remarks"
                                 placeholder="Any additional information or special instructions..."
                                 rows={3}
-                                value={remarks}
-                                onChange={(e) => setRemarks(e.target.value)}
+                                value={data.tenant_remarks}
+                                onChange={(e) => setData('tenant_remarks', e.target.value)}
                             />
                         }
                     />
@@ -222,7 +244,7 @@ const MaintenanceModal = ({ leaseData, currentBill }: ButtonSectionProps) => {
 
                 <Button
                     className="w-full"
-                    disabled={!priorityLevel || !description}
+                    disabled={processing}
                     onClick={handleMaintenanceSubmit}
                 >
                     <Wrench className="w-4 h-4 mr-2" />
