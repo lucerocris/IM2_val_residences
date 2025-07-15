@@ -34,6 +34,7 @@ class TenantController extends Controller
         $tenantData = Tenant::getSelfInfo(Auth::id());
         $leaseInfo = Lease::getOwnLeases(Auth::id());
         $rentalBill = RentalBill::getOwnBills($leaseID);
+        $availableUnits = RentalUnit::getAvailableUnits();
 
 
         return Inertia::render('tenant/Landing', [
@@ -44,6 +45,7 @@ class TenantController extends Controller
             'rentalBill' => $rentalBill,
             'tenantID' => $tenantID,
             'unitID' => $unitID,
+            'availableUnits' => $availableUnits,
             'onboardingLease' => $pendingLease ? [
                 'id' => $pendingLease->id,
                 'status' => $pendingLease->getOnboardingStatus(),
