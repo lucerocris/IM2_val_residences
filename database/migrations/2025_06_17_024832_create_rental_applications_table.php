@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('rental_applications', function (Blueprint $table) {
             $table->id();
-
-
             $table->foreignId('prospective_tenant_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('unit_id')->constrained('rental_units')->onDelete('cascade');
             $table->date('application_date');

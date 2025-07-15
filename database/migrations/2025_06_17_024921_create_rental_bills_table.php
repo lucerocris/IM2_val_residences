@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->foreignId('lease_id')->constrained('leases')->onDelete('cascade');
             $table->date('billing_date');
             $table->decimal('rent_amount', 10, 2);
+            $table->decimal('rent_due', 10, 2);
             $table->date('due_date');
             $table->date('paid_date')->nullable();
             $table->decimal('amount_paid', 10, 2)->default(0);

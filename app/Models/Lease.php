@@ -105,7 +105,7 @@ class Lease extends Model
     }
 
     // Simple accessor: required_fees_amount = deposit_amount
-    public function getRequiredFeesAmountAttribute($value)
+    public function getRequiredFeesAmoun3tAttribute($value)
     {
         return $this->deposit_amount;
     }

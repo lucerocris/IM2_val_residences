@@ -39,7 +39,7 @@ export type Lease = {
         id: string
         address: string
         unit_number: string | null
-        property_type: 'duplex' | 'triplex'
+        property_type: 'duplex' | 'loft' | 'studio'
         landlord: {
             id: string
             user_name: string
@@ -88,9 +88,13 @@ const propertyTypeConfig = {
         variant: 'outline' as const,
         label: 'Duplex'
     },
-    'triplex': {
+    'loft': {
         variant: 'outline' as const,
-        label: 'Triplex'
+        label: 'loft'
+    },
+    'studio': {
+        variant: 'outline' as const,
+        label: 'studio'
     }
 };
 

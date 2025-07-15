@@ -33,6 +33,7 @@ class TenantController extends Controller
         $tenantData = Tenant::getSelfInfo(Auth::id());
         $leaseInfo = Lease::getOwnLeases(Auth::id());
         $rentalBill = RentalBill::getOwnBills($leaseID);
+        dd($rentalBill);
 
 
 

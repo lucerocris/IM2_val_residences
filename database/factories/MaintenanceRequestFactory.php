@@ -21,7 +21,6 @@ class MaintenanceRequestFactory extends Factory
             'maintenance_description' => fake()->sentence(),
             'request_status' => fake()->randomElement(['pending', 'in_progress', 'completed']),
             'priority_level' => fake()->randomElement(['low', 'medium', 'high', 'urgent']),
-            'scheduled_date' => fake()->optional()->dateTimeBetween('now', '+1 month'),
             'completion_date' => fake()->optional()->dateTimeBetween('-1 month', 'now'),
             'tenant_remarks' => fake()->optional()->sentence(),
             'landlord_notes' => fake()->optional()->sentence(),

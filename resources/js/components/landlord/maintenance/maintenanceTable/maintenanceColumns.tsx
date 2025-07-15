@@ -242,48 +242,6 @@ export const maintenanceRequestColumns: ColumnDef<MaintenanceRequest>[] = [
         }
     },
     {
-        id: 'schedule_info',
-        header: 'Schedule',
-        cell: ({ row }) => {
-            const request = row.original;
-            const scheduledDate = request.scheduled_date ? new Date(request.scheduled_date) : null;
-            const completionDate = request.completion_date ? new Date(request.completion_date) : null;
-
-            if (completionDate) {
-                return (
-                    <div className="flex flex-col">
-                        <span className="text-sm text-green-600 font-medium">
-                            Completed
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                            {completionDate.toLocaleDateString()}
-                        </span>
-                    </div>
-                );
-            }
-
-            if (scheduledDate) {
-                return (
-                    <div className="flex flex-col">
-                        <span className="text-sm font-medium">
-                            Scheduled
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                            {scheduledDate.toLocaleDateString()}
-                        </span>
-                    </div>
-                );
-            }
-
-            return (
-                <span className="text-sm text-muted-foreground">
-                    Not scheduled
-                </span>
-            );
-        },
-        enableSorting: false
-    },
-    {
         id: 'cost_info',
         header: 'Cost',
         cell: ({ row }) => {

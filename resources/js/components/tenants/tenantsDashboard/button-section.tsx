@@ -15,13 +15,14 @@ import { Lease, RentalBill } from '@/types/tenantDashboard.types';
 interface ButtonSectionProps {
     leaseData: Lease;
     currentBill: RentalBill;
+    unitID?: number;
     tenantID?: number;
     setMaintenanceModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
 
-const ButtonSection = ({leaseData, currentBill, tenantID }:ButtonSectionProps) => {
+const ButtonSection = ({leaseData, currentBill, tenantID, unitID }:ButtonSectionProps) => {
     const [paymentModalOpen, setPaymentModalOpen] = useState(false)
     const[maintenanceModalOpen, setMaintenanceModalOpen] = useState(false)
 
@@ -51,7 +52,7 @@ const ButtonSection = ({leaseData, currentBill, tenantID }:ButtonSectionProps) =
                 </DialogTrigger>
 
                 <DialogContent className = "sm:max-w-lg">
-                    <MaintenanceModal leaseData = {leaseData} currentBill = {currentBill} tenantID={tenantID} setMaintenanceModalOpen={setMaintenanceModalOpen}  />
+                    <MaintenanceModal leaseData = {leaseData} currentBill = {currentBill} tenantID={tenantID} setMaintenanceModalOpen={setMaintenanceModalOpen} unitID={unitID}  />
                 </DialogContent>
             </Dialog>
         </>
@@ -153,6 +154,7 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
 
 type MaintenanceFormData =  {
     tenant_id: number,
+    unit_id: number,
     maintenance_description: string,
     priority_level: string,
     tenant_remarks: string;
@@ -161,10 +163,11 @@ type MaintenanceFormData =  {
 
 
 
-const MaintenanceModal = ({ leaseData, currentBill, tenantID, setMaintenanceModalOpen }: ButtonSectionProps) => {
+const MaintenanceModal = ({ leaseData, currentBill, tenantID, setMaintenanceModalOpen, unitID }: ButtonSectionProps) => {
 
     const { data, setData, post, processing, errors} = useForm<MaintenanceFormData>({
         tenant_id: tenantID ?? 0,
+        unit_id: unitID ?? 0,
         maintenance_description: "",
         priority_level: "",
         tenant_remarks: "",
@@ -175,9 +178,11 @@ const MaintenanceModal = ({ leaseData, currentBill, tenantID, setMaintenanceModa
 
     const handleMaintenanceSubmit = (e) => {
         e.preventDefault();
-
-        setData('request_date', new Date().toISOString());
-        router.post('/tenant/maintenanceRequest', data, {
+        const updatedData = {
+            ...data,
+            request_date: new Date().toISOString(),
+        };
+        router.post('/tenant/maintenanceRequest', updatedData, {
             preserveScroll: true,
             onSuccess:  () => {
                 setMaintenanceModalOpen(false);

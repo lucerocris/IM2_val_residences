@@ -384,6 +384,9 @@ class DatabaseSeeder extends Seeder
 
         // Create leases for some units with tenants
         $occupiedUnits = $units->take(4);
+        $tenantsWithBills = collect();
+        $tenantsWithoutBills = collect();
+
         foreach ($occupiedUnits as $index => $unit) {
             $tenant = $tenants[$index] ?? $tenants[0];
 
@@ -397,18 +400,60 @@ class DatabaseSeeder extends Seeder
             // Update unit status
             $unit->update(['availability_status' => 'occupied']);
 
-            // Create rental bills for active leases
-            RentalBill::factory(3)->create([
-                'lease_id' => $lease->id,
-                'rent_amount' => $lease->monthly_rent,
-            ]);
+            // Decide whether this tenant will have bills or not
+            if ($index < 2) {
+                // First 2 tenants get bills
+                $tenantsWithBills->push(['tenant' => $tenant, 'lease' => $lease]);
+            } else {
+                // Last 2 tenants get no bills
+                $tenantsWithoutBills->push(['tenant' => $tenant, 'lease' => $lease]);
+            }
 
-            // Create maintenance requests
+            // Create maintenance requests for all tenants
             MaintenanceRequest::factory(rand(1, 3))->create([
                 'tenant_id' => $tenant->id,
                 'unit_id' => $unit->id,
                 'lease_id' => $lease->id,
             ]);
+        }
+
+        // Create rental bills only for tenants with bills
+        foreach ($tenantsWithBills as $tenantData) {
+            $lease = $tenantData['lease'];
+
+            // Create bills with mixed payment statuses - some overdue, some pending, some paid
+            $billCount = 6;
+            for ($i = 0; $i < $billCount; $i++) {
+                if ($i < 2) {
+                    // First 2 bills - OVERDUE (due dates in the past)
+                    RentalBill::factory()->create([
+                        'lease_id' => $lease->id,
+                        'rent_amount' => $lease->monthly_rent,
+                        'payment_status' => 'overdue',
+                        'due_date' => fake()->dateTimeBetween('-60 days', '-15 days'), // 15-60 days ago
+                        'paid_date' => null,
+                    ]);
+                } elseif ($i < 4) {
+                    // Next 2 bills - PENDING (due dates in the future or recent)
+                    RentalBill::factory()->create([
+                        'lease_id' => $lease->id,
+                        'rent_amount' => $lease->monthly_rent,
+                        'payment_status' => 'pending',
+                        'due_date' => fake()->dateTimeBetween('-5 days', '+30 days'), // Recent or upcoming
+                        'paid_date' => null,
+                    ]);
+                } else {
+                    // Last 2 bills - PAID
+                    $dueDate = fake()->dateTimeBetween('-30 days', '-1 day');
+                    RentalBill::factory()->create([
+                        'lease_id' => $lease->id,
+                        'rent_amount' => $lease->monthly_rent,
+                        'payment_status' => 'paid',
+                        'due_date' => $dueDate,
+                        'paid_date' => fake()->dateTimeBetween($dueDate, 'now'),
+                    ]);
+                }
+            }
         }
 
         // Create a lease for the test tenant
@@ -426,11 +471,39 @@ class DatabaseSeeder extends Seeder
             // Update unit status
             $testTenantUnit->update(['availability_status' => 'occupied']);
 
-            // Create rental bills for test tenant's lease
-            RentalBill::factory(3)->create([
-                'lease_id' => $testTenantLease->id,
-                'rent_amount' => $testTenantLease->monthly_rent,
-            ]);
+            // Create rental bills for test tenant's lease - mixed statuses including overdue
+            $testBillCount = 6;
+            for ($i = 0; $i < $testBillCount; $i++) {
+                if ($i < 2) {
+                    // First 2 bills - OVERDUE
+                    RentalBill::factory()->create([
+                        'lease_id' => $testTenantLease->id,
+                        'rent_amount' => $testTenantLease->monthly_rent,
+                        'payment_status' => 'overdue',
+                        'due_date' => fake()->dateTimeBetween('-60 days', '-15 days'),
+                        'paid_date' => null,
+                    ]);
+                } elseif ($i < 4) {
+                    // Next 2 bills - PENDING
+                    RentalBill::factory()->create([
+                        'lease_id' => $testTenantLease->id,
+                        'rent_amount' => $testTenantLease->monthly_rent,
+                        'payment_status' => 'pending',
+                        'due_date' => fake()->dateTimeBetween('-5 days', '+30 days'),
+                        'paid_date' => null,
+                    ]);
+                } else {
+                    // Last 2 bills - PAID
+                    $dueDate = fake()->dateTimeBetween('-30 days', '-1 day');
+                    RentalBill::factory()->create([
+                        'lease_id' => $testTenantLease->id,
+                        'rent_amount' => $testTenantLease->monthly_rent,
+                        'payment_status' => 'paid',
+                        'due_date' => $dueDate,
+                        'paid_date' => fake()->dateTimeBetween($dueDate, 'now'),
+                    ]);
+                }
+            }
 
             // Create maintenance requests for test tenant
             MaintenanceRequest::factory(rand(1, 2))->create([
@@ -464,24 +537,41 @@ class DatabaseSeeder extends Seeder
         }
 
         // Create rental bills with specific month paid dates for monthly revenue tracking
-        $activeLeases = Lease::where('lease_status', 'active')->get();
-        foreach ($activeLeases as $lease) {
+        // Only for leases that should have bills
+        $activeLeasesWithBills = collect([$testTenantLease])->merge($tenantsWithBills->pluck('lease'));
+
+        foreach ($activeLeasesWithBills as $lease) {
             // Create bills for different months - July 2025 (default)
-            RentalBill::factory(rand(1, 2))->monthlyRevenue()->create([
-                'lease_id' => $lease->id,
-                'rent_amount' => $lease->monthly_rent,
-            ]);
+            $billCount = rand(1, 2);
+            for ($i = 0; $i < $billCount; $i++) {
+                $status = fake()->randomElement(['pending', 'paid', 'overdue']);
+                $dueDate = fake()->dateTimeBetween('-10 days', '+20 days');
+
+                RentalBill::factory()->monthlyRevenue()->create([
+                    'lease_id' => $lease->id,
+                    'rent_amount' => $lease->monthly_rent,
+                    'payment_status' => $status,
+                    'due_date' => $dueDate,
+                    'paid_date' => $status === 'paid' ? fake()->dateTimeBetween($dueDate, 'now') : null,
+                ]);
+            }
 
             // Create bills for June 2025
             RentalBill::factory(1)->monthlyRevenue(6, 2025)->create([
                 'lease_id' => $lease->id,
                 'rent_amount' => $lease->monthly_rent,
+                'payment_status' => 'paid',
+                'due_date' => fake()->dateTimeBetween('2025-06-01', '2025-06-15'),
+                'paid_date' => fake()->dateTimeBetween('2025-06-01', '2025-06-30'),
             ]);
 
             // Create bills for May 2025
             RentalBill::factory(1)->monthlyRevenue(5, 2025)->create([
                 'lease_id' => $lease->id,
                 'rent_amount' => $lease->monthly_rent,
+                'payment_status' => 'paid',
+                'due_date' => fake()->dateTimeBetween('2025-05-01', '2025-05-15'),
+                'paid_date' => fake()->dateTimeBetween('2025-05-01', '2025-05-31'),
             ]);
         }
 
@@ -506,6 +596,8 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Database seeded successfully!');
         $this->command->info("Created: 1 Test Landlord, 1 Test Tenant (with lease), {$tenants->count()} Tenants, {$prospects->count()} Prospective Tenants");
         $this->command->info("Created: {$units->count()} Real Rental Units, " . ($occupiedUnits->count() + 1) . " Active Leases (including test tenant), 2 Terminated Leases");
+        $this->command->info("Bills created for: Test Tenant + {$tenantsWithBills->count()} other tenants (overdue/pending/paid mix)");
+        $this->command->info("No bills created for: {$tenantsWithoutBills->count()} tenants");
         $this->command->info("Available units: {$availableUnits->count()}");
     }
 }

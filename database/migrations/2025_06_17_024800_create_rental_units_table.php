@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->enum('availability_status', ['available', 'occupied', 'maintenance', 'unavailable', 'under_constructions'])->default('available');
             $table->decimal('floor_area', 8, 2)->nullable();
             $table->decimal('rent_price', 10, 2);
-            $table->enum('property_type', ['duplex', 'triplex']);
+            $table->enum('property_type', ['duplex', 'studio', 'loft' ]);
             $table->text('description')->nullable();
             $table->json('amenities')->nullable();
             $table->json('unit_photos')->nullable();
