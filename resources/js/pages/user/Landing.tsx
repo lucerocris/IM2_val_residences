@@ -23,8 +23,8 @@ const UserListings = ({ListingsData}: UserListingsProps) => {
     const buttonLabel = "VIEW LISTINGS"
 
     const headerLinks = [
-        {label: "VIEW LISTINGS", href: "/user/listings"},
-        {label: "USER DASHBOARD", href: "/user"}
+        {label: "VIEW LISTINGS", href: "/user"},
+        {label: "USER DASHBOARD", href: "/user/application"}
 
     ];
 

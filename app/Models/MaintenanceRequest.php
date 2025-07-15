@@ -168,7 +168,7 @@ class MaintenanceRequest extends Model
     public static function getMaintenanceRequests(int $tenant_id) {
         return DB::table('maintenance_requests')
             ->where('tenant_id', '=', $tenant_id)
-            ->select('id', 'tenant_id', 'unit_id', 'lease_id', 'request_date', 'maintenance_description', 'request_status', 'priority_level', 'scheduled_date', 'completion_date', 'tenant_remarks', 'scheduled_date', 'completion_date')
+            ->select('id', 'tenant_id', 'unit_id', 'lease_id', 'request_date', 'maintenance_description', 'request_status', 'priority_level', 'completion_date', 'tenant_remarks', 'completion_date')
             ->get();
 
     }
