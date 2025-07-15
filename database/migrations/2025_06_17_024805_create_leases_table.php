@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->date('start_date');
             $table->date('end_date');
             $table->decimal('monthly_rent', 10, 2);
+            $table->decimal('remaining_balance', 10, 2);
             $table->decimal('deposit_amount', 10, 2);
             $table->integer('lease_term');
             $table->enum('lease_status', ['active', 'expired', 'terminated', 'pending'])->default('pending');

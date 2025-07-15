@@ -56,12 +56,16 @@ class LeaseFactory extends Factory
     public function terminated(): static
     {
         return $this->state(function (array $attributes) {
-            $startDate = $attributes['start_date'] ?? fake()->dateTimeBetween('-2 years', '-6 months');
-            $endDate = $attributes['end_date'] ?? (clone $startDate)->modify('+1 year');
+            // Generate dates explicitly for terminated leases
+            $startDate = fake()->dateTimeBetween('-2 years', '-6 months');
+            $endDate = (clone $startDate)->modify('+1 year');
+            $terminatedDate = fake()->dateTimeBetween($startDate, $endDate);
 
             return [
+                'start_date' => $startDate,
+                'end_date' => $endDate,
                 'lease_status' => 'terminated',
-                'terminated_date' => fake()->dateTimeBetween($startDate, $endDate),
+                'terminated_date' => $terminatedDate,
                 'termination_reason' => fake()->randomElement([
                     'Mutual agreement',
                     'Lease violation',

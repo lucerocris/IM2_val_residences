@@ -45,11 +45,7 @@ class ApplicationApprovalService
                 // 5. Create lease record (optional - you might want to do this separately)
                 $lease = $this->createLeaseRecord($application);
 
-                // Reload the user through the Tenant model so that the correct
-                // global scope (user_type = 'tenant') is applied. Using
-                // ProspectiveTenant::fresh() would return null because the row
-                // no longer matches the prospective_tenant scope after the
-                // update above.
+              
 
                 $tenant = \App\Models\Tenant::find($prospectiveTenant->id);
 

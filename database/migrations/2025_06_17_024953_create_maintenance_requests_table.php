@@ -20,7 +20,6 @@ return new class extends Migration
             $table->text('maintenance_description');
             $table->enum('request_status', ['pending', 'in_progress', 'completed', 'cancelled'])->default('pending');
             $table->enum('priority_level', ['low', 'medium', 'high', 'urgent']);
-            $table->date('scheduled_date')->nullable();
             $table->date('completion_date')->nullable();
             $table->text('tenant_remarks')->nullable();
             $table->text('landlord_notes')->nullable();
