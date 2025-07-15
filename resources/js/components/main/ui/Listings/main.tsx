@@ -18,7 +18,7 @@ interface Listing {
     unit_photos: string[];
 }
 interface ListingsMainProps {
-    ListingsData: Listing[];
+    ListingsData?: Listing[];
     redirectToLoginIfUnauthenticated?: boolean;
 }
 

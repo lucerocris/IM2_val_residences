@@ -67,11 +67,11 @@ class TenantController extends Controller
     public function listings()
     {
         $ListingsData = RentalUnit::getListingsData();
-        $availableUnits = RentalUnit::getAvailableUnits();
 
         return Inertia::render('tenant/Listings', [
             'ListingsData' => $ListingsData,
-            'availableUnits' => $availableUnits,
+            'userInfo' => $userInfo,
+
         ]);
     }
 
