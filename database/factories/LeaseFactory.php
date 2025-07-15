@@ -43,6 +43,7 @@ class LeaseFactory extends Factory
             'end_date' => $endDate,
             'monthly_rent' => fake()->randomFloat(2, 8000, 35000),
             'deposit_amount' => fake()->randomFloat(2, 5000, 20000),
+            'remaining_balance' => fake()->randomFloat(2, 5000, 20000 ),
             'lease_term' => 12,
             'lease_status' => $leaseStatus,
             'terminated_date' => $terminatedDate,

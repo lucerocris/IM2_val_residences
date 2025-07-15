@@ -29,15 +29,11 @@ class TenantController extends Controller
         $unitID = Lease::getOwnUnit(Auth::id());
         $tenantID = Auth::id();
         $pendingLease = $this->onboardingService->getPendingOnboardingLease($user);
-        $leaseID = Lease::getOwnLeaseID(Auth::id());
+        $leaseID = Lease::getOwnLeaseID($tenantID);
         $maintenanceData = MaintenanceRequest::getMaintenanceRequests(Auth::id());
         $tenantData = Tenant::getSelfInfo(Auth::id());
         $leaseInfo = Lease::getOwnLeases(Auth::id());
         $rentalBill = RentalBill::getOwnBills($leaseID);
-        
-
-
-
 
 
         return Inertia::render('tenant/Landing', [

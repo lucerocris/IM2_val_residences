@@ -24,7 +24,6 @@ return new class extends Migration {
             $table->date('terminated_date')->nullable();
             $table->string('termination_reason')->nullable();
             $table->timestamps();
-            // $table->decimal('advance_deposit', 10, 2);
 
 
             //onboarding stuff
