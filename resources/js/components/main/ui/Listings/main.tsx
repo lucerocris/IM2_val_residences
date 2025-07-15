@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { usePage, router } from '@inertiajs/react';
 import ApplyModal from './apply-modal';
 import ListingsFilter from './Filter';
 import ListingsGrid from './listing-grid';
@@ -18,10 +19,14 @@ interface Listing {
 }
 interface ListingsMainProps {
     ListingsData: Listing[];
+    redirectToLoginIfUnauthenticated?: boolean;
 }
 
-const ListingsMain = ({ ListingsData }: ListingsMainProps) => {
+const ListingsMain = ({ ListingsData, redirectToLoginIfUnauthenticated = false }: ListingsMainProps) => {
     console.log('ListingsData:', ListingsData);
+
+    const { props } = usePage();
+    const user = (props as any).auth?.user;
 
     // Debug: Check first item structure
     if (ListingsData && ListingsData.length > 0) {
@@ -77,6 +82,12 @@ const ListingsMain = ({ ListingsData }: ListingsMainProps) => {
     };
 
     const handleApply = (listing: Listing) => {
+        // Check if we should redirect unauthenticated users to login
+        if (redirectToLoginIfUnauthenticated && !user) {
+            router.visit('/login');
+            return;
+        }
+
         setSelectedListing(listing);
         setApplyModalOpen(true);
     };

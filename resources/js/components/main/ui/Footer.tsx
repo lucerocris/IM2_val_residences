@@ -3,96 +3,95 @@ import { Phone, MapPinned, MailIcon, Facebook, Instagram, Twitter, Youtube } fro
 const Footer = () => {
     return(
         <>
-            <footer className = "bg-[#323232] text-white flex flex-wrap justify-between p-[30px] text-left">
-                <Left />
-                <Middle />
-                <Right />
+            <footer className="bg-[#323232] text-white">
+                <div className="max-w-6xl mx-auto px-6 py-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <ContactInfo />
+                        <SocialMedia />
+                    </div>
+                </div>
             </footer>
         </>
     );
 }
 
-const Left = () => {
+const ContactInfo = () => {
     return(
-        <>
-            <div className = "flex-1 p-[20px] min-w-[280px] relative">
-                <div className = "text-[2rem] mb-[25px]">Val Residences</div>
+        <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white mb-4">Contact Information</h3>
+            
+            <div className="flex items-start space-x-3">
+                <MapPinned className="w-4 h-4 mt-0.5 text-gray-300 flex-shrink-0" />
+                <p className="text-sm text-gray-300 leading-relaxed">
+                    Corona del Mar, Pooc,<br />
+                    Talisay City, Cebu, Philippines
+                </p>
+            </div>
 
-                <div className = "flex items-center mb-[10px]">
-                    <div className = "mr-[10px]">
-                        <MapPinned />
-                    </div>
-
-                    <div className = "flex-1">
-                        Corona del Mar, Pooc, Talisay City, Cebu, Philippines
-                    </div>
-                </div>
-
-                <div className = "flex items-center mb-[10px]">
-                    <div className = "mr-[10px]">
-                        <Phone />
-                    </div>
-
-                    <div className = "flex-1">               
-                        +639999732452 +639186936086 
-                    </div>
-                </div>
-
-                    <div className = "flex items-center mb-[10px]">
-                    <div className = "mr-[10px]">
-                        <MailIcon />
-                    </div>
-
-                    <div className = "flex-1">           
-                        valresidences@gmail.com
-                    </div>
+            <div className="flex items-center space-x-3">
+                <Phone className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                <div className="text-sm text-gray-300">
+                    <p>+63 999 973 2452</p>
+                    <p>+63 918 693 6086</p>
                 </div>
             </div>
-        </>
+
+            <div className="flex items-center space-x-3">
+                <MailIcon className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                <a href="mailto:valresidences@gmail.com" className="text-sm text-gray-300 hover:text-white transition-colors">
+                    valresidences@gmail.com
+                </a>
+            </div>
+        </div>
     );
 }
 
-const Middle = () => {
+const SocialMedia = () => {
+    const socialLinks = [
+        {
+            icon: Facebook,
+            label: "Facebook",
+            url: "https://facebook.com/val-residences"
+        },
+        {
+            icon: Instagram,
+            label: "Instagram", 
+            url: "https://instagram.com/valResidencesInIG"
+        },
+        {
+            icon: Twitter,
+            label: "Twitter",
+            url: "https://x.com/valResidences"
+        },
+        {
+            icon: Youtube,
+            label: "YouTube",
+            url: "https://youtube.com/Val-Residences"
+        }
+    ];
+
     return(
-        <>
-            <div className = "flex-1 p-[20px] min-w-[280px] relative border-l border-r  border-gray-500">
-                <h3 className = "text-[1.3rem] mb-[30px]">Socials</h3>
-
-                <div className = "flex flex-col space-y-4">
-                    <div className = "w-full flex">
-                        <Facebook className = "mr-2"/> - <a href="https://facebook.com/val-residences" className = "ml-4">Follow us on Facebook</a>
-                    </div>
-
-                    <div className = "w-full flex">
-                        <Instagram className = "mr-2"/> - <a href="https://instagram.com/valResidencesInIG" className = "ml-4">Follow us on Instagram</a>
-                    </div>
-
-                    <div className = "w-full flex">
-                        <Twitter className = "mr-2"/> - <a href="https://x.com/valResidences" className = "ml-4">Follor our Twitter</a>
-                    </div>
-
-                    <div className = "w-full flex">
-                        <Youtube className = "mr-2"/> - <a href="https://youtube.com/Val-Residences" className = "ml-4">Subscribe to our YouTube Channel</a>
-                    </div>
-                </div>
+        <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white mb-4">Follow Us</h3>
+            
+            <div className="grid grid-cols-2 gap-3">
+                {socialLinks.map((social, index) => {
+                    const IconComponent = social.icon;
+                    return (
+                        <a 
+                            key={index}
+                            href={social.url} 
+                            className="flex items-center space-x-2 text-sm text-gray-300 hover:text-white transition-colors p-2 rounded hover:bg-gray-700"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <IconComponent className="w-4 h-4" />
+                            <span>{social.label}</span>
+                        </a>
+                    );
+                })}
             </div>
-        </>
-    );
-}
-
-const Right = () => {
-    return (
-        <>
-            <div className = "flex-1 p-[20px] min-w-[280px] relative">
-                <h3 className = "text-[1.3rem] mb-[30px]">Subscribe to Vacancy Alerts</h3>
-                <p className = "mb-[10px]">Subscribe to our vacancy alerts and be the first to know when a unit becomes available.</p>
-
-                <form method="post" className = "flex flex-col items-start">
-                    <input type="email" placeholder="Your email here" className = "w-full p-[10px] mt-[8px] border rounded-lg"/>
-                    <input type="submit" className = "bg-[#606060] border-none p-[10px] cursor-pointer text-white w-full mt-[5px]" />
-                </form>
-            </div>
-        </>
+        </div>
     );
 }
 

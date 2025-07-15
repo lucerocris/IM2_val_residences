@@ -88,7 +88,7 @@ export function ViewDetailsModal({ open, onOpenChange, listing }: ViewDetailsMod
                     {/* Price */}
                     <div>
                         <h4 className="mb-2 font-semibold">Rent</h4>
-                        <p className="text-2xl font-bold text-green-600">{formatPrice(listing.rent_price)} / month</p>
+                        <p className="text-2xl font-bold text-[#3b3b3b]">{formatPrice(listing.rent_price)} / month</p>
                     </div>
 
                     <Separator />

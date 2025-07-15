@@ -15,31 +15,32 @@ const Hero = ({ title, subtitle, buttonLabel, onHeaderToggle, showScrollButton =
     const [isInListingsSection, setIsInListingsSection] = useState(false);
     const [headerVisible, setHeaderVisible] = useState(!showScrollButton);
 
-    useEffect(() => {
-        if (!showScrollButton) return;
+useEffect(() => {
+    if (!showScrollButton) return;
 
-        const handleScroll = () => {
-            const heroSection = document.querySelector('.hero-section');
-            const listingsSection = document.getElementById('listings-section');
-            
-            if (!heroSection || !listingsSection) return;
+    const handleScroll = () => {
+        const heroSection = document.querySelector('.hero-section');
+        if (!heroSection) return;
 
-            const heroHeight = heroSection.getBoundingClientRect().height;
-            const scrollY = window.scrollY;
-            
-            // Check if scrolled 50% of hero
-            const inListings = scrollY > heroHeight * 0.5; 
-            
-            if (inListings !== isInListingsSection) {
-                setIsInListingsSection(inListings);
-                setHeaderVisible(inListings);
-                onHeaderToggle?.(inListings);
-            }
-        };
+        const heroHeight = heroSection.getBoundingClientRect().height;
+        const scrollY = window.scrollY;
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [isInListingsSection, onHeaderToggle, showScrollButton]);
+        const newInListings = scrollY > heroHeight * 0.5;
+        const shouldHeaderBeVisible = scrollY > heroHeight * 0.01;
+
+        if (newInListings !== isInListingsSection) {
+            setIsInListingsSection(newInListings);
+        }
+
+        if (shouldHeaderBeVisible !== headerVisible) {
+            setHeaderVisible(shouldHeaderBeVisible);
+            onHeaderToggle?.(shouldHeaderBeVisible);
+        }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+}, [isInListingsSection, headerVisible, onHeaderToggle, showScrollButton]);
 
     const scrollToListings = () => {
         const listingsSection = document.getElementById('listings-section');
