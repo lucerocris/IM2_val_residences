@@ -12,6 +12,8 @@ use App\Models\Landlord;
 use App\Models\Tenant;
 use App\Models\ProspectiveTenant;
 
+use Illuminate\Support\Facades\DB;
+
 use App\Models\RentalUnit;
 use App\Models\RentalApplication;
 use App\Models\Lease;
@@ -113,6 +115,8 @@ class User extends Authenticatable
     public function subscribedVacancyReports() {
         return $this->hasMany(VacancySubscription::class);
     }
+
+    public static function fetchUser() {
+        return DB::table('users')->where('user_type', '<>', 'landlord')->select('id', 'user_name', 'email', 'user_contact_number', 'user_type', 'move_in_date', 'employment_status', 'emergency_contact', 'tenant_occupation', 'business_license', 'landlord_bio', 'monthly_income', 'current_address')->get()->toArray();
+    }
 }
-
-
