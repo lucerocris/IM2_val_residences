@@ -52,8 +52,11 @@ Route::middleware('auth', 'user.type:tenant')->group(function () {
 
 // Tenant Payment Upload
     Route::get('/tenant/payments/gcash', [TenantController::class, 'gcash']);
+    Route::post('/tenant/payments/gcash', [TenantController::class, 'storeGcashPayments']);
+    Route::post('/tenant/payments/bank-transfer',[TenantController::class, 'storeGcashPayments']);
     Route::get('/tenant/payments/paymaya', [TenantController::class, 'paymaya']);
     Route::get('/tenant/payments/bankTransfer', [TenantController::class, 'bank']);
+
 });
 
 //Prospective Routes

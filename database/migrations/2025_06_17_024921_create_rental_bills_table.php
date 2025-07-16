@@ -13,13 +13,14 @@ return new class extends Migration {
         Schema::create('rental_bills', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lease_id')->constrained('leases')->onDelete('cascade');
-            $table->date('billing_date');
+            $table->date('billing_date')->nullable();
             $table->decimal('rent_amount', 10, 2);
-            $table->decimal('rent_due', 10, 2);
+            $table->string('proof_of_payment_path')->nullable();
+            $table->string('reference_number')->nullable();
             $table->date('due_date');
             $table->date('paid_date')->nullable();
             $table->decimal('amount_paid', 10, 2)->default(0);
-            $table->enum('payment_status', ['pending', 'paid', 'overdue', 'partial'])
+            $table->enum('payment_status', [ 'paid', 'overdue', 'partial', 'pending'])
                 ->default('pending');
             $table->timestamps();
 

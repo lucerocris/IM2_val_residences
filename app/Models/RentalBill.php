@@ -19,6 +19,7 @@ class RentalBill extends Model
         'paid_date',
         'amount_paid',
         'payment_status',
+        'proof_of_payment_path',
     ];
 
     protected $casts = [
@@ -164,6 +165,7 @@ class RentalBill extends Model
                     ],
                     'billing_date' => $bill->billing_date->format('Y-m-d'),
                     'due_date' => $bill->due_date->format('Y-m-d'),
+                    'proof_of_payment_path' => $bill->proof_of_payment_path,
                     'rent_amount' => (float)$bill->rent_amount,
                     'paid_date' => $bill->paid_date ? $bill->paid_date->format('Y-m-d') : null,
                     'amount_paid' => (float)$bill->amount_paid,

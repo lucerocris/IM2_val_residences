@@ -9,7 +9,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { type ColumnDef } from '@tanstack/react-table';
-import { AlertCircle, CheckCircle, Clock, DollarSign, Home, MoreHorizontal, User } from 'lucide-react';
+import { AlertCircle, CheckCircle, Clock, DollarSign, Home, MoreHorizontal, User, FileText, Eye } from 'lucide-react';
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +38,8 @@ export interface RentalBill {
     paid_date?: string;
     amount_paid: number;
     payment_status: 'paid' | 'pending' | 'overdue' | 'partial';
+    proof_of_payment_path?: string;
+    reference_number?: string;
 }
 
 /*
@@ -78,6 +80,14 @@ const getStatusBadge = (status: string) => {
         default:
             return <Badge variant="secondary">{status}</Badge>;
     }
+};
+
+const getStorageUrl = (path: string | undefined) => {
+    if (!path) return '';
+    // Adjust this base URL to match your storage configuration
+    // For Laravel storage, it's typically: `/storage/${path}`
+    // For other setups, it might be different
+    return `/storage/${path}`;
 };
 
 const formatCurrency = (amount: number) =>
@@ -170,11 +180,7 @@ export const rentCollectionColumns: ColumnDef<RentalBill>[] = [
     /* ---------------------------------------------------------------------
      * Amounts
      * ------------------------------------------------------------------- */
-    {
-        accessorKey: 'rent_amount',
-        header: 'Rent Amount',
-        cell: ({ row }) => <div className="font-medium">{formatCurrency(row.getValue('rent_amount'))}</div>,
-    },
+
     {
         accessorKey: 'amount_paid',
         header: 'Amount Paid',
@@ -186,6 +192,58 @@ export const rentCollectionColumns: ColumnDef<RentalBill>[] = [
                     {bill.payment_status === 'partial' && <div className="text-sm text-gray-500">of {formatCurrency(bill.rent_amount)}</div>}
                 </div>
             );
+        },
+    },
+    /* ---------------------------------------------------------------------
+     * Proof of Payment
+     * ------------------------------------------------------------------- */
+    {
+        accessorKey: 'proof_of_payment',
+        header: 'Proof of Payment',
+        cell: ({ row }) => {
+            const bill = row.original;
+            const hasProof = bill.proof_of_payment_path;
+
+            if (!hasProof) {
+                return <div className="text-sm text-gray-400">No proof uploaded</div>;
+            }
+
+            // Build the complete URL
+            const imageUrl = getStorageUrl(bill.proof_of_payment_path);
+
+            return (
+                <div className="flex items-center space-x-3">
+
+                    <div className="flex-1">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-auto p-0 text-blue-400 hover:text-blue-800 font-medium"
+                            onClick={() => {
+                                window.open(imageUrl, '_blank');
+                            }}
+                        >
+                            <Eye className="mr-1 h-3 w-3" />
+                            View Image
+                        </Button>
+                        {bill.reference_number && (
+                            <div className="text-xs text-gray-500 mt-1">
+                                Ref: {bill.reference_number}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        },
+        filterFn: (row, id, value) => {
+            const bill = row.original;
+            if (value === 'has_proof') {
+                return !!bill.proof_of_payment_path;
+            }
+            if (value === 'no_proof') {
+                return !bill.proof_of_payment_path;
+            }
+            return true;
         },
     },
     /* ---------------------------------------------------------------------
@@ -226,6 +284,13 @@ export const rentCollectionColumns: ColumnDef<RentalBill>[] = [
                                     Mark as paid
                                 </DropdownMenuItem>
                             </>
+                        )}
+
+                        {bill.proof_of_payment_path && (
+                            <DropdownMenuItem onClick={() => window.open(bill.proof_of_payment_path, '_blank')}>
+                                <Eye className="mr-2 h-4 w-4" />
+                                View proof image
+                            </DropdownMenuItem>
                         )}
 
                         <DropdownMenuItem>View details</DropdownMenuItem>
