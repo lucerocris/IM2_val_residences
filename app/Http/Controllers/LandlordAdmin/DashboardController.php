@@ -37,12 +37,16 @@ class DashboardController extends Controller
             ->toDateString();
 
 
+//      Overdue bills
+        $overdueBills = RentalBill::getOverdue();
+
 //        Rental Bill models
         $paidRentalBillsThisMonth = Number::currency(RentalBill::getPaidRevenueThisMonth($startOfMonth, $endOfMonth), in: 'PHP');
 
 
         return Inertia::render('landlord/DashboardPage', [
             'numberOfUnits' => $numberOfUnits,
+            'overdueBills' => $overdueBills,
             'numberOfAvailableUnits' => $numberOfAvailableUnits,
             'numberOfOccupiedUnits' => $numberOfOccupiedUnits,
             'paidRentalBillsThisMonth' => $paidRentalBillsThisMonth,
