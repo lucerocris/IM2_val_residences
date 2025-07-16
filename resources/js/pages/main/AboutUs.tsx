@@ -3,20 +3,21 @@ import Header from '@/components/main/ui/Header';
 import LoginModal from '@/components/main/ui/LoginModal';
 import SignUpModal from '@/components/main/ui/SignUpModal';
 import { Button } from '@/components/ui/button';
+import { router } from '@inertiajs/react';
 
 const landing = () => {
 
-    const headerActions = (
-    <>
-        <Button variant = "outline" className = "bg-transparent hover:opacity-70 duration-400 opacity-90 px-4">
-            <LoginModal />
-        </Button>
-
-        <Button variant = "outline" className = "bg-white text-black hover:opacity-70 duration-400 opacity-90 px-4">
-            <SignUpModal />
-        </Button>
-    </>
-    );
+     const headerActions = (
+         <>
+             <Button variant = "outline" className = "bg-transparent hover:opacity-70 duration-400 opacity-90 px-4" onClick = {() => router.visit('/login')}>
+                 Log In
+             </Button>
+ 
+             <Button variant = "outline" className = "bg-white text-black hover:opacity-70 duration-400 opacity-90 px-4" onClick = {() => router.visit('/register')}>
+                 Sign Up
+             </Button>
+         </>
+     );
 
     return (
         <>
