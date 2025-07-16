@@ -17,7 +17,7 @@ const FeatureAmenities = ({amenities}:FeatureAmenitiesProps) => {
                 </div>
 
                 <div className="max-w-4xl mx-auto">
-                    <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-50 to-teal-50">
+                    <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-neutral-50">
                     <CardContent className="p-8">
                         <div className="grid md:grid-cols-2 gap-4">
                         {amenities.map((amenity, index) => (
@@ -25,7 +25,7 @@ const FeatureAmenities = ({amenities}:FeatureAmenitiesProps) => {
                             key={index}
                             className="flex items-center gap-3 p-4 bg-white/60 rounded-lg hover:bg-white/80 transition-colors"
                             >
-                            <div className="w-3 h-3 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                            <div className="w-3 h-3 bg-slate-400 rounded-full flex-shrink-0"></div>
                             <span className="text-slate-700 font-medium">{amenity}</span>
                             </div>
                         ))}

@@ -51,7 +51,6 @@ const landing = () => {
                         </div>
                     </div>
                 </section>
-
                 <FeatureAmenities amenities={amenities} />
             </MainLayout>
         </>
@@ -66,8 +65,8 @@ const LeftContent = () => {
                 <Card className = "border-0 shadow-lg bg-white">
                     <CardContent className = "p-8">
                         <div className = "flex items-center gap-3 mb-6">
-                            <div className = "size-12 bg-emerald-100 rounded-full flex items-center justify-center">
-                                <Waves className = "size-6 text-emerald-600" />
+                            <div className = "size-12 bg-slate-100 rounded-full flex items-center justify-center">
+                                <Waves className = "size-6 text-slate-600" />
                             </div>
                             <h2 className = "text-2xl font-semibold text-slate-900">Your Seaside Sanctuary</h2>
                         </div>
@@ -86,8 +85,8 @@ const LeftContent = () => {
                 <Card className = "border-0 shadow-lg bg-white">
                     <CardContent className = "p-8">
                         <div className = "flex items-center gap-3 mb-6">
-                            <div className = "size-12 bg-emerald-100 rounded-full flex items-center justify-center">
-                                <MapPin className = "size-6 text-emerald-600" />
+                            <div className = "size-12 bg-slate-100 rounded-full flex items-center justify-center">
+                                <MapPin className = "size-6 text-slate-600" />
                             </div>
                             <h2 className = "text-2xl font-semibold text-slate-900">Prime Location</h2>
                         </div>
@@ -103,8 +102,8 @@ const LeftContent = () => {
                 <Card className = "border-0 shadow-lg bg-white">
                     <CardContent className = "p-8">
                         <div className = "flex items-center gap-3 mb-6">
-                            <div className = "size-12 bg-emerald-100 rounded-full flex items-center justify-center">
-                                <Star className = "size-6 text-emerald-600" />
+                            <div className = "size-12 bg-slate-100 rounded-full flex items-center justify-center">
+                                <Star className = "size-6 text-slate-600" />
                             </div>
                             <h2 className = "text-2xl font-semibold text-slate-900">First of Its Kind</h2>
                         </div>
@@ -128,6 +127,7 @@ const RightContent = () => {
                     <div className = "space-y-4">
                         <div className = "aspect-square overflow-hidden rounded-2xl shadow-lg">
                             <img 
+                            src = "https://cebusweethomes.com/wp-content/uploads/2014/08/Corona-del-Mar-pic-61.jpg"
                             alt = "shi"
                             width = {300}
                             height = {300}
@@ -136,6 +136,7 @@ const RightContent = () => {
                         </div>
                         <div className = "aspect-square overflow-hidden rounded-2xl shadow-lg">
                             <img 
+                            src = "https://www.cebubai.com/wp-content/uploads/2020/08/193-SqM-Residential-Corner-Lot-For-Sale-in-Corona-del-Mar-Talisay-City-Cebu-1200x720.jpg"
                             alt = "shi"
                             width = {300}
                             height = {300}
@@ -146,6 +147,7 @@ const RightContent = () => {
                     <div className = "space-y-4 pt-8">
                         <div className = "aspect-square overflow-hidden rounded-2xl shadow-lg">
                             <img 
+                            src = "https://cebusweethomes.com/wp-content/uploads/2014/08/Corona-del-Mar-pic-2.jpg"
                             alt = "shi"
                             width = {300}
                             height = {300}
@@ -154,6 +156,7 @@ const RightContent = () => {
                         </div>
                         <div className = "aspect-square overflow-hidden rounded-2xl shadow-lg">
                             <img 
+                            src = "https://cebusweethomes.com/wp-content/uploads/2014/08/Corona-del-Mar-pic-4.jpg"
                             alt = "shi"
                             width = {300}
                             height = {300}
@@ -171,7 +174,7 @@ const RightContent = () => {
 const FeatureHighlight = () => {
     return(
         <>
-            <Card className = "border-0 shadow-lg bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+            <Card className = "border-0 shadow-lg bg-gradient-to-r from-slate-700 to-neutral-600 text-white">
                 <CardContent className = "p-6 text-center">
                     <h4 className = "text-xl font-bold mb-2">Spanish Mediterranean Design</h4>
                     <p className = "text-emerald-100">Inspired architecture meets tropical paradise</p>
