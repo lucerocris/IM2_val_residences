@@ -67,6 +67,19 @@ export interface RentalBill {
     balance: number;
     payment_status: 'pending' | 'paid' | 'overdue' | 'partial';
 }
+
+export interface ListingsData {
+    id: string;
+    address: string;
+    unit_number: string;
+    availability_status: string;
+    floor_area: number;
+    rent_price: number;
+    property_type: string;
+    description: string;
+    amenities: string[];
+    unit_photos: string[];
+}
 export interface TenantDashboardProps {
     tenantID: number;
     unitID: number;
@@ -75,4 +88,5 @@ export interface TenantDashboardProps {
     rentalBill: RentalBill[];
     maintenanceRequests: MaintenanceRequest[];
     userInfo: UserInfo[];
+    listingsData: ListingsData[];
 }

@@ -13,7 +13,7 @@ class MainSection extends Controller
     public function home() {
         $Listings = RentalUnit::getListingsData();
         return Inertia::render('main/landing',[
-            'ListingsData' => $Listings
+            'listingsData' => $Listings
         ]);
 
     }

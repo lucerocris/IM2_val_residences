@@ -4,12 +4,18 @@ import ListingsMain from "@/components/main/ui/Listings/main";
 import TenantProfileModal from "@/components/tenants/tenantsDashboard/tenant-profile-modal";
 import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TenantDashboardProps } from "@/types/tenantDashboard.types";
+import { UserInfo, ListingsData } from "@/types/tenantDashboard.types";
 
-const TenantListings = ({ userInfo }:TenantDashboardProps) => {
+interface TenantListingsProps {
+    userInfo: UserInfo[];
+    listingsData: ListingsData[];
+}
+
+const TenantListings = ({ userInfo, listingsData }: TenantListingsProps) => {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
 
-    const title = "Welcome, Jose"
+    const userName = userInfo && userInfo.length > 0 ? userInfo[0].user_name : "Guest";
+    const title = `Welcome, ${userName}`;
     const subtitle = "Find your ideal residence from our curated collection of premium rental properties."
     const buttonLabel = "VIEW LISTINGS"
 
@@ -22,15 +28,25 @@ const TenantListings = ({ userInfo }:TenantDashboardProps) => {
         {label: "LOG OUT", href: "/logout", method: "post"}
     ]
 
-    const tenantData = {
-        user_name: "Jose Rivera",
-        email: "jose.rivera@email.com",
-        user_contact_number: "+63 912 345 6789",
+    // Use actual user data instead of hardcoded values
+    const tenantData = userInfo && userInfo.length > 0 ? {
+        user_name: userInfo[0].user_name,
+        email: userInfo[0].email,
+        user_contact_number: userInfo[0].user_contact_number,
+        user_type: userInfo[0].user_type,
+        move_in_date: userInfo[0].move_in_date,
+        employment_status: userInfo[0].employment_status,
+        emergency_contact: userInfo[0].emergency_contact,
+        tenant_occupation: userInfo[0].tenant_occupation,
+    } : {
+        user_name: "Guest",
+        email: "",
+        user_contact_number: "",
         user_type: "tenant",
-        move_in_date: "2024-01-15",
-        employment_status: "Full-time",
-        emergency_contact: "Maria Rivera - +63 920 123 4567",
-        tenant_occupation: "Software Engineer",
+        move_in_date: "",
+        employment_status: "",
+        emergency_contact: "",
+        tenant_occupation: "",
     };
 
     return(
@@ -51,7 +67,7 @@ const TenantListings = ({ userInfo }:TenantDashboardProps) => {
                     </Button>
                 }
             >
-                <ListingsMain />
+                <ListingsMain listingsData={listingsData} />
             </ListingsLayout>
 
             <TenantProfileModal
