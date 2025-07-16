@@ -60,13 +60,11 @@ export interface UserInfo {
 }
 
 export interface RentalBill {
-    id: number;
     lease_id: number;
-    billing_date: string;
     rent_amount: string;
     due_date: string;
-    paid_date: string;
     amount_paid: number;
+    balance: number;
     payment_status: 'pending' | 'paid' | 'overdue' | 'partial';
 }
 export interface TenantDashboardProps {
@@ -74,7 +72,7 @@ export interface TenantDashboardProps {
     unitID: number;
     tenantData: Tenant;
     leaseData: Lease[];
-    rentalBill: RentalBill;
+    rentalBill: RentalBill[];
     maintenanceRequests: MaintenanceRequest[];
     userInfo: UserInfo[];
 }

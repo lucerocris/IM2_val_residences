@@ -14,7 +14,6 @@ class UserController extends Controller
     public function index() {
 
         $Listings = RentalUnit::getListingsData();
-
         return Inertia::render('user/Landing',[
             'ListingsData' => $Listings
         ]);

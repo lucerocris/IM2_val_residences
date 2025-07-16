@@ -18,6 +18,10 @@ class LeaseFactory extends Factory
     {
         $startDate = fake()->dateTimeBetween('-1 year', '+1 month');
         $endDate = (clone $startDate)->modify('+1 year');
+        // Ensure end_date is always after start_date by at least 1 day
+        if ($endDate <= $startDate) {
+            $endDate = (clone $startDate)->modify('+1 day');
+        }
         $leaseStatus = fake()->randomElement(['active', 'pending', 'expired', 'terminated']);
 
         // Generate terminated date and reason only if lease is terminated
@@ -25,6 +29,7 @@ class LeaseFactory extends Factory
         $terminationReason = null;
 
         if ($leaseStatus === 'terminated') {
+            // Ensure terminated_date is between start_date and end_date
             $terminatedDate = fake()->dateTimeBetween($startDate, $endDate);
             $terminationReason = fake()->randomElement([
                 'Mutual agreement',
@@ -43,7 +48,7 @@ class LeaseFactory extends Factory
             'end_date' => $endDate,
             'monthly_rent' => fake()->randomFloat(2, 8000, 35000),
             'deposit_amount' => fake()->randomFloat(2, 5000, 20000),
-            'remaining_balance' => fake()->randomFloat(2, 5000, 20000 ),
+            'remaining_balance' => fake()->randomFloat(2, 5000, 20000),
             'lease_term' => 12,
             'lease_status' => $leaseStatus,
             'terminated_date' => $terminatedDate,
@@ -60,6 +65,11 @@ class LeaseFactory extends Factory
             // Generate dates explicitly for terminated leases
             $startDate = fake()->dateTimeBetween('-2 years', '-6 months');
             $endDate = (clone $startDate)->modify('+1 year');
+            // Ensure end_date is always after start_date by at least 1 day
+            if ($endDate <= $startDate) {
+                $endDate = (clone $startDate)->modify('+1 day');
+            }
+            // Ensure terminated_date is between start_date and end_date
             $terminatedDate = fake()->dateTimeBetween($startDate, $endDate);
 
             return [

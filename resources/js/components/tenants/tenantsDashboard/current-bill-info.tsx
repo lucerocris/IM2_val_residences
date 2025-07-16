@@ -1,7 +1,7 @@
 
 interface currentBillInfoProps {
     title: string;
-    info: string;
+    info: string | number;
 }
 
 const CurrentBillInfo = ({ title, info }:currentBillInfoProps) => {

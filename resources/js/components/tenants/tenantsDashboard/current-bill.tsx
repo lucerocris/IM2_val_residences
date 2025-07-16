@@ -4,7 +4,7 @@ import CurrentBillInfo from "./current-bill-info";
 import { RentalBill } from '@/types/tenantDashboard.types';
 
 interface currentBillProps {
-    currentBill: RentalBill;
+    currentBill: RentalBill[];
 }
 
 const CurrentBill = ({ currentBill }: currentBillProps) => {
@@ -19,10 +19,11 @@ const CurrentBill = ({ currentBill }: currentBillProps) => {
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <CurrentBillInfo title="Billing Date" info={currentBill.billing_date} />
-                        <CurrentBillInfo title="Due Date" info={currentBill.due_date} />
-                        <CurrentBillInfo title="Amount" info={currentBill.rent_amount} />
-                        <CurrentBillInfo title="Status" info={currentBill.payment_status} />
+                        <CurrentBillInfo title="Due Date" info={currentBill[0].due_date} />
+                        <CurrentBillInfo title="Rent Amount" info={currentBill[0].rent_amount} />
+                        <CurrentBillInfo title="Paid" info={currentBill[0].amount_paid} />
+                        <CurrentBillInfo title="Balance" info={currentBill[0].balance} />
+                        <CurrentBillInfo title="Status" info={currentBill[0].payment_status} />
                     </div>
                 </CardContent>
             </Card>

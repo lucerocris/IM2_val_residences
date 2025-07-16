@@ -36,6 +36,7 @@ class TenantController extends Controller
         $rentalBill = RentalBill::getOwnBills($leaseID);
 
 
+
         return Inertia::render('tenant/Landing', [
 
             'maintenanceRequests' => $maintenanceData,

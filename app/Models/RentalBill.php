@@ -177,10 +177,20 @@ class RentalBill extends Model
 
     public static function getOwnBills(int $lease_id)
     {
-        return DB::table('rental_bills')->where('lease_id', $lease_id)->where(function ($query) {
-            $query->where('payment_status', 'pending')->orWhere('payment_status', 'overdue');
-        })
-            ->select('id', 'lease_id', 'billing_date', DB::raw('SUM(rent_amount) as rent_amount'), 'due_date', 'paid_date', DB::raw('SUM(amount_paid) AS amount_paid'), 'payment_status')
+        return DB::table('rental_bills')
+            ->where('lease_id', $lease_id)
+            ->where(function ($query) {
+                $query->where('payment_status', 'pending')
+                    ->orWhere('payment_status', 'overdue');
+            })
+            ->select(
+                'lease_id',
+                DB::raw('SUM(rent_amount) as rent_amount'),
+                DB::raw('SUM(amount_paid) AS amount_paid'),
+                DB::raw('MIN(payment_status) as payment_status'),
+                DB::raw('SUM(rent_amount) - SUM(amount_paid) AS balance'),
+                DB::raw('MIN(due_date) AS due_date'),
+            )
             ->groupBy('lease_id')
             ->get();
     }

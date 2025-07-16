@@ -14,7 +14,7 @@ import { Lease, RentalBill } from '@/types/tenantDashboard.types';
 
 interface ButtonSectionProps {
     leaseData: Lease;
-    currentBill: RentalBill;
+    currentBill: RentalBill[];
     unitID?: number;
     tenantID?: number;
     setMaintenanceModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -101,11 +101,11 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
                 <div className = "bg-gray-50 p-4 rounded-lg">
                     <div className = "flex justify-between items-center mb-2">
                         <span className = "text-sm text-gray-600">Amount Due:</span>
-                        <span className = "font-semibold">₱{currentBill.rent_amount}</span>
+                        <span className = "font-semibold">₱{currentBill[0].balance}</span>
                     </div>
                     <div className = "flex justify-between items-center">
                         <span className = "text-sm text-gray-600">Due Date:</span>
-                        <span className = "text-sm">{currentBill.due_date}</span>
+                        <span className = "text-sm">{currentBill[0].due_date}</span>
                     </div>
                 </div>
 
@@ -124,12 +124,12 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
                 </div>
 
                 <div className = "space-y-2">
-                    <InputLabel label = "Amount" labelText="Amount" input = {<Input id = {"Amount"} type = "number" value = {currentBill.rent_amount} readOnly className = "bg-gray-50"/>} />
+                    <InputLabel label="Amount" labelText="Amount" input = {<Input id = {"Amount"} type = "number" className = "bg-gray-50"/>} />
                 </div>
 
                 <Button
                     className = "w-full"
-                    disabled = {!paymentMethod || !referenceNumber.trim()}
+                    disabled = {!paymentMethod || !}
                     onClick = {() => {
                         if(paymentMethod === "gcash") {
                             router.visit("/tenant/payments/gcash");
