@@ -25,7 +25,6 @@ return new class extends Migration {
             $table->string('termination_reason')->nullable();
             $table->timestamps();
 
-
             //onboarding stuff
             $table->boolean('onboarding_fees_paid')->default(false);
             $table->boolean('onboarding_signed_lease_uploaded')->default(false);

@@ -70,10 +70,21 @@ class LeaseController extends Controller
         return redirect()->route('leases.index')->with('success', 'Successfully edited the lease');
     }
 
-    public function destroy($id)
+    public function destroy($id) // For deleting tenant with lease ni ha.
     {
         $lease = Lease::findOrFail($id);
         $lease->delete();
         return redirect()->back()->with('success', 'Lease deleted successfully.');
+    }
+
+    public function deactivate($lease_id)
+    {
+        $lease = Lease::deactivate($lease_id);
+
+        if (!$lease) {
+            return redirect()->back()->with('error', 'Lease not found');
+        }
+
+        return redirect()->back()->with('success', 'Lease deactivated successfully');
     }
 }

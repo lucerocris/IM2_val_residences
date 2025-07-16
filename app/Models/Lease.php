@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -340,5 +341,16 @@ class Lease extends Model
     public static function getOwnUnit(int $tenant_id)
     {
         return DB::table('leases')->where('tenant_id', $tenant_id)->value('unit_id');
+    }
+
+    public static function deactivate($lease_id)
+    {
+        $lease = self::find($lease_id);
+        if($lease) {
+            $lease->lease_status = "terminated";
+            $lease->terminated_date = Carbon::now();
+            $lease->save();
+        }
+        return $lease;
     }
 }
