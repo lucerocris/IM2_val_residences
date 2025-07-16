@@ -14,20 +14,34 @@ use App\Http\Controllers\LandlordAdmin\LeaseController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\RequestMaintenanceController;
+use App\Http\Controllers\Auth\PasswordResetController;
+
 use App\Http\Controllers\TenantOnboardingController;
 use App\Http\Controllers\LandlordAdmin\DocumentReviewController;
 
-Route::get('/', [MainSection::class, 'home']);
-Route::get('/about', [MainSection::class, 'about']);
-Route::get('/contact', [MainSection::class, 'contact']);
+
 
 
 //Guest Routes
 Route::middleware('guest')->group(function () {
+    Route::get('/', [MainSection::class, 'home']);
+    Route::get('/about', [MainSection::class, 'about']);
+    Route::get('/contact', [MainSection::class, 'contact']);
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'store']);
+    Route::get('/forgot-password', [PasswordResetController::class, 'create'])
+        ->name('password.request');
+
+    Route::post('/forgot-password', [PasswordResetController::class, 'store'])
+        ->name('password.email');
+
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'edit'])
+        ->name('password.reset');
+
+    Route::post('/reset-password', [PasswordResetController::class, 'update'])
+        ->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
