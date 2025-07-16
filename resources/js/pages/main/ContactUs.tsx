@@ -1,11 +1,14 @@
 import MainLayout from '@/layout/MainLayout'
-import Btn from '@/components/main/ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Header from '@/components/main/ui/Header';
 import LoginModal from '@/components/main/ui/LoginModal';
 import SignUpModal from '@/components/main/ui/SignUpModal';
-import { MapPinned, Phone, Mail } from 'lucide-react'
+import { MapPin, Phone, Mail, Send, MessageCircle, Clock, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 const landing = () => {
 
@@ -31,14 +34,14 @@ const landing = () => {
             actions = { headerActions }
             />
             <MainLayout heroTitle = "Contact Us" heroSubtitle = "Get in Touch with Val Residences">
-                <div className = "pt-[4.3rem] pb-[4.3rem]">
-                    <div className = "p-[4.3rem] flex items-center justify-center">
-                        <div className = "w-[80%] max-w-[1000px] p-[20px] h-auto bg-[#e8e8e8] flex">
+                <section className = "py-20 bg-white">
+                    <div className = "container mx-auto px-4">
+                        <div className = "grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
                             <ContactInfo />
-                            <Form />
+                            <ContactForm />
                         </div>
                     </div>
-                </div>
+                </section>
             </MainLayout>
         </>
     );
@@ -47,48 +50,110 @@ const landing = () => {
 const ContactInfo = () => {
     return(
         <>
-            <div className = "w-[30%] p-[1.8rem] flex flex-col items-center justify-around relative border-r border-gray-300">
-                <div className = "flex flex-col items-center text-center mb-[1.5rem]">
-                    <MapPinned />
-                    <h3 className = "text-[1rem] font-bold">ADDRESS</h3>
-                    <p className = "text-[0.8rem]">Corona del Mar, Pooc, Talisay City, Cebu, Philippines</p>
-                </div>
+            <div className = "space-y-8">
+                <Card className = "border-0 shadow-lg bg-slate-50">
+                    <CardHeader>
+                        <CardTitle className = "flex items-center gap-3 text-2xl">
+                            <MessageCircle className = "size-8 text-slate-600" />
+                            Contact Information
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className = "space-y-8">
 
-                <div className = "flex flex-col items-center text-center mb-[1.5rem]">
-                    <Phone />
-                    <h3 className = "text-[1rem] font-bold">PHONE</h3>
-                    <p className = "text-[0.8rem]">+639999732452 +639186936086</p>
-                </div>
+                        <div className = "flex items-start gap-4">
+                            <div className = "size-12 bg-slate-100 rounded-full flex items-center justify-center shrink-0">
+                                <MapPin className = "size-6 text-slate-600" />
+                            </div>
+                            <div>
+                                <h3 className = "text-lg font-semibold mb-2 text-slate-900">Address</h3>
+                                <p className = "text-slate-700 leading-relaxed">
+                                    Corona del Mar, Pooc, Talisay City,
+                                    <br />
+                                    Cebu, Philippines
+                                </p>
+                            </div>
+                        </div>
 
-                <div className = "flex flex-col items-center text-center mb-[1.5rem]">
-                    <Mail />
-                    <h3 className = "text-[1rem] font-bold">EMAIL</h3>
-                    <p className = "text-[0.8rem]">valresidences@gmail.com</p>
-                </div>
+                        <div className = "flex items-start gap-4">
+                            <div className = "size-12 bg-slate-100 rounded-full flex items-center justify-center shrink-0">
+                                <Phone className = "size-6 text-slate-600" />
+                            </div>
+                            <div>
+                                <h3 className = "text-lg font-semibold mb-2 text-slate-900">Phone</h3>
+                                <div className = "space-y-1 text-slate-700">
+                                    <p>+639999732452</p>
+                                    <p>+639186936086</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className = "flex items-start gap-4">
+                            <div className = "size-12 bg-slate-100 rounded-full flex items-center justify-center shrink-0">
+                                <Mail className = "size-6 text-slate-600" />
+                            </div>
+                            <div>
+                                <h3 className = "text-lg font-semibold mb-2 text-slate-900">Email</h3>
+                                <p className = "text-slate-700">valresidences@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div className = "flex items-start gap-4">
+                            <div className = "size-12 bg-slate-100 rounded-full flex items-center justify-center shrink-0">
+                                <Clock className = "size-6 text-slate-600" />
+                            </div>
+                            <div>
+                                <h3 className = "text-lg font-semibold mb-2 text-slate-900">Office Hours</h3>
+                                <div className = "space-y-1 text-slate-700">
+                                    <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
+                                    <p>Saturday: 9:00 AM - 5:00 PM</p>
+                                    <p>Sunday: By appointment only</p>
+                                </div>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </>
     );
 }
 
-const Form = () => {
+const ContactForm = () => {
     return(
         <>
-            <div className = "w-[70%] p-[1.8rem]">
-                <form action="" className = "flex flex-col">
-                    <h3 className = "text-[1.3rem] mb-[1.5rem]">SEND US A MESSAGE</h3>
+            <Card className = "border-0 shadow-lg bg-white">
+                <CardHeader>
+                    <CardTitle className = "flex items-center gap-3 text-2xl">
+                        <Send className = "size-8 text-slate-600" />
+                        Send Us a Message
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <form className = "space-y-6">
+                        <div className = "grid md:grid-cols-1 gap-4">
 
-                    <label htmlFor="">Name</label>
-                    <input type="text" placeholder = "Enter your name" className = "w-full p-[10px] mt-[10px] mb-[1rem] text-[0.9rem] bg-white"/>
+                            <div className = "space-y-2">
+                                <Label htmlFor = "name" className = "text-slate-900 font-medium">Name *</Label>
+                                <Input id = "name" name = "name" placeholder = "Enter your name" className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" required />
+                            </div>
 
-                    <label htmlFor="">Email</label>
-                    <input type="text" placeholder = "Enter your email" className = "w-full p-[10px] mt-[10px] mb-[1rem] text-[0.9rem] bg-white"/>
+                            <div className = "space-y-2">
+                                <Label>Phone</Label>
+                                <Input placeholder = "Enter your phone number" className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" />
+                            </div>
 
-                    <label htmlFor="">Message</label>
-                    <input type="text" placeholder = "Enter your message" className = "w-full p-[10px] mt-[10px] mb-[1rem] text-[0.9rem] bg-white"/>
+                            <div className = "space-y-2">
+                                <Label>Email</Label>
+                                <Input type = "email" placeholder = "Enter your email" />
+                            </div>
 
-                    <Btn className = "py-2">Submit</Btn>
-                </form>
-            </div>
+                            <div className = "space-y-2">
+                                <Label>Message *</Label>
+                                <Textarea placeholder = "Tell us about your interest in Val Residences..." rows = {6}/>
+                            </div>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </>
     );
 }
