@@ -4,50 +4,39 @@ import ApplyModal from './apply-modal';
 import ListingsFilter from './Filter';
 import ListingsGrid from './listing-grid';
 import { ViewDetailsModal } from './view-details-modal';
+import { ListingsData } from '@/types/tenantDashboard.types';
 
-interface Listing {
-    id: number;
-    address: string;
-    unit_number: string;
-    availability_status: string;
-    floor_area: number;
-    rent_price: number;
-    property_type: string;
-    description: string;
-    amenities: string[];
-    unit_photos: string[];
-}
 interface ListingsMainProps {
-    ListingsData?: Listing[];
+    listingsData?: ListingsData[];
     redirectToLoginIfUnauthenticated?: boolean;
 }
 
-const ListingsMain = ({ ListingsData, redirectToLoginIfUnauthenticated = false }: ListingsMainProps) => {
-    console.log('ListingsData:', ListingsData);
+const ListingsMain = ({ listingsData, redirectToLoginIfUnauthenticated = false }: ListingsMainProps) => {
+    console.log('ListingsData:', listingsData);
 
     const { props } = usePage();
     const user = (props as any).auth?.user;
 
     // Debug: Check first item structure
-    if (ListingsData && ListingsData.length > 0) {
+    if (listingsData && listingsData.length > 0) {
         console.log('First listing structure:', {
-            id: ListingsData[0].id,
-            unit_photos_type: typeof ListingsData[0].unit_photos,
-            unit_photos_value: ListingsData[0].unit_photos,
-            amenities_type: typeof ListingsData[0].amenities,
-            amenities_value: ListingsData[0].amenities,
+            id: listingsData[0].id,
+            unit_photos_type: typeof listingsData[0].unit_photos,
+            unit_photos_value: listingsData[0].unit_photos,
+            amenities_type: typeof listingsData[0].amenities,
+            amenities_value: listingsData[0].amenities,
         });
     }
     const [subscriptionModalOpen, setSubscriptionModalOpen] = useState(false);
     const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState(false);
     const [applyModalOpen, setApplyModalOpen] = useState(false);
-    const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
+    const [selectedListing, setSelectedListing] = useState<ListingsData | null>(null);
     const [propertyTypeFilter, setPropertyTypeFilter] = useState('all');
     const [maxRentFilter, setMaxRentFilter] = useState('all');
     const [sortBy, setSortBy] = useState('price_low');
 
     const filteredAndSortedListings = useMemo(() => {
-        const filtered = (ListingsData || []).filter((listing) => {
+        const filtered = (listingsData || []).filter((listing) => {
             const matchesPropertyType = propertyTypeFilter === 'all' || listing.property_type === propertyTypeFilter;
 
             const matchesMaxRent =
@@ -74,14 +63,15 @@ const ListingsMain = ({ ListingsData, redirectToLoginIfUnauthenticated = false }
             }
         });
         return filtered;
-    }, [propertyTypeFilter, maxRentFilter, sortBy]);
+    }, [listingsData, propertyTypeFilter, maxRentFilter, sortBy]);
 
-    const handleViewDetails = (listing: Listing) => {
+    const handleViewDetails = (listing: ListingsData) => {
         setSelectedListing(listing);
         setViewDetailsModalOpen(true);
     };
 
-    const handleApply = (listing: Listing) => {
+    const handleApply = (listing: ListingsData
+    ) => {
         // Check if we should redirect unauthenticated users to login
         if (redirectToLoginIfUnauthenticated && !user) {
             router.visit('/login');

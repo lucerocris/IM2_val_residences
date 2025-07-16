@@ -2,24 +2,12 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { Home, MapPin } from 'lucide-react';
-
-interface Listing {
-    id: number;
-    address: string;
-    unit_number: string;
-    availability_status: string;
-    floor_area: number;
-    rent_price: number;
-    property_type: string;
-    description: string;
-    amenities: string[];
-    unit_photos: string[];
-}
+import { ListingsData } from '@/types/tenantDashboard.types';
 
 interface ViewDetailsModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    listing: Listing | null;
+    listing: ListingsData | null;
 }
 
 export function ViewDetailsModal({ open, onOpenChange, listing }: ViewDetailsModalProps) {

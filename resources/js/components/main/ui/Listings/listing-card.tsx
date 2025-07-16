@@ -2,27 +2,16 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Car, Dumbbell, Home, MapPin, Shield, Waves, Wifi, Wind } from 'lucide-react';
+import { ListingsData } from '@/types/tenantDashboard.types';
 
 {
     /* NOTE TO SELF: MAKE THIS INTERFACE A TYPE FOR REUSABILITY */
 }
-export type Listing = {
-    id: number;
-    address: string;
-    unit_number: string;
-    availability_status: string;
-    floor_area: number;
-    rent_price: number;
-    property_type: string;
-    description: string;
-    amenities: string[];
-    unit_photos: string[];
-};
 
 interface ListingCardProps {
-    listing: Listing;
-    onViewDetails: (listing: Listing) => void;
-    onApply: (listing: Listing) => void;
+    listing: ListingsData;
+    onViewDetails: (listing: ListingsData) => void;
+    onApply: (listing: ListingsData) => void;
     featured?: boolean;
 }
 

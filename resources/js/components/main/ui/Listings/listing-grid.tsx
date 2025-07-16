@@ -1,23 +1,11 @@
 import { Home } from "lucide-react";
 import ListingCard from "./listing-card";
-
-export type Listing = {
-    id: number;
-    address: string;
-    unit_number: string;
-    availability_status: string;
-    floor_area: number;
-    rent_price: number;
-    property_type: string;
-    description: string;
-    amenities: string[];
-    unit_photos: string[];
-};
+import { ListingsData } from "@/types/tenantDashboard.types";
 
 interface ListingsGridProps {
-    listings: Listing[];
-    onViewDetails?: (listing: Listing) => void;
-    onApply?: (listing: Listing) => void;
+    listings: ListingsData[];
+    onViewDetails?: (listing: ListingsData) => void;
+    onApply?: (listing: ListingsData) => void;
 }
 
 const ListingsGrid = ({ listings, onViewDetails, onApply }: ListingsGridProps) => {

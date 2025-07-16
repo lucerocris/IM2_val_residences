@@ -1,22 +1,11 @@
 import ListingsLayout from "@/layout/ListingsLayout";
 import ListingsMain from "@/components/main/ui/Listings/main";
-
-interface Listing {
-    id: number;
-    address: string;
-    unit_number: string;
-    availability_status: string;
-    floor_area: number;
-    rent_price: number;
-    property_type: string;
-    description: string;
-    amenities: string[];
-    unit_photos: string[];
-}
+import { ListingsData } from "@/types/tenantDashboard.types";
 
 interface UserListingsProps {
-    ListingsData: Listing[];
+    ListingsData: ListingsData[];
 }
+
 const UserListings = ({ListingsData}: UserListingsProps) => {
     const title = "Welcome, Cris"
     const subtitle = "Discover your perfect home among our premium rental collection in the heart of Cebu."
@@ -40,7 +29,7 @@ const UserListings = ({ListingsData}: UserListingsProps) => {
             headerLinks={headerLinks}
             headerLinks2 = {headerLinks2}
         >
-            <ListingsMain ListingsData={ListingsData}/>
+            <ListingsMain listingsData={ListingsData}/>
         </ListingsLayout>
     );
 }

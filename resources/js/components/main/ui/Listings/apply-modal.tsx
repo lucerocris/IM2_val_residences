@@ -7,18 +7,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { router, useForm, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import type { PropertyFormData } from '@/types/propertyFormData.types';
-
-interface Listing {
-    id: number;
-    address: string;
-    unit_number: string;
-    rent_price: number;
-}
+import { ListingsData } from '@/types/tenantDashboard.types';
 
 interface ApplyModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    listing: Listing | null;
+    listing: ListingsData | null;
 }
 
 interface User {
