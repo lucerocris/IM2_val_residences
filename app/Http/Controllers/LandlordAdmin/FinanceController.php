@@ -10,7 +10,8 @@ use App\Models\MaintenanceRequest;
 
 class FinanceController extends Controller
 {
-    public function rent() {
+    public function rent()
+    {
         $rentData = RentalBill::getTableData();
         return Inertia::render('landlord/RentCollection', [
             'rentData' => $rentData,
@@ -18,11 +19,11 @@ class FinanceController extends Controller
         ]);
     }
 
-    public function report() {
-        $financialData = $this->getFinancialReportData();
-
-        return Inertia::render('landlord/FinancialReport', $financialData);
-    }
+    //    public function report() {
+    //        $financialData = $this->getFinancialReportData();
+    //
+    //        return Inertia::render('landlord/FinancialReport', $financialData);
+    //    }
 
     private function getFinancialReportData()
     {
@@ -88,4 +89,3 @@ class FinanceController extends Controller
         ];
     }
 }
-?>

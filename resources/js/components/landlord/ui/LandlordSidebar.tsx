@@ -122,10 +122,6 @@ const paymentsNavigation: NavigationType[] = [
                 name: 'Rent Collection',
                 href: '/landlord/payments/rent-collection',
             },
-            {
-                name: 'Financial Reports',
-                href: '/landlord/payments/report',
-            },
         ],
     },
 ];

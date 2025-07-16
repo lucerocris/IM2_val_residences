@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
     type ColumnDef,
     type ColumnFiltersState,
@@ -10,25 +12,20 @@ import {
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
-} from "@tanstack/react-table"
-import { RentCollectionTableViewOptions } from "./rent-collection-table-view-options"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Plus, Search, Filter, FileText, Send } from "lucide-react"
-import { DataTablePagination } from "../../ui/data-table-pagination"
-import { DataTableFacetedFilter } from "../../ui/data-table-faceted-filter"
-import type { RentalBill } from "./rent-collection-columns"
+} from '@tanstack/react-table';
+import { Filter, Plus, Search, Send } from 'lucide-react';
+import { useState } from 'react';
+import { DataTableFacetedFilter } from '../../ui/data-table-faceted-filter';
+import { DataTablePagination } from '../../ui/data-table-pagination';
+import type { RentalBill } from './rent-collection-columns';
+import { RentCollectionTableViewOptions } from './rent-collection-table-view-options';
 
 interface RentCollectionDataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
+    columns: ColumnDef<TData, TValue>[];
+    data: TData[];
 }
 
-export function RentCollectionDataTable<TData, TValue>({
-    columns,
-    data = [],
-}: RentCollectionDataTableProps<TData, TValue>) {
+export function RentCollectionDataTable<TData, TValue>({ columns, data = [] }: RentCollectionDataTableProps<TData, TValue>) {
     // Add comprehensive safety checks
     const safeData = (() => {
         if (!data) {
@@ -51,10 +48,10 @@ export function RentCollectionDataTable<TData, TValue>({
         return data;
     })();
 
-    const [sorting, setSorting] = useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useState({})
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = useState({});
 
     const table = useReactTable({
         data: safeData, // Use the safe data
@@ -73,20 +70,20 @@ export function RentCollectionDataTable<TData, TValue>({
             columnVisibility,
             rowSelection,
         },
-    })
+    });
 
     const paymentStatusOptions = [
-        { label: "Paid", value: "paid" },
-        { label: "Pending", value: "pending" },
-        { label: "Overdue", value: "overdue" },
-        { label: "Partial", value: "partial" },
-    ]
+        { label: 'Paid', value: 'paid' },
+        { label: 'Pending', value: 'pending' },
+        { label: 'Overdue', value: 'overdue' },
+        { label: 'Partial', value: 'partial' },
+    ];
 
-    const hasActiveFilters = table.getState().columnFilters.length > 0
+    const hasActiveFilters = table.getState().columnFilters.length > 0;
 
     const handleSendAllReminders = () => {
         const selectedRows = table.getFilteredSelectedRowModel().rows;
-        const unpaidBills = selectedRows.filter(row => {
+        const unpaidBills = selectedRows.filter((row) => {
             const bill = row.original as RentalBill;
             return bill.payment_status !== 'paid';
         });
@@ -98,21 +95,21 @@ export function RentCollectionDataTable<TData, TValue>({
 
         console.log(`Sending reminders to ${unpaidBills.length} unpaid bills`);
         // Implementation for sending reminders
-    }
+    };
 
     const handleExportData = () => {
-        const dataToExport = table.getFilteredRowModel().rows.map(row => row.original);
+        const dataToExport = table.getFilteredRowModel().rows.map((row) => row.original);
         console.log('Exporting rent collection data:', dataToExport);
         // Implementation for exporting rent collection data
-    }
+    };
 
     const handleGenerateBills = () => {
         console.log('Generate new bills clicked');
         // Implementation for generating new bills
-    }
+    };
 
     // Get count of selected unpaid bills for action buttons
-    const selectedUnpaidCount = table.getFilteredSelectedRowModel().rows.filter(row => {
+    const selectedUnpaidCount = table.getFilteredSelectedRowModel().rows.filter((row) => {
         const bill = row.original as RentalBill;
         return bill.payment_status !== 'paid';
     }).length;
@@ -123,29 +120,21 @@ export function RentCollectionDataTable<TData, TValue>({
             <div className="flex items-center justify-between">
                 <div className="flex flex-1 items-center space-x-2">
                     <div className="relative">
-                        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Search className="absolute top-2.5 left-2 h-4 w-4 text-muted-foreground" />
                         <Input
                             placeholder="Search by tenant or property..."
-                            value={(table.getColumn("tenant_info")?.getFilterValue() as string) ?? ""}
-                            onChange={(event) => table.getColumn("tenant_info")?.setFilterValue(event.target.value)}
-                            className="h-8 w-[150px] lg:w-[300px] pl-8"
+                            value={(table.getColumn('tenant_info')?.getFilterValue() as string) ?? ''}
+                            onChange={(event) => table.getColumn('tenant_info')?.setFilterValue(event.target.value)}
+                            className="h-8 w-[150px] pl-8 lg:w-[300px]"
                         />
                     </div>
 
-                    {table.getColumn("payment_status") && (
-                        <DataTableFacetedFilter
-                            column={table.getColumn("payment_status")}
-                            title="Payment Status"
-                            options={paymentStatusOptions}
-                        />
+                    {table.getColumn('payment_status') && (
+                        <DataTableFacetedFilter column={table.getColumn('payment_status')} title="Payment Status" options={paymentStatusOptions} />
                     )}
 
                     {hasActiveFilters && (
-                        <Button
-                            variant="ghost"
-                            onClick={() => table.resetColumnFilters()}
-                            className="h-8 px-2 lg:px-3"
-                        >
+                        <Button variant="ghost" onClick={() => table.resetColumnFilters()} className="h-8 px-2 lg:px-3">
                             Reset
                             <Filter className="ml-2 h-4 w-4" />
                         </Button>
@@ -154,21 +143,15 @@ export function RentCollectionDataTable<TData, TValue>({
 
                 <div className="flex items-center space-x-2">
                     {selectedUnpaidCount > 0 && (
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8"
-                            onClick={handleSendAllReminders}
-                        >
+                        <Button variant="outline" size="sm" className="h-8" onClick={handleSendAllReminders}>
                             <Send className="mr-2 h-4 w-4" />
                             Send Reminders ({selectedUnpaidCount})
                         </Button>
                     )}
-
                 </div>
 
-                <div className = "flex items-center space-x-2">
-                    <RentCollectionTableViewOptions table = {table} />
+                <div className="flex items-center space-x-2">
+                    <RentCollectionTableViewOptions table={table} />
                 </div>
             </div>
 
@@ -181,12 +164,9 @@ export function RentCollectionDataTable<TData, TValue>({
                                 {headerGroup.headers.map((header) => {
                                     return (
                                         <TableHead key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(header.column.columnDef.header, header.getContext())
-                                            }
+                                            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                                         </TableHead>
-                                    )
+                                    );
                                 })}
                             </TableRow>
                         ))}
@@ -194,15 +174,9 @@ export function RentCollectionDataTable<TData, TValue>({
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                    className="hover:bg-muted/50"
-                                >
+                                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'} className="hover:bg-muted/50">
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </TableCell>
+                                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                                     ))}
                                 </TableRow>
                             ))
@@ -212,16 +186,11 @@ export function RentCollectionDataTable<TData, TValue>({
                                     <div className="flex flex-col items-center justify-center space-y-2">
                                         <div className="text-muted-foreground">
                                             {safeData.length === 0
-                                                ? "No rental bills found. Generate bills to get started."
-                                                : "No bills match your current filters."
-                                            }
+                                                ? 'No rental bills found. Generate bills to get started.'
+                                                : 'No bills match your current filters.'}
                                         </div>
                                         {safeData.length === 0 && (
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={handleGenerateBills}
-                                            >
+                                            <Button variant="outline" size="sm" onClick={handleGenerateBills}>
                                                 <Plus className="mr-2 h-4 w-4" />
                                                 Generate bills
                                             </Button>
@@ -237,5 +206,5 @@ export function RentCollectionDataTable<TData, TValue>({
             {/* Pagination */}
             <DataTablePagination table={table} />
         </div>
-    )
+    );
 }
