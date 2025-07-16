@@ -30,7 +30,7 @@ const landing = () => {
             ]}
             actions = { headerActions }
             />
-            <MainLayout>
+            <MainLayout heroTitle = "Contact Us" heroSubtitle = "Get in Touch with Val Residences">
                 <div className = "pt-[4.3rem] pb-[4.3rem]">
                     <div className = "p-[4.3rem] flex items-center justify-center">
                         <div className = "w-[80%] max-w-[1000px] p-[20px] h-auto bg-[#e8e8e8] flex">

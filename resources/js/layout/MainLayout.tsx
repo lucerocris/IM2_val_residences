@@ -18,15 +18,17 @@ const slides = [
 ];
 
 interface MainLayoutProps {
+    heroTitle: string;
+    heroSubtitle: string;
     children: ReactNode;
 }
 
-const MainLayout = ({ children }:MainLayoutProps) => {
+const MainLayout = ({ children, heroTitle, heroSubtitle }:MainLayoutProps) => {
     useFlashMessages();
     return (
         <div className = "overflow-x-hidden">
             <Toaster duration={4000}/>
-            <Hero title = "Val Residences" subtitle = "description" />
+            <Hero title = {heroTitle} subtitle = {heroSubtitle} />
             {children}
             <Footer />
         </div>
