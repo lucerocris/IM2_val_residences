@@ -179,7 +179,10 @@ class RentalBill extends Model
     {
         return DB::table('rental_bills')->where('lease_id', $lease_id)->where(function ($query) {
             $query->where('payment_status', 'pending')->orWhere('payment_status', 'overdue');
-        })->select('id', 'lease_id', 'billing_date', 'rent_amount', 'due_date', 'paid_date', 'amount_paid', 'payment_status')->get();
+        })
+            ->select('id', 'lease_id', 'billing_date', DB::raw('SUM(rent_amount) as rent_amount'), 'due_date', 'paid_date', DB::raw('SUM(amount_paid) AS amount_paid'), 'payment_status')
+            ->groupBy('lease_id')
+            ->get();
     }
 }
 

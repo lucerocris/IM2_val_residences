@@ -37,6 +37,7 @@ class TenantController extends Controller
 
 
         return Inertia::render('tenant/Landing', [
+
             'maintenanceRequests' => $maintenanceData,
             'tenantData' => $tenantData,
             'userInfo' => $userInfo,
@@ -66,10 +67,12 @@ class TenantController extends Controller
 
     public function listings()
     {
-        $ListingsData = RentalUnit::getListingsData();
-
+        $ListingsData = RentalUnit::getAvailableUnits();
+        $userInfo = Tenant::getSelfInfo(Auth::id());
         return Inertia::render('tenant/Listings', [
             'ListingsData' => $ListingsData,
+            'userInfo' => $userInfo,
+
         ]);
     }
 

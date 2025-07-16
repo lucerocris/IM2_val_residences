@@ -127,10 +127,6 @@ const PaymentModal = ({leaseData, currentBill }:ButtonSectionProps) => {
                     <InputLabel label = "Amount" labelText="Amount" input = {<Input id = {"Amount"} type = "number" value = {currentBill.rent_amount} readOnly className = "bg-gray-50"/>} />
                 </div>
 
-                <div className = "space-y-2">
-                    <InputLabel label = "refNo" labelText="Reference Number" input = {<Input id = "refNo" placeholder = "Enter reference number" value = {referenceNumber} onChange = {(e) => setReferenceNumber(e.target.value)} />} />
-                </div>
-
                 <Button
                     className = "w-full"
                     disabled = {!paymentMethod || !referenceNumber.trim()}

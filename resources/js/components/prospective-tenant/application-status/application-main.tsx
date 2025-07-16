@@ -6,76 +6,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import NoApplication from "./no-application";
 import TitleCard from "./title-card";
 import { Button } from "@/components/ui/button";
+import { ApplicationData, UserApplicationProps } from "@/types/application.types";
 
-interface RentalApplication {
-  id: number
-  unit: {
-    id: number
-    address: string
-    unit_number?: string
-    rent_price: number
-    property_type: "duplex" | "triplex"
-    floor_area?: number
-  }
-  application_date: string
-  preferred_move_in_date?: string
-  application_status: "pending" | "approved" | "rejected" | "withdrawn"
-  additional_notes?: string
-  reviewed_date?: string
-  review_notes?: string
-}
-
-const mockApplications: RentalApplication[] = [
-  {
-    id: 1,
-    unit: {
-      id: 101,
-      address: "123 Oak Street",
-      unit_number: "A",
-      rent_price: 1200,
-      property_type: "duplex",
-      floor_area: 850,
-    },
-    application_date: "2024-01-15",
-    preferred_move_in_date: "2024-02-01",
-    application_status: "pending",
-    additional_notes: "Looking for a quiet place to work from home.",
-  },
-  {
-    id: 2,
-    unit: {
-      id: 102,
-      address: "456 Pine Avenue",
-      unit_number: "B",
-      rent_price: 1500,
-      property_type: "triplex",
-      floor_area: 1200,
-    },
-    application_date: "2024-01-10",
-    preferred_move_in_date: "2024-01-25",
-    application_status: "approved",
-    reviewed_date: "2024-01-18",
-    review_notes: "Excellent references and stable income. Approved for lease.",
-  },
-  {
-    id: 3,
-    unit: {
-      id: 103,
-      address: "789 Maple Drive",
-      rent_price: 1000,
-      property_type: "duplex",
-      floor_area: 750,
-    },
-    application_date: "2024-01-05",
-    preferred_move_in_date: "2024-01-20",
-    application_status: "rejected",
-    reviewed_date: "2024-01-12",
-    review_notes: "Income requirements not met for this property.",
-  },
-]
-
-const ApplicationMain = () => {
-    const [applications, setApplications] = useState<RentalApplication[]>(mockApplications)
+const ApplicationMain = ({ applicationData }:UserApplicationProps) => {
 
     const getStatusIcon = (status: string) => {
         switch(status) {
@@ -115,7 +48,9 @@ const ApplicationMain = () => {
         })
     }
 
-    if (applications.length === 0) {
+    console.log(applicationData);
+
+    if (!applicationData || applicationData.length === 0) {
         return (
             <>
                <NoApplication />
@@ -129,8 +64,8 @@ const ApplicationMain = () => {
                 <TitleCard />
 
                 <div className = "space-y-4">
-                    {applications.map((application) => (
-                        <Card key ={application.id} className = "w-full">
+                    {applicationData.map((application) => (
+                        <Card key ={application.application_id} className = "w-full">
 
 
                             {/* HEAD OF CARD --START */}
@@ -141,9 +76,9 @@ const ApplicationMain = () => {
                                         {/* Address - START */}
                                         <CardTitle className = "text-lg flex items-center gap-2">
                                             <MapPin className = "size-4 text-gray-500" />
-                                            {application.unit.address}
-                                            {application.unit.unit_number && (
-                                                <span className = "text-sm font-normal text-gray-500">Unit {application.unit.unit_number}</span>
+                                            {application.address}
+                                            {application.unit_number && (
+                                                <span className = "text-sm font-normal text-gray-500">Unit {application.unit_number}</span>
                                             )}
                                         </CardTitle>
                                         {/* Address - END */}
@@ -152,12 +87,12 @@ const ApplicationMain = () => {
                                         <CardDescription className = "flex items-center gap-4">
                                             <span className = "flex items-center gap-1">
                                                 <DollarSign className = "size-3"/>
-                                                ${application.unit.rent_price}/month
+                                                ${application.rent_price}/month
                                             </span>
                                             <span className = "capitalize">
-                                                {application.unit.property_type}
+                                                {application.property_type}
                                             </span>
-                                            {application.unit.floor_area && <span>{application.unit.floor_area} sq ft</span>}
+                                            {application.floor_area && <span>{application.floor_area} sq ft</span>}
                                         </CardDescription>
                                         {/* Unit Info - END */}
                                     </div>
@@ -193,16 +128,36 @@ const ApplicationMain = () => {
                                 </div>
                                 {/* DATES - END */}
 
+                                {/* ADDITIONAL NOTES - START */}
+                                {application.additional_notes && (
+                                    <div className="mb-4">
+                                        <p className="text-sm text-gray-600">Additional Notes</p>
+                                        <p className="text-sm">{application.additional_notes}</p>
+                                    </div>
+                                )}
+                                {/* ADDITIONAL NOTES - END */}
+
                                 {/* APPROVED STATUS ALERT - START */}
                                 {application.application_status === "approved" && (
                                     <Alert className = "mb-4 border-green-200 bg-green-50">
                                         <CheckCircle className = "size-4 text-green-600"/>
                                         <AlertDescription className = "text-green-800">
-                                            Congratulations! Your applicaton has been approved.
+                                            Congratulations! Your application has been approved.
                                         </AlertDescription>
                                     </Alert>
                                 )}
                                 {/* APPROVED STATUS ALERT - END */}
+
+                                {/* REJECTED STATUS ALERT - START */}
+                                {application.application_status === "rejected" && application.review_notes && (
+                                    <Alert className = "mb-4 border-red-200 bg-red-50">
+                                        <XCircle className = "size-4 text-red-600"/>
+                                        <AlertDescription className = "text-red-800">
+                                            Your application was rejected. Reason: {application.review_notes}
+                                        </AlertDescription>
+                                    </Alert>
+                                )}
+                                {/* REJECTED STATUS ALERT - END */}
 
                                 {application.application_status === "pending" && (
                                     <Button

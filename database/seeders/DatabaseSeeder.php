@@ -587,7 +587,7 @@ class DatabaseSeeder extends Seeder
                 $randomUnit = $availableUnits->random();
 
                 RentalApplication::factory()->create([
-                    'prospective_tenant_id' => $prospect->id,
+                    'prospective_tenant_id' => 3,
                     'unit_id' => $randomUnit->id,
                 ]);
             }
