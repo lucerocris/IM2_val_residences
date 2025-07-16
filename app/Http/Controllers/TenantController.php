@@ -17,9 +17,7 @@ class TenantController extends Controller
 {
 
 
-    public function __construct(private TenantOnboardingService $onboardingService)
-    {
-    }
+    public function __construct(private TenantOnboardingService $onboardingService) {}
 
     public function index()
     {
@@ -44,6 +42,7 @@ class TenantController extends Controller
             'userInfo' => $userInfo,
             'leaseData' => $leaseInfo,
             'rentalBill' => $rentalBill,
+            'leaseID' => $leaseID,
             'tenantID' => $tenantID,
             'unitID' => $unitID,
             'onboardingLease' => $pendingLease ? [
@@ -61,7 +60,8 @@ class TenantController extends Controller
         ]);
     }
 
-    public function storeMaintenance(RequestMaintenanceRequest $request) {
+    public function storeMaintenance(RequestMaintenanceRequest $request)
+    {
         MaintenanceRequest::create($request->validated());
         return redirect()->route('tenant.dashboard')->with('success', 'Request added successfully');
     }
@@ -77,18 +77,58 @@ class TenantController extends Controller
         ]);
     }
 
-    public function gcash()
+    public function gcash(Request $request)
     {
-        return Inertia::render('tenant/payment/Gcash');
+        $amount = $request->query('amount', 0); // Default to 0 if no amount provided
+        $leaseID = $request->query('leaseid', 0);
+
+        return Inertia::render('tenant/payment/Gcash', [
+            'paymentData' => [
+                'amount' => $amount,
+                'leaseid' => $leaseID,
+            ]
+        ]);
     }
 
-    public function paymaya()
+    public function bank(Request $request)
     {
-        return Inertia::render('tenant/payment/PayMaya');
+        $amount = $request->query('amount', 0);
+        $leaseID = $request->query('leaseid', 0);
+        return Inertia::render('tenant/payment/BankTransfer', [
+            'paymentData' => [
+                'amount' => $amount,
+                'leaseid' => $leaseID,
+            ]
+        ]);
     }
 
-    public function bank()
+    public function storeGcashPayments(Request $request)
     {
-        return Inertia::render('tenant/payment/BankTransfer');
+        $validated = $request->validate([
+            'lease_id' => 'required|numeric|exists:leases,id',
+            'reference_number' => 'required|string',
+            'amount_paid' => 'required|numeric|min:0',
+            'proof_of_payment' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'paid_date' => 'required|date',
+            'payment_status' => 'required|string|in:paid,overdue,partial,pending'
+        ]);
+
+        $lease = Lease::findOrFail($validated['lease_id']);
+
+        $proofOfPaymentPath = $request->file('proof_of_payment')->store('proof_of_payment', 'public');
+
+        $payment = RentalBill::create([
+            'lease_id' => $validated['lease_id'],
+            'billing_date' => now()->toDateString(),
+            'rent_amount' => $lease->monthly_rent,
+            'proof_of_payment_path' => $proofOfPaymentPath,
+            'reference_number' => $validated['reference_number'],
+            'due_date' => now()->addDays(30)->toDateString(),
+            'paid_date' => $validated['paid_date'],
+            'amount_paid' => $validated['amount_paid'],
+            'payment_status' => $validated['payment_status'],
+        ]);
+
+        return redirect()->route('tenant.dashboard')->with('success', 'Payment sent successfully');
     }
 }

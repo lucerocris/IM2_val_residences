@@ -24,7 +24,6 @@ class RentalBillFactory extends Factory
             'billing_date' => $billingDate,
             'rent_amount' => $rentAmount,
             'due_date' => $dueDate,
-            'rent_due' => fake()->randomFloat(2, 5000, 20000 ),
             'paid_date' => fake()->optional()->dateTimeBetween($billingDate, 'now'),
             'amount_paid' => fake()->randomElement([0, $rentAmount * 0.5, $rentAmount]),
             'payment_status' => fake()->randomElement(['pending', 'paid', 'overdue', 'partial']),

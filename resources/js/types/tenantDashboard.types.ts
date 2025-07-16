@@ -83,6 +83,7 @@ export interface ListingsData {
 export interface TenantDashboardProps {
     tenantID: number;
     unitID: number;
+    leaseID: number;
     tenantData: Tenant;
     leaseData: Lease[];
     rentalBill: RentalBill[];
