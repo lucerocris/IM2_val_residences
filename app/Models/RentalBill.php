@@ -196,6 +196,13 @@ class RentalBill extends Model
             ->groupBy('lease_id')
             ->get();
     }
+
+    public static function getBills(int $lease_id) {
+        return DB::table('rental_bills')->where('lease_id', $lease_id)->where(function ($query) {
+            $query->where('payment_status', 'pending')
+                ->orWhere('payment_status', 'overdue');
+        })->select('id', 'lease_id', 'billing_date', 'rent_amount', 'due_date', 'payment_status')->get()->toArray();
+    }
     public static function getOverdue()
     {
         return DB::table('rental_bills')
