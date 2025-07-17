@@ -351,12 +351,10 @@ export const propertyColumns: ColumnDef<Unit>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(property.id)}>Copy property ID</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => router.visit(`/landlord/properties/${property.id}/edit`)}>
                             <Edit className="mr-2 h-4 w-4" /> Edit property
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(property.id)}>
                             <Trash2 className="mr-2 h-4 w-4" /> Delete property
                         </DropdownMenuItem>

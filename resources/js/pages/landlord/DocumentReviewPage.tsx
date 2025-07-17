@@ -59,9 +59,9 @@ export default function DocumentReviewPage({ pendingReviews }: Props) {
     };
 
     const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-MY', {
+        return new Intl.NumberFormat('en-PH', {
             style: 'currency',
-            currency: 'MYR'
+            currency: 'PHP'
         }).format(amount);
     };
 
@@ -139,17 +139,19 @@ export default function DocumentReviewPage({ pendingReviews }: Props) {
                                         <div className="text-center">
                                             <div className="text-sm text-gray-600">Monthly Rent</div>
                                             <div
-                                                className="font-semibold text-gray-900">{formatCurrency(review.monthly_rent)}</div>
+                                                className="font-semibold text-gray-900">{formatCurrency(Number(review.monthly_rent))}
+                                            </div>
                                         </div>
                                         <div className="text-center">
                                             <div className="text-sm text-gray-600">Security Deposit</div>
                                             <div
-                                                className="font-semibold text-gray-900">{formatCurrency(review.deposit_amount)}</div>
+                                                className="font-semibold text-gray-900">{formatCurrency(Number(review.deposit_amount))}</div>
                                         </div>
                                         <div className="text-center">
                                             <div className="text-sm text-gray-600">Onboarding Fees</div>
                                             <div
-                                                className="font-semibold text-gray-900">{formatCurrency(review.onboarding_fees_amount)}</div>
+                                                className="font-semibold text-gray-900">{formatCurrency(Number(review.onboarding_fees_amount))
+                                            }</div>
                                         </div>
                                     </div>
 

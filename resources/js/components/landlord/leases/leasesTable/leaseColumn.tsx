@@ -22,7 +22,7 @@ export type Lease = {
     monthly_rent: number
     deposit_amount: number
     lease_term: number
-    lease_status: 'active' | 'expired' | 'terminated' | 'pending'
+    lease_status: 'active' | 'expired' | 'terminated' | 'pending' | 'for_review';
     terms_and_conditions: string | null
     terminated_date: string | null
     termination_reason: string | null
@@ -80,8 +80,16 @@ const leaseStatusConfig = {
         color: '#dc2626',
         borderColor: '#fecaca',
         label: 'Terminated'
+    },
+    'for_review': {
+        variant: 'secondary' as const,
+        backgroundColor: '#e0f2fe',
+        color: '#0369a1',
+        borderColor: '#bae6fd',
+        label: 'For Review'
     }
 };
+
 
 const propertyTypeConfig = {
     'duplex': {
@@ -308,26 +316,15 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(lease.id)}>
-                            Copy lease ID
-                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Eye className="mr-2 h-4 w-4" /> View lease details
-                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={()=> router.visit(`/landlord/leases/${lease.id}/${lease.units.id}/${lease.tenant.id}/edit`)}>
                             <Edit className="mr-2 h-4 w-4" /> Edit lease
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        {lease.lease_status === 'pending' && (
-                            <>
-                                <DropdownMenuItem className="text-green-600">
-                                    Approve lease
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="text-red-600">
-                                    Reject lease
-                                </DropdownMenuItem>
-                            </>
+                        {lease.lease_status === 'for_review' && (
+                            <DropdownMenuItem onClick={() => router.visit(`/landlord/document-review/${lease.id}`)}>
+                                <Trash2 className="mr-2 h-4 w-4" /> Review Documents
+                            </DropdownMenuItem>
                         )}
                         {lease.lease_status === 'active' && (
                             <DropdownMenuItem variant='destructive' className="text-red-600">
