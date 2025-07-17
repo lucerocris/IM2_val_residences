@@ -226,12 +226,6 @@ class Lease extends Model
                     'lease_term' => $lease->lease_term,
                     'lease_status' => $lease->lease_status,
                     'units' => $lease->units ? [
-                    'end_date' => $lease->end_date,
-                    'monthly_rent' => $lease->monthly_rent,
-                    'deposit_amount' => $lease->deposit_amount,
-                    'lease_term' => $lease->lease_term,
-                    'lease_status' => $lease->lease_status,
-                    'units' => $lease->units ? [
                         'id' => $lease->units->id,
                         'landlord_id' => $lease->units->landlord_id,
                         'address' => $lease->units->address,
