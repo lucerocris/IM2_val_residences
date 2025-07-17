@@ -8,6 +8,8 @@ interface currentBillProps {
 }
 
 const CurrentBill = ({ currentBill }: currentBillProps) => {
+
+    console.log(currentBill);
     return (
         <>
             <Card>
