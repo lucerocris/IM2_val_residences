@@ -14,21 +14,39 @@ use App\Http\Controllers\LandlordAdmin\LeaseController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\RequestMaintenanceController;
+use App\Http\Controllers\Auth\PasswordResetController;
+
 use App\Http\Controllers\TenantOnboardingController;
 use App\Http\Controllers\LandlordAdmin\DocumentReviewController;
+
 
 Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
 Route::get('/contact', [MainSection::class, 'contact']);
 Route::post('/contact', [MainSection::class, 'submitContactForm'])->name('contact.submit');
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'edit'])
+    ->name('password.reset');
+Route::post('/reset-password', [PasswordResetController::class, 'update'])
+    ->name('password.update');
+
 
 
 //Guest Routes
 Route::middleware('guest')->group(function () {
+    Route::get('/', [MainSection::class, 'home']);
+    Route::get('/about', [MainSection::class, 'about']);
+    Route::get('/contact', [MainSection::class, 'contact']);
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'store']);
+    Route::get('/forgot-password', [PasswordResetController::class, 'create'])
+        ->name('password.request');
+
+    Route::post('/forgot-password', [PasswordResetController::class, 'store'])
+        ->name('password.email');
+
+
 });
 
 Route::middleware('auth')->group(function () {
@@ -53,8 +71,11 @@ Route::middleware('auth', 'user.type:tenant')->group(function () {
 
 // Tenant Payment Upload
     Route::get('/tenant/payments/gcash', [TenantController::class, 'gcash']);
+    Route::post('/tenant/payments/gcash', [TenantController::class, 'storeGcashPayments']);
+    Route::post('/tenant/payments/bank-transfer',[TenantController::class, 'storeGcashPayments']);
     Route::get('/tenant/payments/paymaya', [TenantController::class, 'paymaya']);
     Route::get('/tenant/payments/bankTransfer', [TenantController::class, 'bank']);
+
 });
 
 //Prospective Routes
@@ -82,6 +103,7 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
     Route::get('/landlord/tenants', [TenantLandlordController::class, 'index'])->name('tenants.index');
     Route::get('/landlord/tenants/create', [TenantLandlordController::class, 'create']);
     Route::get('/landlord/tenants/{id}/edit', [TenantLandlordController::class, 'edit']);
+    Route::post('/landlord/tenants', [TenantLandlordController::class, 'store']);
     Route::put('/landlord/tenants/{id}', [TenantLandlordController::class, 'update']);
     Route::delete('/landlord/tenants/{id}', [TenantLandlordController::class, 'destroy'])->name('tenants.destroy');
 

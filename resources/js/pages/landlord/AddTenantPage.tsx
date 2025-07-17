@@ -1,4 +1,3 @@
-import AccountSecurityCard from '@/components/landlord/addTenant/AccountSecurityCard';
 import BasicInformationCard from '@/components/landlord/addTenant/BasicInformationCard';
 import EmploymentInfoCard from '@/components/landlord/addTenant/EmploymentInfoCard';
 import AddTenantFormAction from '@/components/landlord/addTenant/addTenantFormAction';

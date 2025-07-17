@@ -10,6 +10,7 @@ use App\Models\RentalBill;
 use App\Models\RentalUnit;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Inertia\Inertia;
 
 class LeaseController extends Controller
@@ -44,11 +45,29 @@ class LeaseController extends Controller
         ]);
     }
 
-    public function store(StoreLeaseRequest $request) {
+    public function store(StoreLeaseRequest $request)
+    {
+        // Create the lease
         Lease::create($request->validated());
-        return redirect()->route('leases.index')->with('success', 'Lease created successfully.');
-    }
 
+        $tenantId = $request->input('tenant_id');
+        $tenant = Tenant::find($tenantId); // or Tenant::find($tenantId)
+
+        if ($tenant && $tenant->email) {
+            $email = $tenant->email;
+
+            $status = Password::sendResetLink(['email' => $email]);
+
+            if ($status == Password::RESET_LINK_SENT) {
+                return redirect()->route('leases.index')->with('success', 'Tenant account and Lease created successfully! A password setup email has been sent to ' . $tenant->email);
+            } else {
+                return redirect()->route('leases.index')->with('warning', 'Tenant account created successfully, but the password setup email could not be sent. You may need to resend it manually.');
+            }
+        } else {
+            // Tenant not found or missing email
+            return redirect()->route('leases.index')->with('success', 'Lease created successfully, but tenant not found or tenant has no email to send a password reset link.');
+        }
+    }
     public function edit($lease_id, $unit_id, $tenant_id)
     {
         $lease = Lease::findOrFail($lease_id);
