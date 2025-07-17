@@ -124,18 +124,29 @@ const ContactForm = () => {
         message: "",
     })
 
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
+        setIsSubmitting(true)
         
-        console.log("Form submitted:", formData)
-        
-        setFormData({ name: "", email: "", phone: "", message: "" })
+        // Submit to Laravel backend
+        router.post('/contact', formData, {
+            onSuccess: () => {
+                setFormData({ name: "", email: "", phone: "", message: "" })
+                setIsSubmitting(false)
+            },
+            onError: (errors) => {
+                console.log('Form errors:', errors)
+                setIsSubmitting(false)
+            }
+        })
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData((prev) => ({
-        ...prev,
-        [e.target.name]: e.target.value,
+            ...prev,
+            [e.target.name]: e.target.value,
         }))
     }
 
@@ -162,53 +173,61 @@ const ContactForm = () => {
                                     placeholder = "Enter your name" 
                                     className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" 
                                     required 
+                                    disabled={isSubmitting}
                                 />
                             </div>
 
                             <div className = "space-y-2">
                                 <Label htmlFor = "phone" className = "text-slate-900 font-medium">Phone</Label>
                                 <Input 
-                                id = "phone" 
-                                name = "phone"
-                                type = "tel"
-                                value = {formData.phone}
-                                onChange = {handleChange}
-                                placeholder = "Enter your phone number" 
-                                className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" 
+                                    id = "phone" 
+                                    name = "phone"
+                                    type = "tel"
+                                    value = {formData.phone}
+                                    onChange = {handleChange}
+                                    placeholder = "Enter your phone number" 
+                                    className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" 
+                                    disabled={isSubmitting}
                                 />
                             </div>
 
                             <div className = "space-y-2">
-                                <Label htmlFor = "email" className = "text-slate-900 font-medium">Email</Label>
+                                <Label htmlFor = "email" className = "text-slate-900 font-medium">Email *</Label>
                                 <Input 
-                                id = "email"
-                                name = "email"
-                                type = "email"
-                                value = {formData.email}
-                                onChange = {handleChange} 
-                                placeholder = "Enter your email" 
-                                className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" 
-                                required
+                                    id = "email"
+                                    name = "email"
+                                    type = "email"
+                                    value = {formData.email}
+                                    onChange = {handleChange} 
+                                    placeholder = "Enter your email" 
+                                    className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" 
+                                    required
+                                    disabled={isSubmitting}
                                 />
                             </div>
 
                             <div className = "space-y-2">
                                 <Label htmlFor = "message" className = "text-slate-900 font-medium">Message *</Label>
                                 <Textarea 
-                                id = "message"
-                                name = "message"
-                                value = {formData.message}
-                                onChange = {handleChange}
-                                placeholder = "Tell us about your interest in Val Residences..." 
-                                rows = {6}
-                                className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500 resize-none"
-                                required
+                                    id = "message"
+                                    name = "message"
+                                    value = {formData.message}
+                                    onChange = {handleChange}
+                                    placeholder = "Tell us about your interest in Val Residences..." 
+                                    rows = {6}
+                                    className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500 resize-none"
+                                    required
+                                    disabled={isSubmitting}
                                 />
                             </div>
 
-                            <Button type = "submit" className = "w-full bg-gradient-to-r from-slate-500 to-neutral-500 hover:from-slate-600 hover:to-neutral-600 text-white font-semibold py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                            <Button 
+                                type = "submit" 
+                                className = "w-full bg-gradient-to-r from-slate-500 to-neutral-500 hover:from-slate-600 hover:to-neutral-600 text-white font-semibold py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                                disabled={isSubmitting}
+                            >
                                 <Send className = "size-5 mr-2" />
-                                Send Message
+                                {isSubmitting ? 'Sending...' : 'Send Message'}
                             </Button>
 
                             <p className = "text-sm text-slate-600 text-center">We'll get back to you within 24 hours during business days.</p>

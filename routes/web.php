@@ -20,6 +20,7 @@ use App\Http\Controllers\LandlordAdmin\DocumentReviewController;
 Route::get('/', [MainSection::class, 'home']);
 Route::get('/about', [MainSection::class, 'about']);
 Route::get('/contact', [MainSection::class, 'contact']);
+Route::post('/contact', [MainSection::class, 'submitContactForm'])->name('contact.submit');
 
 
 //Guest Routes
