@@ -120,11 +120,12 @@ export default function DocumentReviewDetail({ lease }: Props) {
     }
 
     const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat("en-MY", {
-            style: "currency",
-            currency: "MYR",
-        }).format(amount)
-    }
+        return new Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        }).format(amount);
+    };
+
 
     const getDocumentLabel = (type: string) => {
         switch (type) {

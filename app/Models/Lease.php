@@ -104,7 +104,7 @@ class Lease extends Model
         return ($this->attributes['monthly_rent'] ?? 0) * 3;
     }
 
-    // Simple accessor: required_fees_amount = deposit_amount
+
     public function getRequiredFeesAmountAttribute($value)
     {
         return $this->deposit_amount;
@@ -177,9 +177,10 @@ class Lease extends Model
     {
         if ($this->isOnboardingComplete() && $this->lease_status === 'pending') {
             $this->update([
-                'lease_status' => 'pending',
+                'lease_status' => 'for_review',
                 'landlord_review_status' => 'pending',
                 'documents_submitted_for_review' => true,
+                'documents_submitted_at' => now(),
             ]);
             return true;
         }
@@ -264,7 +265,7 @@ class Lease extends Model
  */
     public function approveAndActivateLease(int $landlordId, string $notes = null): bool
     {
-        if ($this->isOnboardingComplete() && $this->lease_status === 'pending') {
+        if ($this->isOnboardingComplete() && $this->lease_status === 'for_review') {
             $this->update([
                 'lease_status' => 'active',
                 'landlord_review_status' => 'approved',

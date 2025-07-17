@@ -75,7 +75,7 @@ class DocumentReviewController extends Controller
         $success = $lease->approveAndActivateLease(Auth::id(), $request->notes);
 
         if ($success) {
-            return back()->with('success', 'Documents approved and lease activated successfully!');
+            return redirect('leases.index')->with('success', 'Documents approved and lease activated successfully!');
         } else {
             return back()->with('error', 'Failed to activate lease. Please check the documents again.');
         }
