@@ -19,7 +19,11 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\TenantOnboardingController;
 use App\Http\Controllers\LandlordAdmin\DocumentReviewController;
 
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'edit'])
+    ->name('password.reset');
 
+Route::post('/reset-password', [PasswordResetController::class, 'update'])
+    ->name('password.update');
 
 
 //Guest Routes
@@ -37,11 +41,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/forgot-password', [PasswordResetController::class, 'store'])
         ->name('password.email');
 
-    Route::get('/reset-password/{token}', [PasswordResetController::class, 'edit'])
-        ->name('password.reset');
 
-    Route::post('/reset-password', [PasswordResetController::class, 'update'])
-        ->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
@@ -98,6 +98,7 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
     Route::get('/landlord/tenants', [TenantLandlordController::class, 'index'])->name('tenants.index');
     Route::get('/landlord/tenants/create', [TenantLandlordController::class, 'create']);
     Route::get('/landlord/tenants/{id}/edit', [TenantLandlordController::class, 'edit']);
+    Route::post('/landlord/tenants', [TenantLandlordController::class, 'store']);
     Route::put('/landlord/tenants/{id}', [TenantLandlordController::class, 'update']);
     Route::delete('/landlord/tenants/{id}', [TenantLandlordController::class, 'destroy'])->name('tenants.destroy');
 

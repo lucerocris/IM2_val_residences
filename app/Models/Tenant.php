@@ -4,8 +4,15 @@ namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-class Tenant extends User
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use App\Notifications\TenantResetPasswordNotification;
+class Tenant extends User implements CanResetPassword
 {
+
+    use CanResetPasswordTrait;
+
     protected static $singleTableType = 'tenant';
 
     protected static function booted() {
@@ -18,6 +25,9 @@ class Tenant extends User
         });
 
     }
+
+
+
 
     // Add Tenant-specific methods and relationships here
     public function leases()
