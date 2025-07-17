@@ -2,8 +2,6 @@ import MainLayout from '@/layout/MainLayout'
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Header from '@/components/main/ui/Header';
-import LoginModal from '@/components/main/ui/LoginModal';
-import SignUpModal from '@/components/main/ui/SignUpModal';
 import { MapPin, Phone, Mail, Send, MessageCircle, Clock, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
@@ -151,28 +149,69 @@ const ContactForm = () => {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <form className = "space-y-6">
+                    <form className = "space-y-6" onSubmit = {handleSubmit}>
                         <div className = "grid md:grid-cols-1 gap-4">
 
                             <div className = "space-y-2">
                                 <Label htmlFor = "name" className = "text-slate-900 font-medium">Name *</Label>
-                                <Input id = "name" name = "name" placeholder = "Enter your name" className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" required />
+                                <Input 
+                                    id = "name" 
+                                    name = "name" 
+                                    value = {formData.name}
+                                    onChange = {handleChange}
+                                    placeholder = "Enter your name" 
+                                    className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" 
+                                    required 
+                                />
                             </div>
 
                             <div className = "space-y-2">
-                                <Label>Phone</Label>
-                                <Input placeholder = "Enter your phone number" className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" />
+                                <Label htmlFor = "phone" className = "text-slate-900 font-medium">Phone</Label>
+                                <Input 
+                                id = "phone" 
+                                name = "phone"
+                                type = "tel"
+                                value = {formData.phone}
+                                onChange = {handleChange}
+                                placeholder = "Enter your phone number" 
+                                className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" 
+                                />
                             </div>
 
                             <div className = "space-y-2">
-                                <Label>Email</Label>
-                                <Input type = "email" placeholder = "Enter your email" />
+                                <Label htmlFor = "email" className = "text-slate-900 font-medium">Email</Label>
+                                <Input 
+                                id = "email"
+                                name = "email"
+                                type = "email"
+                                value = {formData.email}
+                                onChange = {handleChange} 
+                                placeholder = "Enter your email" 
+                                className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500" 
+                                required
+                                />
                             </div>
 
                             <div className = "space-y-2">
-                                <Label>Message *</Label>
-                                <Textarea placeholder = "Tell us about your interest in Val Residences..." rows = {6}/>
+                                <Label htmlFor = "message" className = "text-slate-900 font-medium">Message *</Label>
+                                <Textarea 
+                                id = "message"
+                                name = "message"
+                                value = {formData.message}
+                                onChange = {handleChange}
+                                placeholder = "Tell us about your interest in Val Residences..." 
+                                rows = {6}
+                                className = "border-slate-300 focus:border-slate-500 focus:ring-slate-500 resize-none"
+                                required
+                                />
                             </div>
+
+                            <Button type = "submit" className = "w-full bg-gradient-to-r from-slate-500 to-neutral-500 hover:from-slate-600 hover:to-neutral-600 text-white font-semibold py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                                <Send className = "size-5 mr-2" />
+                                Send Message
+                            </Button>
+
+                            <p className = "text-sm text-slate-600 text-center">We'll get back to you within 24 hours during business days.</p>
                         </div>
                     </form>
                 </CardContent>
