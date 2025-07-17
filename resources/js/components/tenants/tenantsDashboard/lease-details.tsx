@@ -1,130 +1,141 @@
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Lease } from '@/types/tenantDashboard.types';
-import LeaseDetailsInfo from './lease-details-info';
-
-interface LeaseData {
-    id: number;
-    tenant_id: number;
-    unit_id: number;
-    start_date: string;
-    end_date: string;
-    monthly_rent: string;
-    deposit_amount: string;
-    lease_term: number;
-    lease_status: string;
-    terms_and_conditions: string;
-    unit: {
-        id: number;
-        landlord_id: number;
-        address: string;
-        unit_number: string;
-        availability_status: string;
-        floor_area: string;
-        rent_price: string;
-        property_type: string;
-        description: string;
-        amenities: string[];
-    };
-}
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Home, Calendar, DollarSign, FileText, AlertCircle } from "lucide-react"
+import type { Lease, RentalBill } from "@/types/tenantDashboard.types"
 
 interface LeaseDetailsProps {
-    leaseData: Lease;
+    leaseData: Lease
+    rentalBill?: RentalBill[]
 }
 
-export default function LeaseDetails({ leaseData }: LeaseDetailsProps) {
-    const formatCurrency = (amount: number): string => {
-        return amount.toLocaleString('en-PH', {
-            style: 'currency',
-            currency: 'PHP',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        });
-    };
+const LeaseDetails = ({ leaseData, rentalBill }: LeaseDetailsProps) => {
+    const formatCurrency = (amount: number | string) => {
+        return `₱${Number.parseFloat(amount.toString()).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+    }
 
     const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    };
+        return new Date(dateString).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        })
+    }
 
-    const getStatusColor = (status: string) => {
-        switch (status.toLowerCase()) {
-            case 'active':
-                return 'bg-green-100 text-green-800 hover:bg-green-100';
-            case 'expired':
-                return 'bg-red-100 text-red-800 hover:bg-red-100';
-            case 'pending':
-                return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100';
+    const getStatusBadge = (status: string) => {
+        switch (status) {
+            case "active":
+                return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Active</Badge>
+            case "pending":
+                return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Pending</Badge>
+            case "expired":
+                return <Badge variant="secondary">Expired</Badge>
+            case "terminated":
+                return <Badge variant="destructive">Terminated</Badge>
             default:
-                return 'bg-gray-100 text-gray-800 hover:bg-gray-100';
+                return <Badge variant="outline">{status}</Badge>
         }
-    };
+    }
 
-    const formatAmenity = (amenity: string) => {
-        return amenity.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
-    };
+    // Calculate remaining balance from rental bills
+    const calculateRemainingBalance = () => {
+        if (!rentalBill || rentalBill.length === 0) return 0
+        return rentalBill
+            .filter((bill) => bill.payment_status !== "paid")
+            .reduce((sum, bill) => sum + Number.parseFloat(bill.rent_amount), 0)
+    }
+
+    const remainingBalance = calculateRemainingBalance()
 
     return (
-        <Card className="mx-auto w-full">
-            <CardContent className="space-y-4">
-                {/* Lease Information */}
-                <div>
-                    <h3 className="mb-2 text-base font-bold text-gray-900">Lease Information</h3>
-                    <div className="grid grid-cols-5 gap-4">
-                        <LeaseDetailsInfo title="Start Date" data={formatDate(leaseData.start_date)} />
-                        <LeaseDetailsInfo title="Monthly Rent (Php)" data={formatCurrency(leaseData.monthly_rent)} />
-                        <LeaseDetailsInfo title="Deposit Amount (Php)" data={formatCurrency(leaseData.deposit_amount)} />
-                        <LeaseDetailsInfo title="Lease Term (months)" data={leaseData.lease_term.toLocaleString()} />
+        <Card className="shadow-sm">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-gray-900">
+                    <Home className="w-5 h-5 text-blue-600" />
+                    Lease Information
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-6">
+                    {/* Property Address */}
+                    <div className="rounded-lg bg-blue-50 p-4 border border-blue-100">
+                        <h3 className="font-semibold text-blue-900 mb-1">Property Address</h3>
+                        <p className="text-blue-800">
+                            {leaseData.units?.address}
+                            {leaseData.units?.unit_number && ` - Unit ${leaseData.units.unit_number}`}
+                        </p>
+                    </div>
 
-                        <div className="space-y-1">
-                            <p className="text-sm text-gray-600">Lease Status</p>
-                            <Badge className={`${getStatusColor(leaseData.lease_status)} text-sm`}>
-                                {leaseData.lease_status.charAt(0).toUpperCase() + leaseData.lease_status.slice(1)}
-                            </Badge>
+                    {/* Lease Details Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                                <Calendar className="w-5 h-5 text-gray-600" />
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900">Start Date</p>
+                                    <p className="text-sm text-gray-600">{formatDate(leaseData.start_date)}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                                <DollarSign className="w-5 h-5 text-gray-600" />
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900">Monthly Rent</p>
+                                    <p className="text-sm text-gray-600">{formatCurrency(leaseData.monthly_rent)}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                                <FileText className="w-5 h-5 text-gray-600" />
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900">Lease Term</p>
+                                    <p className="text-sm text-gray-600">{leaseData.lease_term} months</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                                <Calendar className="w-5 h-5 text-gray-600" />
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900">End Date</p>
+                                    <p className="text-sm text-gray-600">{formatDate(leaseData.end_date)}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                                <DollarSign className="w-5 h-5 text-gray-600" />
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900">Deposit Amount</p>
+                                    <p className="text-sm text-gray-600">{formatCurrency(leaseData.deposit_amount)}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                                <div className="w-5 h-5 flex items-center justify-center">{getStatusBadge(leaseData.lease_status)}</div>
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900">Lease Status</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <Separator />
-
-                {/* Rental Unit Information */}
-                <div>
-                    <h3 className="mb-2 text-base font-bold text-gray-900">Rental Unit Information</h3>
-                    <div className="mb-3 grid grid-cols-3 gap-4">
-                        <LeaseDetailsInfo title="Address" data={leaseData.units?.address || 'N/A'} />
-                        <LeaseDetailsInfo title="Unit Number" data={leaseData.units?.unit_number || 'N/A'} />
-                        <LeaseDetailsInfo
-                            title="Property Type"
-                            data={
-                                leaseData.units?.property_type
-                                    ? leaseData.units.property_type.charAt(0).toUpperCase() + leaseData.units.property_type.slice(1)
-                                    : 'N/A'
-                            }
-                        />
-                    </div>
-
-                    <div className="mb-3 space-y-1">
-                        <p className="text-sm text-gray-600">Description</p>
-                        <p className="text-md text-gray-900">{leaseData.units?.description || 'N/A'}</p>
-                    </div>
-
-                    <div className="space-y-1">
-                        <p className="text-sm text-gray-600">Amenities</p>
-                        <div className="flex flex-wrap gap-1">
-                            {leaseData.units?.amenities?.map((amenity, index) => (
-                                <Badge key={index} variant="secondary" className="bg-blue-100 px-2 py-1 text-sm text-blue-800 hover:bg-blue-100">
-                                    {formatAmenity(amenity)}
-                                </Badge>
-                            )) || <span className="text-gray-500">No amenities listed</span>}
+                    {/* Remaining Balance */}
+                    {remainingBalance > 0 && (
+                        <div className="rounded-lg bg-red-50 p-4 border border-red-100">
+                            <div className="flex items-center gap-2">
+                                <AlertCircle className="w-5 h-5 text-red-600" />
+                                <div>
+                                    <h4 className="font-semibold text-red-900">Remaining Balance</h4>
+                                    <p className="text-lg font-bold text-red-900">{formatCurrency(remainingBalance)}</p>
+                                    <p className="text-sm text-red-700">Outstanding amount for this lease</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </CardContent>
         </Card>
-    );
+    )
 }
+
+export default LeaseDetails

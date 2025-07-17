@@ -60,11 +60,11 @@ export interface UserInfo {
 }
 
 export interface RentalBill {
+    id: number;
     lease_id: number;
+    billing_date: string;
     rent_amount: string;
     due_date: string;
-    amount_paid: number;
-    balance: number;
     payment_status: 'pending' | 'paid' | 'overdue' | 'partial';
 }
 

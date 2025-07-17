@@ -31,7 +31,7 @@ class TenantController extends Controller
         $maintenanceData = MaintenanceRequest::getMaintenanceRequests(Auth::id());
         $tenantData = Tenant::getSelfInfo(Auth::id());
         $leaseInfo = Lease::getOwnLeases(Auth::id());
-        $rentalBill = RentalBill::getOwnBills($leaseID);
+        $rentalBill = RentalBill::getBills($leaseID);
 
 
 
