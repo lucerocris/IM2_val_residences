@@ -1,4 +1,5 @@
 import MainLayout from '@/layout/MainLayout'
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Header from '@/components/main/ui/Header';
 import LoginModal from '@/components/main/ui/LoginModal';
@@ -118,6 +119,28 @@ const ContactInfo = () => {
 }
 
 const ContactForm = () => {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+    })
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+        
+        console.log("Form submitted:", formData)
+        
+        setFormData({ name: "", email: "", phone: "", message: "" })
+    }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData((prev) => ({
+        ...prev,
+        [e.target.name]: e.target.value,
+        }))
+    }
+
     return(
         <>
             <Card className = "border-0 shadow-lg bg-white">
