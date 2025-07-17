@@ -19,11 +19,16 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\TenantOnboardingController;
 use App\Http\Controllers\LandlordAdmin\DocumentReviewController;
 
+
+Route::get('/', [MainSection::class, 'home']);
+Route::get('/about', [MainSection::class, 'about']);
+Route::get('/contact', [MainSection::class, 'contact']);
+Route::post('/contact', [MainSection::class, 'submitContactForm'])->name('contact.submit');
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'edit'])
     ->name('password.reset');
-
 Route::post('/reset-password', [PasswordResetController::class, 'update'])
     ->name('password.update');
+
 
 
 //Guest Routes
