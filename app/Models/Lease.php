@@ -306,4 +306,9 @@ class Lease extends Model
             ->orderBy('documents_submitted_at', 'asc')
             ->get();
     }
+
+    public static function getOwnUnit(int $tenant_id)
+    {
+        return DB::table('leases')->where('tenant_id', $tenant_id)->value('unit_id');
+    }
 }
