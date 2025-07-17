@@ -180,7 +180,11 @@ export const rentCollectionColumns: ColumnDef<RentalBill>[] = [
     /* ---------------------------------------------------------------------
      * Amounts
      * ------------------------------------------------------------------- */
-
+    {
+        accessorKey: 'rent_amount',
+        header: 'Rent Amount',
+        cell: ({ row }) => <div className="font-medium">{formatCurrency(row.getValue('rent_amount'))}</div>,
+    },
     {
         accessorKey: 'amount_paid',
         header: 'Amount Paid',
