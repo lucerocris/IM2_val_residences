@@ -33,4 +33,17 @@ class UserController extends Controller
         ]);
     }
 
+    // Soft deletes User and associated Leases and Rental Units
+    public function deactivate($id)
+    {
+        $user = User::deactivate($id);
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found');
+        }
+
+        return redirect()->back()->with('success', 'User and related leases deactivated successfully');
+
+    }
+
 }

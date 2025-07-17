@@ -21,6 +21,7 @@ use App\Models\RentalApplication;
 use App\Models\Lease;
 use App\Models\MaintenanceRequest;
 use App\Models\VacancySubscription;
+use Carbon\Carbon;
 
 
 class User extends Authenticatable implements CanResetPassword
@@ -120,5 +121,37 @@ class User extends Authenticatable implements CanResetPassword
 
     public static function fetchUser() {
         return DB::table('users')->where('user_type', '<>', 'landlord')->select('id', 'user_name', 'email', 'user_contact_number', 'user_type', 'move_in_date', 'employment_status', 'emergency_contact', 'tenant_occupation', 'business_license', 'landlord_bio', 'monthly_income', 'current_address')->get()->toArray();
+    }
+
+
+    public static function deactivate($user_id)
+    {
+        $user = self::find($user_id);
+
+        if (!$user) {
+            return null;
+        }
+
+
+        $user->active = false;
+        $user->save();
+
+
+        $leases = Lease::where('tenant_id', $user->id)->get();
+
+        foreach ($leases as $lease) {
+            $lease->lease_status = "Terminated";
+            $lease->terminated_date = Carbon::now();
+            $lease->save();
+
+
+            $unit = RentalUnit::find($lease->unit_id);
+            if ($unit) {
+                $unit->availability_status = 'Available';
+                $unit->save();
+            }
+        }
+
+        return $user;
     }
 }
