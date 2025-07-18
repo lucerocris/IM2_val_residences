@@ -67,7 +67,7 @@ class DocumentReviewController extends Controller
             'notes' => 'nullable|string|max:1000',
         ]);
 
-        // Ensure landlord owns the unit
+
         if ($lease->units->landlord_id !== Auth::id()) {
             abort(403, 'Unauthorized access');
         }

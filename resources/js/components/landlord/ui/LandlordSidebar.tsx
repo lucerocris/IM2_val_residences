@@ -140,6 +140,20 @@ const maintenanceNavigation: NavigationType[] = [
     },
 ];
 
+const usersNavigation: NavigationType[] = [
+    {
+        name: 'Users',
+        href: 'users',
+        icon: Users,
+        submenu: [
+            {
+                name: 'Users',
+                href: '/landlord/users',
+            },
+        ],
+    },
+];
+
 const user = {
     name: 'Simon Lawrence Jemuel Yu',
     email: 'simonlawrencejemuelyu@gmail.com',
@@ -236,6 +250,7 @@ const LandlordSidebar = () => {
                         <SidebarMenu>
                             {renderNavigationGroup(paymentsNavigation)}
                             {renderNavigationGroup(maintenanceNavigation)}
+                            {renderNavigationGroup(usersNavigation)}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 type Metric = {
     title: string;
-    metric: string | number;
+    metric: string | number | ReactNode;
     metricDescription: string | ReactNode;
     icon: ReactNode;
 };

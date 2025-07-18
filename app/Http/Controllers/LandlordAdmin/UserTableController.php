@@ -12,10 +12,16 @@ class UserTableController extends Controller
     //
     public function index(){
         $userList = User::fetchUser();
-        dd($userList);
+        $metrics = [
+            'numberOfUsers' => User::getNumberOfUsers(),
+            'numberOfTenant' => User::getNumberOfActiveTenants(),
+            'numberOfProspectiveTenant' => User::getNumberOfProspectiveTenants(),
+            'numberOfNewUsers' => User::getNumberOfNewUsers(),
+        ];
 
-        return Inertia::render('landlord/UserTablePage', [
+        return Inertia::render('landlord/UserPage', [
             'userList' => $userList,
+            'metrics' => $metrics
         ]);
     }
 }

@@ -13,11 +13,10 @@ use App\Http\Controllers\LandlordAdmin\RentalApplicationController;
 use App\Http\Controllers\LandlordAdmin\LeaseController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\RequestMaintenanceController;
 use App\Http\Controllers\Auth\PasswordResetController;
-
 use App\Http\Controllers\TenantOnboardingController;
 use App\Http\Controllers\LandlordAdmin\DocumentReviewController;
+use App\Http\Controllers\LandlordAdmin\UserTableController;
 
 
 Route::get('/', [MainSection::class, 'home']);
@@ -148,5 +147,8 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
         ->name('landlord.document-review.reject');
     Route::get('/document-review/{lease}/download/{documentType}', [DocumentReviewController::class, 'downloadDocument'])
         ->name('landlord.document-review.download');
+
+//    Lanlord Users
+    Route::get('/landlord/users', [UserTableController::class, 'index']);
 
 });
