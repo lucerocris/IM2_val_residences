@@ -1,8 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Wrench, Calendar, AlertCircle, CheckCircle, Clock, XCircle } from "lucide-react"
-import GetStatusBadge from "./maintenance-request/get-status-badge"
-import GetPriorityBadge from "./maintenance-request/get-priority-badge"
+import { GetStatusBadge, GetPriorityBadge } from "./maintenance-request/get-maintenance-badges"
 import { CompletionDate, LandlordNotes, TenantRemarks } from "./maintenance-request/additional-info"
 import NoMaintenanceRequest from "./maintenance-request/no-maintenance"
 

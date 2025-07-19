@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import NoCurrentBills from "./current-bill/no-current-bill"
 
 interface CurrentBillProps {
     currentBill: RentalBill[]
@@ -29,23 +30,7 @@ const CurrentBill = ({ currentBill, leaseData, leaseID }: CurrentBillProps) => {
 
     if (!currentBill || currentBill.length === 0) {
         return (
-            <Card className="shadow-sm">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-gray-900">
-                        <DollarSign className="w-5 h-5 text-green-600" />
-                        Current Bills
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <div className="rounded-full bg-green-100 p-3 mb-4">
-                            <DollarSign className="w-8 h-8 text-green-600" />
-                        </div>
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">All caught up!</h3>
-                        <p className="text-gray-500">You have no outstanding bills at this time.</p>
-                    </div>
-                </CardContent>
-            </Card>
+            <NoCurrentBills />
         )
     }
 
