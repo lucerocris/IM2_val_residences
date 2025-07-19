@@ -114,6 +114,16 @@ const handleDelete = (leaseID: string) => {
     }
 }
 
+const handleTerminate = (leaseID: string) => {
+    if (confirm('Are you sure you want to terminate this lease?')) {
+        router.patch(`/landlord/leases/${leaseID}/terminate`, {
+            lease_status: "terminated"
+        }, {
+            preserveScroll:true,
+        })
+    }
+}
+
 export const leaseColumns: ColumnDef<Lease>[] = [
     {
         accessorKey: 'tenant',
@@ -327,7 +337,7 @@ export const leaseColumns: ColumnDef<Lease>[] = [
                             </DropdownMenuItem>
                         )}
                         {lease.lease_status === 'active' && (
-                            <DropdownMenuItem variant='destructive' className="text-red-600">
+                            <DropdownMenuItem variant='destructive' className="text-red-600" onClick={() => handleTerminate(lease.id)}>
                                 <Trash2 className="mr-2 h-4 w-4 text-red-600" /> Terminate lease
                             </DropdownMenuItem>
                         )}

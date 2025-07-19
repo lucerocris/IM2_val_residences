@@ -115,6 +115,7 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
     Route::get('/landlord/leases/{lease_id}/{unit_id}/{tenant_id}/edit', [LeaseController::class, 'edit']);
     Route::post('/landlord/leases', [LeaseController::class, 'store']);
     Route::put('/landlord/leases/{id}', [LeaseController::class, 'update']);
+    Route::patch('/landlord/leases/{id}/terminate', [LeaseController::class, 'terminateLease']);
 
 // Landlord payments
     Route::get('/landlord/payments/rent-collection', [FinanceController::class, 'rent']);
