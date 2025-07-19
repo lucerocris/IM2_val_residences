@@ -81,11 +81,13 @@ class TenantController extends Controller
     {
         $amount = $request->query('amount', 0); // Default to 0 if no amount provided
         $leaseID = $request->query('leaseid', 0);
+        $billID = $request->query('billid', 0);
 
         return Inertia::render('tenant/payment/Gcash', [
             'paymentData' => [
                 'amount' => $amount,
                 'leaseid' => $leaseID,
+                'billid' => $billID,
             ]
         ]);
     }
@@ -102,33 +104,33 @@ class TenantController extends Controller
         ]);
     }
 
-    public function storeGcashPayments(Request $request)
+    public function updateGcashPayment(Request $request, $id)
     {
+        $rentalBill = RentalBill::findOrFail($id);
+
+        // Validate input
+        $maxAmount = $rentalBill->amount ?? 999999; // fallback value if null
+
         $validated = $request->validate([
-            'lease_id' => 'required|numeric|exists:leases,id',
             'reference_number' => 'required|string',
-            'amount_paid' => 'required|numeric|min:0',
+            'amount_paid' => 'required|numeric|min:0|max:' . $maxAmount,
             'proof_of_payment' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'paid_date' => 'required|date',
-            'payment_status' => 'required|string|in:paid,overdue,partial,pending'
         ]);
 
-        $lease = Lease::findOrFail($validated['lease_id']);
 
         $proofOfPaymentPath = $request->file('proof_of_payment')->store('proof_of_payment', 'public');
 
-        $payment = RentalBill::create([
-            'lease_id' => $validated['lease_id'],
-            'billing_date' => now()->toDateString(),
-            'rent_amount' => $lease->monthly_rent,
-            'proof_of_payment_path' => $proofOfPaymentPath,
+        // Update payment details
+        $rentalBill->update([
             'reference_number' => $validated['reference_number'],
-            'due_date' => now()->addDays(30)->toDateString(),
-            'paid_date' => $validated['paid_date'],
             'amount_paid' => $validated['amount_paid'],
-            'payment_status' => $validated['payment_status'],
+            'proof_of_payment_path' => $proofOfPaymentPath,
+            'paid_date' => $validated['paid_date'],
+            'payment_status' => 'pending_verification', // optional, if you have this field
         ]);
 
-        return redirect()->route('tenant.dashboard')->with('success', 'Payment sent successfully');
+        return redirect()->route('tenant.dashboard')->with('success', 'Payment sent successfully.');
     }
+
 }

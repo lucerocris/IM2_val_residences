@@ -6,11 +6,12 @@ import { Label } from '@/components/ui/label';
 import { useForm, usePage, router } from '@inertiajs/react';
 import { CheckCircle, QrCode, Upload } from 'lucide-react';
 import { useState } from 'react';
-import { isDateAfterType } from 'react-day-picker';
+
 
 interface paymentAmountType {
     amount: number;
     leaseid: number;
+    billid: number;
 }
 
 type PageProps = {
@@ -18,10 +19,8 @@ type PageProps = {
 };
 
 type PaymentFormData = {
-    lease_id: number;
     reference_number: string;
     amount_paid: number | string;
-    payment_status: 'paid' | 'overdue' | 'partial' | 'pending';
     paid_date: string;
     proof_of_payment: File | null;
 };
@@ -33,14 +32,13 @@ const GcashPayment = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const { data, setData, post, errors, processing } = useForm<PaymentFormData>({
-        lease_id: paymentData.leaseid,
         reference_number: '',
-        payment_status: 'pending',
         paid_date: '',
         amount_paid: paymentData.amount,
-        proof_of_payment: null,
+        proof_of_payment_path: null,
     });
 
+    console.log(paymentData.billid);
     console.log(data);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,16 +50,21 @@ const GcashPayment = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
         if (!data.proof_of_payment || !data.reference_number) {
             return;
         }
 
-        const updatedData = {
-            ...data,
-            paid_date:  new Date().toISOString()
-        };
+        const formData = new FormData();
+        formData.append('reference_number', data.reference_number);
+        formData.append('amount_paid', data.amount_paid.toString());
+        formData.append('proof_of_payment', data.proof_of_payment); // File object
+        formData.append('paid_date', new Date().toISOString().split('T')[0]); // Format: YYYY-MM-DD
+        formData.append('_method', 'PATCH'); // Method spoofing for Laravel
 
-        router.post('/tenant/payments/gcash', updatedData, {
+        router.post(`/tenant/payments/gcash/${paymentData.billid}`, formData, {
+            preserveScroll: true,
+            forceFormData: true, // Ensure Inertia uses FormData
             onSuccess: () => {
                 setIsSubmitted(true);
             },

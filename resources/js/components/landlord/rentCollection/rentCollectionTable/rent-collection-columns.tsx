@@ -9,7 +9,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { type ColumnDef } from '@tanstack/react-table';
-import { AlertCircle, CheckCircle, Clock, DollarSign, Home, MoreHorizontal, User, FileText, Eye } from 'lucide-react';
+import { AlertCircle, CheckCircle, Clock, DollarSign, Home, MoreHorizontal, User, ShieldCheck, Eye } from 'lucide-react';
+import { router } from '@inertiajs/react';
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +64,13 @@ const getStatusBadge = (status: string) => {
                     Pending
                 </Badge>
             );
+        case 'pending_verification':
+            return (
+                <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">
+                    <ShieldCheck className="mr-1 h-3 w-3" />
+                    Pending Verification
+                </Badge>
+            );
         case 'overdue':
             return (
                 <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
@@ -102,6 +110,15 @@ const formatDate = (dateString: string) =>
         month: 'short',
         day: 'numeric',
     });
+
+
+const handlePaid = (billID: number) => {
+    router.patch(`/landlord/payments/${billID}/paid`, {
+        payment_status: 'paid'
+    }, {
+        preserveScroll: true,
+    });
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -278,26 +295,16 @@ export const rentCollectionColumns: ColumnDef<RentalBill>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(bill.id.toString())}>Copy bill ID</DropdownMenuItem>
                         <DropdownMenuSeparator />
 
                         {bill.payment_status !== 'paid' && (
                             <>
-                                <DropdownMenuItem>
-                                    <CheckCircle className="mr-2 h-4 w-4" />
+                                <DropdownMenuItem onClick={() => handlePaid(bill.id)}>
+                                    <CheckCircle className="mr-2 h-4 w-4 text-green-400" />
                                     Mark as paid
                                 </DropdownMenuItem>
                             </>
                         )}
-
-                        {bill.proof_of_payment_path && (
-                            <DropdownMenuItem onClick={() => window.open(bill.proof_of_payment_path, '_blank')}>
-                                <Eye className="mr-2 h-4 w-4" />
-                                View proof image
-                            </DropdownMenuItem>
-                        )}
-
-                        <DropdownMenuItem>View details</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
