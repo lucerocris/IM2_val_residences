@@ -14,6 +14,8 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import NoCurrentBills from "./current-bill/no-current-bill"
 import { GetBillStatus } from "./current-bill/get-bill-badges"
 import { AmountDue, BillingDate, BillPeriod, DueDate, Status } from "./current-bill/bill-details"
+import UnpaidBills from "./current-bill/summary-section"
+import { AmountAndStatus, Dates } from "./current-bill/individual-bills"
 
 interface CurrentBillProps {
     currentBill: RentalBill[]
@@ -26,6 +28,10 @@ const getMonthYear = (dateString: string) => {
         year: "numeric",
         month: "long",
     })
+}
+
+const formatCurrency = (amount: number | string) => {
+    return `₱${Number.parseFloat(amount.toString()).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
 }
 
 const CurrentBill = ({ currentBill, leaseData, leaseID }: CurrentBillProps) => {
@@ -45,21 +51,6 @@ const CurrentBill = ({ currentBill, leaseData, leaseID }: CurrentBillProps) => {
 
     // Calculate totals
     const unpaidBills = currentBill.filter((bill) => bill.payment_status !== "paid")
-    const totalUnpaid = unpaidBills.reduce((sum, bill) => sum + Number.parseFloat(bill.rent_amount), 0)
-    const overdueBills = unpaidBills.filter((bill) => bill.payment_status === "overdue")
-    const pendingBills = unpaidBills.filter((bill) => bill.payment_status === "pending")
-
-    const formatCurrency = (amount: number | string) => {
-        return `₱${Number.parseFloat(amount.toString()).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
-    }
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        })
-    }
 
     return (
         <>
@@ -72,24 +63,7 @@ const CurrentBill = ({ currentBill, leaseData, leaseID }: CurrentBillProps) => {
                 </CardHeader>
                 <CardContent className="space-y-6">
                     {/* Summary Section */}
-                    {unpaidBills.length > 0 && (
-                        <div className="rounded-lg bg-gradient-to-r from-red-50 to-orange-50 p-4 border border-red-100">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <AlertCircle className="w-5 h-5 text-red-600" />
-                                        <h3 className="font-semibold text-red-900">Outstanding Balance</h3>
-                                    </div>
-                                    <p className="text-2xl font-bold text-red-900">{formatCurrency(totalUnpaid)}</p>
-                                    <p className="text-sm text-red-700 mt-1">
-                                        {overdueBills.length > 0 && `${overdueBills.length} overdue`}
-                                        {overdueBills.length > 0 && pendingBills.length > 0 && ", "}
-                                        {pendingBills.length > 0 && `${pendingBills.length} pending`}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    {unpaidBills.length > 0 && <UnpaidBills currentBill={currentBill} />}
 
                     {/* Individual Bills */}
                     <div className="space-y-3">
@@ -100,35 +74,8 @@ const CurrentBill = ({ currentBill, leaseData, leaseID }: CurrentBillProps) => {
                                     key={bill.id}
                                     className="flex items-center justify-between p-4 rounded-lg border bg-white hover:shadow-sm transition-shadow"
                                 >
-                                    <div className="flex items-center gap-4">
-                                        <div className="flex-shrink-0">
-                                            <div className="rounded-full bg-gray-100 p-2">
-                                                <Calendar className="w-4 h-4 text-gray-600" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h5 className="font-medium text-gray-900">{getMonthYear(bill.due_date)}</h5>
-                                            <p className="text-sm text-gray-500">Due: {formatDate(bill.due_date)}</p>
-                                            {bill.billing_date && (
-                                                <p className="text-xs text-gray-400">Billed: {formatDate(bill.billing_date)}</p>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center gap-4">
-                                        <div className="text-right">
-                                            <p className="font-semibold text-gray-900">{formatCurrency(bill.rent_amount)}</p>
-                                        </div>
-
-                                        <div className="flex items-center gap-2">
-                                            <GetBillStatus status = {bill.payment_status} />
-                                            {bill.payment_status !== "paid" && (
-                                                <Button size="sm" variant="outline" onClick={() => handlePayNowClick(bill)}>
-                                                    Pay Now
-                                                </Button>
-                                            )}
-                                        </div>
-                                    </div>
+                                    <Dates due_date = {bill.due_date} billing_date = {bill.billing_date} />
+                                    <AmountAndStatus bill = {bill} onPayNowClick = {handlePayNowClick} />
                                 </div>
                             ))}
                         </div>
@@ -163,10 +110,6 @@ interface BillPaymentModalProps {
 const BillPaymentModal = ({ bill, leaseData, leaseID, onClose }: BillPaymentModalProps) => {
     const [paymentMethod, setPaymentMethod] = useState("")
     const [amount, setAmount] = useState(bill.rent_amount)
-
-    const formatCurrency = (amount: number | string) => {
-        return `₱${Number.parseFloat(amount.toString()).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
-    }
 
     return (
         <>
