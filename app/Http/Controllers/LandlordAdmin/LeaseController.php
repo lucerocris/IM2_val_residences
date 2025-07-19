@@ -106,4 +106,14 @@ class LeaseController extends Controller
 
         return redirect()->back()->with('success', 'Lease deactivated successfully');
     }
+
+    public function terminateLease(Request $request, $id) {
+        $lease = Lease::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'lease_status' => 'required|string|in:active,expired,terminated,pending,for_review'
+        ]);
+        $lease->update($validatedData);
+        return redirect()->back()->with('success', 'Lease terminated successfully');
+    }
 }

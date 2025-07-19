@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 interface MetricCardProps {
     title: string;
-    metric: string | number;
+    metric: string | number | ReactNode;
     metricDescription: string | ReactNode;
     Icon: ReactNode;
     className?: string;

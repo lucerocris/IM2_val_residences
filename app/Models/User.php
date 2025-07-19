@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Nanigans\SingleTableInheritance\SingleTableInheritanceTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -28,6 +29,7 @@ class User extends Authenticatable implements CanResetPassword
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use SingleTableInheritanceTrait;
+    use SoftDeletes;
     use HasFactory, Notifiable, CanResetPasswordTrait;
     protected $table = 'users';
 
@@ -120,7 +122,7 @@ class User extends Authenticatable implements CanResetPassword
     }
 
     public static function fetchUser() {
-        return DB::table('users')->where('user_type', '<>', 'landlord')->select('id', 'user_name', 'email', 'user_contact_number', 'user_type', 'move_in_date', 'employment_status', 'emergency_contact', 'tenant_occupation', 'business_license', 'landlord_bio', 'monthly_income', 'current_address')->get()->toArray();
+        return DB::table('users')->where('user_type', '<>', 'landlord')->select('id', 'user_name', 'email', 'user_contact_number', 'user_type', 'move_in_date', 'employment_status', 'emergency_contact', 'tenant_occupation', 'monthly_income', 'current_address', 'created_at')->get()->toArray();
     }
 
 
@@ -154,4 +156,27 @@ class User extends Authenticatable implements CanResetPassword
 
         return $user;
     }
+
+    public static function getNumberOfProspectiveTenants() {
+        return DB::table('users')->where('user_type', '=','prospective_tenant')->count();
+    }
+
+    public static function getNumberOfActiveTenants() {
+        return DB::table('users')->where('user_type', '=', 'tenant')->count();
+    }
+
+    public static function getNumberOfUsers() {
+        return DB::table('users')
+            ->whereIn('user_type', ['tenant', 'prospective_tenant'])
+            ->count();
+    }
+
+    public static function getNumberOfNewUsers() {
+        return  DB::table('users')
+            ->whereYear('created_at', now()->year)
+            ->whereMonth('created_at', now()->month)
+            ->count();
+    }
+
+
 }

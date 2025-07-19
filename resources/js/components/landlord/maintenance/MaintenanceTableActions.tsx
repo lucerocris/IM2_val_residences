@@ -26,9 +26,7 @@ const handleDelete = (requestID: string)=> {
     }
 }
 
-const handleStart = (requestID: string) => {
 
-}
 
 
 const MaintenanceTableActions = ({request}: MaintenanceTableActionsProps) => {

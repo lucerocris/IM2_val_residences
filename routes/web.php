@@ -13,11 +13,10 @@ use App\Http\Controllers\LandlordAdmin\RentalApplicationController;
 use App\Http\Controllers\LandlordAdmin\LeaseController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\RequestMaintenanceController;
 use App\Http\Controllers\Auth\PasswordResetController;
-
 use App\Http\Controllers\TenantOnboardingController;
 use App\Http\Controllers\LandlordAdmin\DocumentReviewController;
+use App\Http\Controllers\LandlordAdmin\UserTableController;
 
 
 Route::get('/', [MainSection::class, 'home']);
@@ -116,6 +115,7 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
     Route::get('/landlord/leases/{lease_id}/{unit_id}/{tenant_id}/edit', [LeaseController::class, 'edit']);
     Route::post('/landlord/leases', [LeaseController::class, 'store']);
     Route::put('/landlord/leases/{id}', [LeaseController::class, 'update']);
+    Route::patch('/landlord/leases/{id}/terminate', [LeaseController::class, 'terminateLease']);
 
 // Landlord payments
     Route::get('/landlord/payments/rent-collection', [FinanceController::class, 'rent']);
@@ -148,5 +148,8 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
         ->name('landlord.document-review.reject');
     Route::get('/document-review/{lease}/download/{documentType}', [DocumentReviewController::class, 'downloadDocument'])
         ->name('landlord.document-review.download');
+
+//    Lanlord Users
+    Route::get('/landlord/users', [UserTableController::class, 'index']);
 
 });

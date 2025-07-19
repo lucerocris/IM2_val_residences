@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->enum('lease_status', ['active', 'expired', 'terminated', 'pending', 'for_review'])->default('pending');
             $table->date('terminated_date')->nullable();
             $table->string('termination_reason')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             //onboarding stuff

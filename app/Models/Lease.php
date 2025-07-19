@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class Lease extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'tenant_id',
@@ -191,7 +193,9 @@ class Lease extends Model
     public static function getTableData()
     {
         return self::with([
-            'tenant:id,user_name,email,user_contact_number',
+            'tenant' => function ($query) {
+                $query->withTrashed()->select('id', 'user_name', 'email', 'user_contact_number');
+            },
             'units:id,address,unit_number,property_type,landlord_id',
             'units.landlord:id,user_name'
         ])

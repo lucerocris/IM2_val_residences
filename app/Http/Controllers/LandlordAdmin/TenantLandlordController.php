@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class TenantLandlordController extends Controller
 {
@@ -82,13 +83,32 @@ class TenantLandlordController extends Controller
     // Delete Tenant
     public function destroy($id)
     {
+        // Find tenant by ID and ensure it's a tenant type
         $tenant = User::where('user_type', 'tenant')->findOrFail($id);
 
-        $tenant->leases()->delete();
-        $tenant->maintenanceRequests()->delete();
+        // Wrap in transaction for data consistency
+        DB::transaction(function () use ($tenant) {
+            // Get all leases of the tenant
+            $leases = $tenant->leases;
 
-        $tenant->delete();
+            foreach ($leases as $lease) {
+                // Update lease status to terminated
+                $lease->update(['lease_status' => 'terminated']);
 
-        return redirect()->back()->with('success', 'Tenant deleted successfully.');
+                // Make the related unit available
+                if ($lease->units) {
+                    $lease->units->update(['availability_status' => 'available']);
+                }
+            }
+
+            // Delete maintenance requests
+            $tenant->maintenanceRequests()->delete();
+
+            // Delete tenant
+            $tenant->delete();
+        });
+
+        return redirect()->back()->with('success', 'Tenant deleted successfully and related leases updated.');
     }
+
 }
