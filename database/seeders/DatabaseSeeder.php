@@ -544,9 +544,12 @@ class DatabaseSeeder extends Seeder
                 // Create realistic rental bills
                 $this->createRealisticBills($lease, 15);
 
-                // Create maintenance requests
+
+// Create maintenance requests
                 $maintenanceCount = fake()->numberBetween(1, 3);
                 for ($i = 0; $i < $maintenanceCount; $i++) {
+                    $requestStatus = fake()->randomElement(['pending', 'in_progress', 'completed']);
+
                     MaintenanceRequest::create([
                         'tenant_id' => $user->id,
                         'unit_id' => $unit->id,
@@ -562,15 +565,14 @@ class DatabaseSeeder extends Seeder
                             'Paint peeling in bedroom',
                             'Clogged drain in bathroom'
                         ]),
-                        'request_status' => fake()->randomElement(['pending', 'in_progress', 'completed']),
+                        'request_status' => $requestStatus,
                         'priority_level' => fake()->randomElement(['low', 'medium', 'high']),
                         'tenant_remarks' => fake()->optional(0.7)->sentence(),
                         'landlord_notes' => fake()->optional(0.5)->sentence(),
-                        'actual_cost' => fake()->optional(0.6)->randomFloat(2, 500, 5000),
-                        'completion_date' => fake()->optional(0.4)->dateTimeBetween('-30 days', 'now'),
+                        'actual_cost' => $requestStatus === 'completed' ? fake()->randomFloat(2, 500, 5000) : null,
+                        'completion_date' => $requestStatus === 'completed' ? fake()->dateTimeBetween('-30 days', 'now') : null,
                     ]);
                 }
-
             } elseif ($userData['user_type'] === 'prospective_tenant') {
                 // Create rental application for prospective tenant
                 $unit = $units[$userData['apply_to_unit_index']];
