@@ -28,7 +28,7 @@ export const AmountDue = ({ rent_amount }:AmountDueProps) => {
 }
 
 interface DueDateProps {
-    payment_status: string;
+    payment_status?: string;
     due_date: string;
 }
 
@@ -39,15 +39,15 @@ export const DueDate = ({ payment_status, due_date }:DueDateProps) => {
                 return "text-red-600"
             case "pending":
                 return "text-yellow-600"
-            default:
-                return "text-gray-600"
         }
     }
+
+    const statusColor = payment_status ? getStatusColor(payment_status) : "text-gray-600"
 
     return(
         <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600">Due Date:</span>
-            <span className={`text-sm font-medium ${getStatusColor(payment_status)}`}>
+            <span className={`text-sm font-medium ${statusColor}`}>
             {formatDate(due_date)}
             </span>
         </div>

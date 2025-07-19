@@ -18,8 +18,9 @@ import { CreditCard, Wrench, ArrowRight } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import type { Lease, RentalBill } from "@/types/tenantDashboard.types"
+import { AmountDue, BillingDate, DueDate } from "./current-bill/bill-details"
+import { LabeledTextArea, LabeledSelect, LabeledInput } from "./button-section/labeled-inputs"
 
 interface ButtonSectionProps {
     leaseData: Lease
@@ -99,18 +100,6 @@ const PaymentModal = ({ leaseData, currentBill, leaseID }: ButtonSectionProps) =
     const [paymentMethod, setPaymentMethod] = useState("")
     const [amount, setAmount] = useState("")
 
-    const formatCurrency = (amount: number | string) => {
-        return `₱${Number.parseFloat(amount.toString()).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
-    }
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        })
-    }
-
     return (
         <>
             <DialogHeader>
@@ -126,49 +115,34 @@ const PaymentModal = ({ leaseData, currentBill, leaseID }: ButtonSectionProps) =
                     <h4 className="font-medium text-gray-900">Payment Summary</h4>
                     {currentBill && currentBill.length > 0 && (
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">Amount Due:</span>
-                                <span className="font-semibold text-red-600">{formatCurrency(currentBill[0].rent_amount)}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">Due Date:</span>
-                                <span className="text-sm text-gray-900">{formatDate(currentBill[0].due_date)}</span>
-                            </div>
-                            {currentBill[0].billing_date && (
-                                <div className="flex justify-between items-center">
-                                    <span className="text-sm text-gray-600">Billing Date:</span>
-                                    <span className="text-sm text-gray-900">{formatDate(currentBill[0].billing_date)}</span>
-                                </div>
-                            )}
+                            <AmountDue rent_amount = {currentBill[0].rent_amount} />
+                            <DueDate due_date = {currentBill[0].due_date} />
+                            {currentBill[0].billing_date && <BillingDate billing_date = {currentBill[0].billing_date} />}
                         </div>
                     )}
                 </div>
 
                 {/* Payment Method Selection */}
-                <div className="space-y-2">
-                    <Label htmlFor="payment-method">Payment Method</Label>
-                    <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select payment method" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="gcash">GCash</SelectItem>
-                            <SelectItem value="bank-transfers">Bank Transfer</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
+                <LabeledSelect 
+                    label = "Payment Method"
+                    value = {paymentMethod}
+                    onValueChange = {setPaymentMethod}
+                    placeholder = "Select payment method"
+                    options = {[
+                        {label: "GCash", value: "gcash"},
+                        {label: "Bank Transfer", value: "bank-transfers"}
+                    ]}
+                />
 
                 {/* Amount Input */}
-                <div className="space-y-2">
-                    <Label htmlFor="amount">Amount</Label>
-                    <Input
-                        id="amount"
-                        type="number"
-                        placeholder="Enter amount"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                    />
-                </div>
+                <LabeledInput 
+                    id = "amount"
+                    label = "Amount"
+                    type = "number"
+                    placeholder = "Enter amount"
+                    value = {amount}
+                    onChange = {(e) => setAmount(e.target.value)}
+                />
 
                 {/* Submit Button */}
                 <Button
@@ -234,44 +208,38 @@ const MaintenanceModal = ({ leaseData, tenantID, setMaintenanceModalOpen, unitID
             </DialogHeader>
             <div className="space-y-4">
                 {/* Priority Level */}
-                <div className="space-y-2">
-                    <Label htmlFor="priority">Priority Level</Label>
-                    <Select value={data.priority_level} onValueChange={(value) => setData("priority_level", value)}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select priority level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="low">Low - Can wait a few days</SelectItem>
-                            <SelectItem value="medium">Medium - Should be addressed soon</SelectItem>
-                            <SelectItem value="high">High - Needs attention within 24 hours</SelectItem>
-                            <SelectItem value="urgent">Urgent - Emergency repair needed</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
+                <LabeledSelect
+                    label = "Priority Level"
+                    value = {data.priority_level}
+                    onValueChange = {(value: string) => setData("priority_level", value)}
+                    options = {[
+                        { value: "low", label: "Low - Can wait a few days" },
+                        { value: "medium", label: "Medium - Should be addressed soon" },
+                        { value: "high", label: "High - Needs attention within 24 hours" },
+                        { value: "urgent", label: "Urgent - Emergency repair needed" },
+                    ]}
+                />
 
                 {/* Description */}
-                <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                        id="description"
-                        placeholder="Please describe the maintenance issue in detail..."
-                        className="min-h-[100px]"
-                        value={data.maintenance_description}
-                        onChange={(e) => setData("maintenance_description", e.target.value)}
-                    />
-                </div>
+
+                <LabeledTextArea 
+                    id = "description"
+                    label = "Description"
+                    placeholder = "Please describe the maintenance issue in detail..."
+                    value = {data.maintenance_description}
+                    onChange = {(e) => setData("maintenance_description", e.target.value)}
+                />
 
                 {/* Additional Notes */}
-                <div className="space-y-2">
-                    <Label htmlFor="remarks">Additional Notes (Optional)</Label>
-                    <Textarea
-                        id="remarks"
-                        placeholder="Any additional information or special instructions..."
-                        rows={3}
-                        value={data.tenant_remarks}
-                        onChange={(e) => setData("tenant_remarks", e.target.value)}
-                    />
-                </div>
+
+                <LabeledTextArea 
+                    id = "remarks"
+                    label = "Additional Notes (Optional)"
+                    placeholder = "Any additional information or special instructions..."
+                    rows = {3}
+                    value = {data.tenant_remarks}
+                    onChange = {(e) => setData("tenant_remarks", e.target.value)}
+                />
 
                 {/* Submit Button */}
                 <Button
