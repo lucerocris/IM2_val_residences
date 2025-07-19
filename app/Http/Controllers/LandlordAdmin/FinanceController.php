@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\LandlordAdmin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\RentalBill;
 use App\Models\RentalUnit;
@@ -53,9 +54,9 @@ class FinanceController extends Controller
 
             $monthlyData[] = [
                 'month' => $revenue['month'],
-                'revenue' => (float) $revenue['revenue'],
-                'expenses' => (float) $expenses,
-                'profit' => (float) $profit,
+                'revenue' => (float)$revenue['revenue'],
+                'expenses' => (float)$expenses,
+                'profit' => (float)$profit,
             ];
         }
 
@@ -81,11 +82,23 @@ class FinanceController extends Controller
         }
 
         return [
-            'totalMonthlyRevenue' => (float) $totalMonthlyRevenue,
-            'totalMaintenanceCosts' => (float) $totalMaintenanceCosts,
-            'totalNetIncome' => (float) $totalNetIncome,
-            'averageOccupancy' => (float) round($averageOccupancy ?: 0, 1),
-            'revenueChange' => (float) round($revenueChange, 1),
+            'totalMonthlyRevenue' => (float)$totalMonthlyRevenue,
+            'totalMaintenanceCosts' => (float)$totalMaintenanceCosts,
+            'totalNetIncome' => (float)$totalNetIncome,
+            'averageOccupancy' => (float)round($averageOccupancy ?: 0, 1),
+            'revenueChange' => (float)round($revenueChange, 1),
         ];
+    }
+
+    public function markAsPaid(Request $request, $id)
+    {
+        $bill = RentalBill::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'payment_status' => 'required|string|in:paid, overdue, partial, pending, pending_verification',
+        ]);
+
+        $bill->update($validatedData);
+        return redirect()->back()->with('success', 'Bill mark as paid successfully');
     }
 }

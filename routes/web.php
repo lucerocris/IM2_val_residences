@@ -70,7 +70,7 @@ Route::middleware('auth', 'user.type:tenant')->group(function () {
 
 // Tenant Payment Upload
     Route::get('/tenant/payments/gcash', [TenantController::class, 'gcash']);
-    Route::post('/tenant/payments/gcash', [TenantController::class, 'storeGcashPayments']);
+    Route::patch('/tenant/payments/gcash/{id}', [TenantController::class, 'updateGcashPayment']);
     Route::post('/tenant/payments/bank-transfer',[TenantController::class, 'storeGcashPayments']);
     Route::get('/tenant/payments/paymaya', [TenantController::class, 'paymaya']);
     Route::get('/tenant/payments/bankTransfer', [TenantController::class, 'bank']);
@@ -119,7 +119,8 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
 
 // Landlord payments
     Route::get('/landlord/payments/rent-collection', [FinanceController::class, 'rent']);
-    Route::get('/landlord/payments/report', [FinanceController::class, 'report']);
+//    Route::get('/landlord/payments/report', [FinanceController::class, 'report']);
+    Route::patch('/landlord/payments/{id}/paid', [FinanceController::class, 'markAsPaid']);
 // Landlord Delete Lease
     Route::delete('/landlord/leases/{id}', [LeaseController::class, 'destroy'])->name('leases.destroy');
 

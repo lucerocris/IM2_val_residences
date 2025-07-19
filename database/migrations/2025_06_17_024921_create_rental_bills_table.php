@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->date('due_date');
             $table->date('paid_date')->nullable();
             $table->decimal('amount_paid', 10, 2)->default(0);
-            $table->enum('payment_status', [ 'paid', 'overdue', 'partial', 'pending'])
+            $table->enum('payment_status', [ 'paid', 'overdue', 'partial', 'pending', 'pending_verification'])
                 ->default('pending');
             $table->timestamps();
 
