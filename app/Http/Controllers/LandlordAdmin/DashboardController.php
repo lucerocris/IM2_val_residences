@@ -39,7 +39,6 @@ class DashboardController extends Controller
 
 //      Overdue bills
         $overdueBills = RentalBill::getOverdue();
-
 //        Rental Bill models
         $paidRentalBillsThisMonth = Number::currency(RentalBill::getPaidRevenueThisMonth($startOfMonth, $endOfMonth), in: 'PHP');
 

@@ -6,7 +6,18 @@ import MetricGrid from '@/components/landlord/ui/MetricGrid';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import LandlordLayout from '@/layout/LandlordLayout';
-import { AlertCircle, Building2, Calendar, FileText, PhilippinePeso, Plus, TrendingUp, Users, Wrench } from 'lucide-react';
+import {
+    AlertCircle,
+    Building2,
+    Calendar,
+    FileText,
+    PhilippinePeso,
+    Plus,
+    TrendingUp,
+    Users,
+    Wrench,
+    DollarSign
+} from 'lucide-react';
 
 type MaintenanceRequest = {
     id: number;
@@ -27,20 +38,45 @@ type RecentActivities = {
     applicant?: string;
 };
 
-type UpcomingExpirations = {
-    id: number;
-    unit: string;
-    tenant: string;
-    endDate: string;
-    daysLeft: number;
+type OverDueBills = {
+    lease_id: number;
+    user_name: string;
+    balance: string;
+    due_date: string;
 };
 
-const upcomingExpirations: UpcomingExpirations[] = [
-    { id: 1, unit: 'Unit 7A', tenant: 'Mike Wilson', endDate: '2024-02-15', daysLeft: 18 },
-    { id: 2, unit: 'Unit 12C', tenant: 'Lisa Brown', endDate: '2024-02-28', daysLeft: 31 },
-    { id: 3, unit: 'Unit 4B', tenant: 'David Lee', endDate: '2024-03-10', daysLeft: 41 },
-    { id: 4, unit: 'Unit 9A', tenant: 'Emma Davis', endDate: '2024-03-22', daysLeft: 53 },
-];
+/**
+ * Calculates the number of days a bill is overdue
+ * @param dueDate - The due date string in format 'YYYY-MM-DD'
+ * @returns The number of days overdue (positive number)
+ */
+const getDaysOverdue = (dueDate: string): number => {
+    const today = new Date();
+    const due = new Date(dueDate);
+
+    // Reset time to avoid timezone issues
+    today.setHours(0, 0, 0, 0);
+    due.setHours(0, 0, 0, 0);
+
+    // Calculate difference in milliseconds and convert to days
+    const diffTime = today.getTime() - due.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+};
+
+/**
+ * Formats a currency string or number to Philippine Peso format
+ * @param amount - The amount to format (string or number)
+ * @returns Formatted currency string
+ */
+const formatCurrency = (amount: string | number): string => {
+    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP'
+    }).format(numAmount);
+};
 
 const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -77,16 +113,18 @@ interface DashboardPageProps {
     paidRentalBillsThisMonth: number;
     numberOfMaintenanceRequest: number;
     maintenanceRequests: MaintenanceRequest[];
+    overdueBills: OverDueBills[];
 }
 
 const DashboardPage = ({
-    numberOfUnits,
-    numberOfAvailableUnits,
-    numberOfOccupiedUnits,
-    paidRentalBillsThisMonth,
-    numberOfMaintenanceRequest,
-    maintenanceRequests,
-}: DashboardPageProps) => {
+                           numberOfUnits,
+                           numberOfAvailableUnits,
+                           numberOfOccupiedUnits,
+                           paidRentalBillsThisMonth,
+                           numberOfMaintenanceRequest,
+                           maintenanceRequests,
+                           overdueBills,
+                       }: DashboardPageProps) => {
     const metricData = [
         {
             title: 'Total Units',
@@ -105,7 +143,6 @@ const DashboardPage = ({
             ),
             icon: <PhilippinePeso className="h-4 w-4 text-muted-foreground" />,
         },
-
         {
             title: 'Pending Requests',
             metric: numberOfMaintenanceRequest,
@@ -119,11 +156,17 @@ const DashboardPage = ({
             <LandlordLayout>
                 <div className="space-y-6">
                     {/* Header */}
-                    <LandlordPageHeader title={'Dashboard'} subtitle={'Overview of your rental properties and operations'} />
+                    <LandlordPageHeader
+                        title={'Dashboard'}
+                        subtitle={'Overview of your rental properties and operations'}
+                    />
 
                     {/* Key Metrics */}
                     <div className="flex w-full gap-5">
-                        <MetricGrid metrics={metricData} className={'grid flex-1 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1'} />
+                        <MetricGrid
+                            metrics={metricData}
+                            className={'grid flex-1 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1'}
+                        />
                         <div className="flex-1">
                             <Card className="h-full">
                                 <DashboardCardHeader
@@ -158,28 +201,37 @@ const DashboardPage = ({
                     </div>
 
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                        {/* Upcoming Lease Expirations */}
+                        {/* Overdue Bills */}
                         <Card>
                             <DashboardCardHeader
-                                icon={<Calendar className="h-5 w-5" />}
-                                cardTitle={'Upcoming Lease Expirations'}
-                                cardDescription={'Leases expiring in the next 60 days'}
+                                icon={<DollarSign className="h-5 w-5" />}
+                                cardTitle={"Overdue Bills"}
+                                cardDescription={"Outstanding payments past due date"}
                             />
                             <DashboardCardContent
-                                items={upcomingExpirations}
-                                renderItems={(lease: UpcomingExpirations) => (
-                                    <div className="flex items-center justify-between rounded-lg border p-3">
-                                        <div>
-                                            <p className="font-medium">{lease.unit}</p>
-                                            <p className="text-sm text-gray-600">{lease.tenant}</p>
+                                items={overdueBills}
+                                renderItems={(bill: OverDueBills) => {
+                                    const daysOverdue = getDaysOverdue(bill.due_date);
+
+                                    return (
+                                        <div className="flex items-center justify-between rounded-lg border p-3">
+                                            <div>
+                                                <p className="font-medium">{bill.user_name}</p>
+                                                <p className="text-sm text-gray-600">Lease ID: {bill.lease_id}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <Badge variant="destructive">
+                                                    {daysOverdue} days overdue
+                                                </Badge>
+                                                <p className="mt-1 text-sm font-medium">
+                                                    {formatCurrency(bill.balance)}
+                                                </p>
+                                                <p className="text-xs text-gray-500">Due: {bill.due_date}</p>
+                                            </div>
                                         </div>
-                                        <div className="text-right">
-                                            <Badge variant={lease.daysLeft <= 30 ? 'destructive' : 'secondary'}>{lease.daysLeft} days</Badge>
-                                            <p className="mt-1 text-xs text-gray-500">{lease.endDate}</p>
-                                        </div>
-                                    </div>
-                                )}
-                                getKey={(lease) => lease.id}
+                                    );
+                                }}
+                                getKey={(bill) => bill.lease_id}
                             />
                         </Card>
 
