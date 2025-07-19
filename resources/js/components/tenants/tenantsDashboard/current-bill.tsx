@@ -21,6 +21,13 @@ interface CurrentBillProps {
     leaseID?: number
 }
 
+const getMonthYear = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+    })
+}
+
 const CurrentBill = ({ currentBill, leaseData, leaseID }: CurrentBillProps) => {
     const [selectedBill, setSelectedBill] = useState<RentalBill | null>(null)
     const [paymentModalOpen, setPaymentModalOpen] = useState(false)
@@ -51,13 +58,6 @@ const CurrentBill = ({ currentBill, leaseData, leaseID }: CurrentBillProps) => {
             year: "numeric",
             month: "short",
             day: "numeric",
-        })
-    }
-
-    const getMonthYear = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
         })
     }
 
@@ -166,13 +166,6 @@ const BillPaymentModal = ({ bill, leaseData, leaseID, onClose }: BillPaymentModa
 
     const formatCurrency = (amount: number | string) => {
         return `₱${Number.parseFloat(amount.toString()).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
-    }
-    
-    const getMonthYear = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-        })
     }
 
     return (
