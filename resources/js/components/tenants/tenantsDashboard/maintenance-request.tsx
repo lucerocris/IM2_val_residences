@@ -1,6 +1,8 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Wrench, Calendar, AlertCircle, CheckCircle, Clock, XCircle } from "lucide-react"
+import GetStatusBadge from "./maintenance-request/get-status-badge"
+import GetPriorityBadge from "./maintenance-request/get-priority-badge"
 
 interface MaintenanceRequest {
     id: number
@@ -18,75 +20,6 @@ interface MaintenanceRequestComponentProps {
 }
 
 const MaintenanceRequestComponent = ({ maintenanceRequests }: MaintenanceRequestComponentProps) => {
-    const getStatusBadge = (status: string) => {
-        switch (status) {
-            case "pending":
-                return (
-                    <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
-                        <Clock className="w-3 h-3 mr-1" />
-                        Pending
-                    </Badge>
-                )
-            case "in_progress":
-                return (
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-100">
-                        <AlertCircle className="w-3 h-3 mr-1" />
-                        In Progress
-                    </Badge>
-                )
-            case "completed":
-                return (
-                    <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-100">
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        Completed
-                    </Badge>
-                )
-            case "cancelled":
-                return (
-                    <Badge variant="secondary" className="bg-gray-100 text-gray-800 hover:bg-gray-100">
-                        <XCircle className="w-3 h-3 mr-1" />
-                        Cancelled
-                    </Badge>
-                )
-            default:
-                return <Badge variant="outline">{status}</Badge>
-        }
-    }
-
-    const getPriorityBadge = (priority: string) => {
-        switch (priority) {
-            case "urgent":
-                return (
-                    <Badge variant="destructive" className="text-xs">
-                        Urgent
-                    </Badge>
-                )
-            case "high":
-                return (
-                    <Badge variant="secondary" className="bg-red-100 text-red-800 hover:bg-red-100 text-xs">
-                        High
-                    </Badge>
-                )
-            case "medium":
-                return (
-                    <Badge variant="secondary" className="bg-orange-100 text-orange-800 hover:bg-orange-100 text-xs">
-                        Medium
-                    </Badge>
-                )
-            case "low":
-                return (
-                    <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-100 text-xs">
-                        Low
-                    </Badge>
-                )
-            default:
-                return (
-                    <Badge variant="outline" className="text-xs">
-                        {priority}
-                    </Badge>
-                )
-        }
-    }
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("en-US", {
@@ -144,8 +77,8 @@ const MaintenanceRequestComponent = ({ maintenanceRequests }: MaintenanceRequest
                                         </div>
                                     </div>
                                     <div className="flex flex-col gap-2 ml-4">
-                                        {getStatusBadge(request.request_status)}
-                                        {getPriorityBadge(request.priority_level)}
+                                        <GetStatusBadge status = {request.request_status} />
+                                        <GetPriorityBadge priority = {request.priority_level} />
                                     </div>
                                 </div>
 
