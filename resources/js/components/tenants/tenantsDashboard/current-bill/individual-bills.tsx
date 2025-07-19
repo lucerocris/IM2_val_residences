@@ -2,21 +2,8 @@ import { Calendar } from "lucide-react";
 import { GetBillStatus } from "./get-bill-badges";
 import { RentalBill } from "@/types/tenantDashboard.types";
 import { Button } from "@/components/ui/button";
-
-const getMonthYear = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-    })
-}
-
-const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-    })
-}
+import { getMonthYear } from "@/utils/date";
+import { formatDate } from "@/utils/format";
 
 interface DatesProps {
     due_date: string;

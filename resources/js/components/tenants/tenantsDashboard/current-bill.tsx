@@ -1,9 +1,8 @@
 "use client"
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { DollarSign, Calendar, AlertCircle, CreditCard } from "lucide-react"
+import { DollarSign, CreditCard } from "lucide-react"
 import type { RentalBill } from "@/types/tenantDashboard.types"
 import { router } from "@inertiajs/react"
 import { useState } from "react"
@@ -12,26 +11,16 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import NoCurrentBills from "./current-bill/no-current-bill"
-import { GetBillStatus } from "./current-bill/get-bill-badges"
 import { AmountDue, BillingDate, BillPeriod, DueDate, Status } from "./current-bill/bill-details"
 import UnpaidBills from "./current-bill/summary-section"
 import { AmountAndStatus, Dates } from "./current-bill/individual-bills"
+import { formatCurrency } from "@/utils/format"
+import { getMonthYear } from "@/utils/date"
 
 interface CurrentBillProps {
     currentBill: RentalBill[]
     leaseData?: any
     leaseID?: number
-}
-
-const getMonthYear = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-    })
-}
-
-const formatCurrency = (amount: number | string) => {
-    return `₱${Number.parseFloat(amount.toString()).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
 }
 
 const CurrentBill = ({ currentBill, leaseData, leaseID }: CurrentBillProps) => {

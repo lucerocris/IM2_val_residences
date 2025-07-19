@@ -1,18 +1,6 @@
 import { Calendar, DollarSign, FileText, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-// Global functions to be reused
-const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    })
-}
-
-const formatCurrency = (amount: number | string) => {
-    return `₱${Number.parseFloat(amount.toString()).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
-}
+import { formatDate, formatCurrency } from "@/utils/format";
 
 interface StartDateProps {
     start_date: string;

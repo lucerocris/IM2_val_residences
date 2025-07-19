@@ -1,12 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-
-const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-    })
-}
+import { formatDate } from "@/utils/format";
 
 interface BillPeriodProps {
     due_date: string;

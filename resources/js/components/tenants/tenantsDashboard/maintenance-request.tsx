@@ -1,9 +1,10 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Wrench, Calendar, AlertCircle, CheckCircle, Clock, XCircle } from "lucide-react"
+import { Wrench, Calendar} from "lucide-react"
 import { GetStatusBadge, GetPriorityBadge } from "./maintenance-request/get-maintenance-badges"
 import { CompletionDate, LandlordNotes, TenantRemarks } from "./maintenance-request/additional-info"
 import NoMaintenanceRequest from "./maintenance-request/no-maintenance"
+import { formatDate } from "@/utils/format"
 
 interface MaintenanceRequest {
     id: number
@@ -21,14 +22,6 @@ interface MaintenanceRequestComponentProps {
 }
 
 const MaintenanceRequestComponent = ({ maintenanceRequests }: MaintenanceRequestComponentProps) => {
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        })
-    }
 
     if (!maintenanceRequests || maintenanceRequests.length === 0) {
         return (

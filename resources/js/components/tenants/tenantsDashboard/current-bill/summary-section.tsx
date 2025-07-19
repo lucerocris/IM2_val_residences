@@ -1,15 +1,12 @@
 import { AlertCircle } from "lucide-react";
 import type { RentalBill } from "@/types/tenantDashboard.types";
+import { formatCurrency } from "@/utils/format";
 
 interface UnpaidBillsProps {
     currentBill: RentalBill[];
 }
 
 const UnpaidBills = ({ currentBill }:UnpaidBillsProps) => {
-
-    const formatCurrency = (amount: number | string) => {
-        return `₱${Number.parseFloat(amount.toString()).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
-    }
 
     const unpaidBills = currentBill.filter((bill) => bill.payment_status !== "paid")
     const totalUnpaid = unpaidBills.reduce((sum, bill) => sum + Number.parseFloat(bill.rent_amount), 0)

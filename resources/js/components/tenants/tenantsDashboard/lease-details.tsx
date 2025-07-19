@@ -1,6 +1,5 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Home, Calendar, DollarSign, FileText, AlertCircle } from "lucide-react"
+import { Home} from "lucide-react"
 import type { Lease, RentalBill } from "@/types/tenantDashboard.types"
 import { DepositAmount, EndDate, LeaseStatus, LeaseTerm, MonthlyRent, RemainingBalance, StartDate } from "./lease-details/lease-details-grid"
 
