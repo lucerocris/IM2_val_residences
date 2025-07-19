@@ -167,15 +167,7 @@ const BillPaymentModal = ({ bill, leaseData, leaseID, onClose }: BillPaymentModa
     const formatCurrency = (amount: number | string) => {
         return `₱${Number.parseFloat(amount.toString()).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
     }
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        })
-    }
-
+    
     const getMonthYear = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("en-US", {
             year: "numeric",
@@ -199,8 +191,8 @@ const BillPaymentModal = ({ bill, leaseData, leaseID, onClose }: BillPaymentModa
                     <div className="space-y-2">
                         <BillPeriod due_date = {getMonthYear(bill.due_date)} />
                         <AmountDue rent_amount = {formatCurrency(bill.rent_amount)} />
-                        <DueDate payment_status= {bill.payment_status} due_date = {formatDate(bill.due_date)} />
-                        {bill.billing_date && <BillingDate billing_date = {formatDate(bill.billing_date)} /> }
+                        <DueDate payment_status= {bill.payment_status} due_date = {bill.due_date} />
+                        {bill.billing_date && <BillingDate billing_date = {bill.billing_date} /> }
                         <Status payment_status= {bill.payment_status} />
                     </div>
                 </div>

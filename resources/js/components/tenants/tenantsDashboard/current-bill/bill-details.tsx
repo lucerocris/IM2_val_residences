@@ -1,13 +1,18 @@
 import { Badge } from "@/components/ui/badge";
 
-interface BillDetailsProps {
-    due_date?: string;
-    rent_amount?: string;
-    payment_status?: "paid" | "pending" | "overdue" | "partial" | string;
-    billing_date?: string;
-} 
+const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    })
+}
 
-export const BillPeriod = ({ due_date }:BillDetailsProps) => {
+interface BillPeriodProps {
+    due_date: string;
+}
+
+export const BillPeriod = ({ due_date }:BillPeriodProps) => {
     return (
         <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600">Bill Period:</span>
@@ -16,7 +21,11 @@ export const BillPeriod = ({ due_date }:BillDetailsProps) => {
     )
 }
 
-export const AmountDue = ({ rent_amount }:BillDetailsProps) => {
+interface AmountDueProps {
+    rent_amount: string;
+}
+
+export const AmountDue = ({ rent_amount }:AmountDueProps) => {
     return(
         <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600">Amount Due:</span>
@@ -25,7 +34,12 @@ export const AmountDue = ({ rent_amount }:BillDetailsProps) => {
     )
 }
 
-export const DueDate = ({ payment_status, due_date }:BillDetailsProps) => {
+interface DueDateProps {
+    payment_status: string;
+    due_date: string;
+}
+
+export const DueDate = ({ payment_status, due_date }:DueDateProps) => {
     const getStatusColor = (status:string) => {
         switch(status) {
             case "overdue":
@@ -37,29 +51,34 @@ export const DueDate = ({ payment_status, due_date }:BillDetailsProps) => {
         }
     }
 
-    const statusColor = payment_status ? getStatusColor(payment_status) : "text-gray-600"
-
     return(
         <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600">Due Date:</span>
-            <span className={`text-sm font-medium ${statusColor}`}>
-            {due_date}
+            <span className={`text-sm font-medium ${getStatusColor(payment_status)}`}>
+            {formatDate(due_date)}
             </span>
         </div>
     )
 }
 
-export const BillingDate = ({ billing_date }:BillDetailsProps) => {
+interface BillingDateProps {
+    billing_date: string;
+}
+
+export const BillingDate = ({ billing_date }:BillingDateProps) => {
     return(
         <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600">Billing Date:</span>
-            <span className="text-sm text-gray-900">{billing_date}</span>
+            <span className="text-sm text-gray-900">{formatDate(billing_date)}</span>
         </div>
     )
 }
 
-export const Status = ({ payment_status }:BillDetailsProps) => {
-    const statusLabel = payment_status ? payment_status.charAt(0).toUpperCase() + payment_status.slice(1) : "N/A";
+interface StatusProps {
+    payment_status: string;
+}
+
+export const Status = ({ payment_status }:StatusProps) => {
 
     return(
         <div className="flex justify-between items-center">
@@ -74,7 +93,7 @@ export const Status = ({ payment_status }:BillDetailsProps) => {
                             : ""
                 }
             >
-                {statusLabel}
+                {payment_status.charAt(0).toUpperCase() + payment_status.slice(1)}
             </Badge>
         </div>
     )
