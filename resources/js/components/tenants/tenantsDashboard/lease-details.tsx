@@ -2,6 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Home} from "lucide-react"
 import type { Lease, RentalBill } from "@/types/tenantDashboard.types"
 import { DepositAmount, EndDate, LeaseStatus, LeaseTerm, MonthlyRent, RemainingBalance, StartDate } from "./lease-details/lease-details-grid"
+import PropertyAddress from "./lease-details/property-address"
 
 interface LeaseDetailsProps {
     leaseData: Lease
@@ -30,13 +31,7 @@ const LeaseDetails = ({ leaseData, rentalBill }: LeaseDetailsProps) => {
             <CardContent>
                 <div className="space-y-6">
                     {/* Property Address */}
-                    <div className="rounded-lg bg-blue-50 p-4 border border-blue-100">
-                        <h3 className="font-semibold text-blue-900 mb-1">Property Address</h3>
-                        <p className="text-blue-800">
-                            {leaseData.units?.address}
-                            {leaseData.units?.unit_number && ` - Unit ${leaseData.units.unit_number}`}
-                        </p>
-                    </div>
+                    <PropertyAddress address = {leaseData.units?.address} unit_number = {leaseData.units?.unit_number} />
 
                     {/* Lease Details Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
