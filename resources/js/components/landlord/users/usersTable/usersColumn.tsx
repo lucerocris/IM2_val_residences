@@ -6,7 +6,7 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { router } from '@inertiajs/react';
 import type { ColumnDef } from '@tanstack/react-table';
@@ -29,11 +29,18 @@ export type User = {
     created_at: string;
 };
 
-const handleDelete = (userId: string) => {
+const handleDelete = (userId: string, type: string) => {
     if (confirm('Are you sure you want to delete this user?')) {
-        router.delete(`/admin/users/${userId}`, {
-            preserveScroll: true,
-        });
+        if (type == 'prospective_tenant') {
+            router.delete(`/landlord/users/${userId}`, {
+                preserveScroll: true
+            });
+        } else {
+            router.delete(`/landlord/tenants/${userId}`, {
+                preserveScroll: true
+            });
+        }
+
     }
 };
 
@@ -58,7 +65,7 @@ export const usersColumns: ColumnDef<User>[] = [
                     <span className="text-xs text-muted-foreground">ID: {row.original.id}</span>
                 </div>
             );
-        },
+        }
     },
     {
         accessorKey: 'email',
@@ -78,7 +85,7 @@ export const usersColumns: ColumnDef<User>[] = [
                     <span className="truncate">{email}</span>
                 </div>
             );
-        },
+        }
     },
     {
         accessorKey: 'user_contact_number',
@@ -93,7 +100,7 @@ export const usersColumns: ColumnDef<User>[] = [
         cell: ({ row }) => {
             const contact = row.getValue('user_contact_number') as string;
             return <span className="font-mono">{contact}</span>;
-        },
+        }
     },
     {
         accessorKey: 'user_type',
@@ -106,21 +113,21 @@ export const usersColumns: ColumnDef<User>[] = [
                     backgroundColor: '#dcfce7',
                     color: '#166534',
                     borderColor: '#bbf7d0',
-                    label: 'Tenant',
+                    label: 'Tenant'
                 },
                 prospective_tenant: {
                     backgroundColor: '#dbeafe',
                     color: '#2563eb',
                     borderColor: '#bfdbfe',
-                    label: 'Prospective Tenant',
-                },
+                    label: 'Prospective Tenant'
+                }
             };
 
             const config = typeConfig[type as keyof typeof typeConfig] || {
                 backgroundColor: '#f3f4f6',
                 color: '#6b7280',
                 borderColor: '#e5e7eb',
-                label: 'Unknown',
+                label: 'Unknown'
             };
 
             return (
@@ -132,7 +139,7 @@ export const usersColumns: ColumnDef<User>[] = [
                             backgroundColor: config.backgroundColor,
                             color: config.color,
                             borderColor: config.borderColor,
-                            border: '1px solid',
+                            border: '1px solid'
                         }}
                     >
                         {config.label}
@@ -142,7 +149,7 @@ export const usersColumns: ColumnDef<User>[] = [
         },
         filterFn: (row, id, value) => {
             return value.includes(row.getValue(id));
-        },
+        }
     },
     {
         accessorKey: 'employment_status',
@@ -165,7 +172,7 @@ export const usersColumns: ColumnDef<User>[] = [
                 <span className="text-muted-foreground pl-3">Not specified</span>
             );
         },
-        enableSorting: false,
+        enableSorting: false
     },
     {
         accessorKey: 'monthly_income',
@@ -191,11 +198,11 @@ export const usersColumns: ColumnDef<User>[] = [
 
             const formatted = new Intl.NumberFormat('en-US', {
                 style: 'currency',
-                currency: 'PHP',
+                currency: 'PHP'
             }).format(income);
 
             return <span className="pl-3 font-medium">{formatted}</span>;
-        },
+        }
     },
     {
         accessorKey: 'move_in_date',
@@ -225,7 +232,7 @@ export const usersColumns: ColumnDef<User>[] = [
                     <span>{date.toLocaleDateString()}</span>
                 </div>
             );
-        },
+        }
     },
     {
         accessorKey: 'current_address',
@@ -246,7 +253,7 @@ export const usersColumns: ColumnDef<User>[] = [
                 <span className="text-muted-foreground">Not specified</span>
             );
         },
-        enableSorting: false,
+        enableSorting: false
     },
     {
         id: 'actions',
@@ -263,29 +270,26 @@ export const usersColumns: ColumnDef<User>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.id)}>
-                            Copy user ID
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.email)}>
-                            Copy email
-                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => router.visit(`/admin/users/${user.id}`)}>
-                            <User className="mr-2 h-4 w-4" /> View profile
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => router.visit(`/admin/users/${user.id}/edit`)}>
-                            <Edit className="mr-2 h-4 w-4" /> Edit user
-                        </DropdownMenuItem>
+
+                        {user.user_type === 'tenant' && (
+                            <>
+                                <DropdownMenuItem onClick={() => router.visit(`/landlord/tenants/${user.id}/edit`)}>
+                                    <Edit className="mr-2 h-4 w-4" /> Edit tenant
+                                </DropdownMenuItem>
+                            </>
+                        )}
+
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                             className="text-red-600"
-                            onClick={() => handleDelete(user.id)}
+                            onClick={() => handleDelete(user.id, user.user_type)}
                         >
                             <Trash2 className="mr-2 h-4 w-4" /> Delete user
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
-        },
-    },
+        }
+    }
 ];

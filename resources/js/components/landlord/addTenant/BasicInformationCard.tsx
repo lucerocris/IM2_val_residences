@@ -97,7 +97,7 @@ const BasicInformationCard = ({user_name, email, user_contact_number, emergency_
                 </div>
             </CardContent>
         </Card>
-    )
+    );
 }
 
 export default BasicInformationCard;

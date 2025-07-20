@@ -343,7 +343,7 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
         id: 'actions',
         cell: ({ row }) => {
             const tenant = row.original;
-
+``
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
