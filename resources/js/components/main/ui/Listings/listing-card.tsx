@@ -116,7 +116,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
                                 <Button onClick={() => onViewDetails(listing)} variant="outline" className="flex-1">
                                     View Details
                                 </Button>
-                                <Button onClick={() => onApply(listing)} className="flex-1">
+                                <Button onClick={() => onApply(listing)} className="flex-1" disabled = {listing.availability_status?.toLowerCase() === "occupied"}>
                                     Apply Now
                                 </Button>
                             </div>
@@ -180,7 +180,7 @@ const ListingCard = ({ listing, onViewDetails, onApply, featured = false }: List
                     <Button onClick={() => onViewDetails(listing)} variant="outline" className="flex-1">
                         View Details
                     </Button>
-                    <Button onClick={() => onApply(listing)} className="flex-1">
+                    <Button onClick={() => onApply(listing)} className="flex-1" disabled = {listing.availability_status?.toLowerCase() === "occupied"}>
                         Apply Now
                     </Button>
                 </div>
