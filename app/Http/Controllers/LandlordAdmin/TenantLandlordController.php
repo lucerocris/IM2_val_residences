@@ -111,4 +111,31 @@ class TenantLandlordController extends Controller
         return redirect()->back()->with('success', 'Tenant deleted successfully and related leases updated.');
     }
 
-}
+
+    public function restore($id)
+    {
+        $tenant = Tenant::onlyTrashed()->findOrFail($id);
+
+        DB::transaction(function () use ($tenant) {
+            // Restore tenant
+            $tenant->restore();
+
+            // Restore leases if they use soft deletes
+            $tenant->leases()->onlyTrashed()->restore();
+
+            // Set restored leases to active
+            $tenant->leases()->update(['lease_status' => 'active']);
+
+            // Update units back to unavailable
+            foreach ($tenant->leases as $lease) {
+                if ($lease->units) {
+                    $lease->units->update(['availability_status' => 'occupied']);
+                }
+            }
+
+            // Mark tenant as active again
+            $tenant->update(['status' => 'active']);
+        });
+
+        return redirect()->back()->with('success', 'Tenant restored successfully.');
+    }}

@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('user_contact_number')->nullable();
 
             $table->enum('user_type', ['landlord', 'tenant', 'prospective_tenant']);
-            $table->boolean('active')->default(true);
+            $table->enum('status', ['active', 'inactive'])->default('active');
+
 
             //para sa tenants
             $table->date('move_in_date')->nullable();

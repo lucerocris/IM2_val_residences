@@ -105,6 +105,7 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
     Route::post('/landlord/tenants', [TenantLandlordController::class, 'store']);
     Route::put('/landlord/tenants/{id}', [TenantLandlordController::class, 'update']);
     Route::delete('/landlord/tenants/{id}', [TenantLandlordController::class, 'destroy'])->name('tenants.destroy');
+    Route::patch('/landlord/tenants/{id}/restore', [TenantLandlordController::class, 'restore']);
 
 // Landlord applications
     Route::get('/landlord/applications', [RentalApplicationController::class, 'index']);
