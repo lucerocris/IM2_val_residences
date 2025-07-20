@@ -14,11 +14,11 @@ class TenantOnboardingController extends Controller
     {
     }
 
-    public function show() {
+    public function show()
+    {
 
         //gets the current pending lease via the getPendingOnboardingLease method
         $pendingLease = $this->onboardingService->getPendingOnboardingLease(Auth::user());
-
 
 
         //so if the $pendingLease is null that means the current tenant already completed the onboarding. if he/she already completed the onboarding, he/she is redirected to the tenant dashboard
@@ -60,13 +60,12 @@ class TenantOnboardingController extends Controller
             abort(403, 'Unauthorized access to lease');
         }
 
-        $completed = $this->onboardingService->markFeesAsPaid(
+        $this->onboardingService->markFeesAsPaid(
             $lease,
             $request->payment_amount,
             $request->file('proof_of_payment'));
 
-        return back()->with('success', 'Payment and proof of payment uploaded successfully!')
-            ->with('lease_activated', $completed);
+        return back()->with('success', 'Payment and proof of payment uploaded successfully!');
 
 
     }
@@ -74,26 +73,27 @@ class TenantOnboardingController extends Controller
     public function uploadSignedLease(Request $request)
     {
         $request->validate([
-            'signed_lease' => 'required|file|mimes:pdf|max:10240', // 10MB max
+            'signed_lease' => 'required|file|mimes:pdf|max:10240',
             'lease_id' => 'required|exists:leases,id',
         ]);
 
         $lease = Lease::findOrFail($request->lease_id);
 
         if ($lease->tenant_id !== Auth::id()) {
+
             abort(403, 'Unauthorized access to lease');
         }
 
-        $completed = $this->onboardingService->markSignedLeaseAsUploaded($lease, $request->file('signed_lease'));
 
-        return back()->with('success', 'Signed lease document uploaded successfully!')
-            ->with('lease_activated', $completed);
+        $this->onboardingService->markSignedLeaseAsUploaded($lease, $request->file('signed_lease'));
+
+        return back()->with('success', 'Signed lease document uploaded successfully!');
     }
 
     public function uploadId(Request $request)
     {
         $request->validate([
-            'id_document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240', // 5MB max
+            'id_document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'lease_id' => 'required|exists:leases,id',
         ]);
 
@@ -103,10 +103,10 @@ class TenantOnboardingController extends Controller
             abort(403, 'Unauthorized access to lease');
         }
 
-        $completed = $this->onboardingService->markIdAsUploaded($lease, $request->file('id_document'));
+        $this->onboardingService->markIdAsUploaded($lease, $request->file('id_document'));
 
-        return back()->with('success', 'ID document uploaded successfully!')
-            ->with('lease_activated', $completed);
+        return back()->with('success', 'ID document uploaded successfully!');
+
     }
 
     public function downloadLease(Lease $lease)

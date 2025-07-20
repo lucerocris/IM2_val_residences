@@ -192,7 +192,7 @@ class Lease extends Model
     }
 
 
-    public function sendLeaseForReview(): bool
+    public function sendLeaseForReview(): void
     {
         if ($this->isOnboardingComplete() && $this->lease_status === 'pending') {
             $this->update([
@@ -201,9 +201,7 @@ class Lease extends Model
                 'documents_submitted_for_review' => true,
                 'documents_submitted_at' => now(),
             ]);
-            return true;
         }
-        return false;
     }
 
 
@@ -267,13 +265,6 @@ class Lease extends Model
         return DB::table('leases')->where('tenant_id', $tenant_id)->value('id');
     }
 
-    public function isReadyForLandlordReview(): bool
-    {
-        return $this->isOnboardingComplete() &&
-            $this->lease_status === 'pending' &&
-            $this->landlord_review_status === 'pending';
-    }
-
 
     /**
      * New method for landlord to approve and activate lease
@@ -304,7 +295,8 @@ class Lease extends Model
             'landlord_review_notes' => $reason,
             'landlord_reviewed_at' => now(),
             'landlord_reviewed_by' => $landlordId,
-            // Reset document flags so tenant can re-upload
+
+            'lease_status' => 'pending',
             'onboarding_signed_lease_uploaded' => false,
             'onboarding_id_uploaded' => false,
             'onboarding_fees_paid' => false,
@@ -314,17 +306,6 @@ class Lease extends Model
         return true;
     }
 
-    /**
-     * Get leases pending landlord review
-     */
-    public static function getPendingReviewLeases(int $landlordId)
-    {
-        return self::with(['tenant:id,user_name,email,user_contact_number', 'units:id,address,unit_number,landlord_id'])
-            ->where('documents_submitted_for_review', true)
-            ->where('landlord_review_status', 'pending')
-            ->orderBy('documents_submitted_at', 'asc')
-            ->get();
-    }
 
     /**
      * Get the current onboarding status of the lease

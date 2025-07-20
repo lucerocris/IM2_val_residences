@@ -57,7 +57,7 @@ interface ApplicationModalProps {
     onReviewNotesChange: (notes: string) => void;
     onMessageTextChange: (message: string) => void;
     onApplicationAction: (applicationId: string, action: 'approved' | 'rejected', notes: string) => void;
-    onSendMessage: (applicationId: string, message: string) => void;
+
 }
 
 const InfoRow = ({ icon: Icon, label, value, children }: { icon: any; label: string; value?: string | number; children?: React.ReactNode }) => (
@@ -78,7 +78,6 @@ const ApplicationModal = ({
     onReviewNotesChange,
     onMessageTextChange,
     onApplicationAction,
-    onSendMessage,
     messageText,
 }: ApplicationModalProps) => {
     const [showApproveDialog, setShowApproveDialog] = useState(false);
@@ -300,27 +299,6 @@ const ApplicationModal = ({
                         </Card>
                     )}
 
-                    {/* Communication */}
-                    <Card>
-                        <CardHeader className="pb-3">
-                            <CardTitle className="flex items-center gap-2 text-base font-medium">
-                                <MessageSquare className="h-4 w-4" />
-                                Send Message
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                            <Textarea
-                                placeholder="Type your message to the applicant..."
-                                value={messageText}
-                                onChange={(e) => onMessageTextChange(e.target.value)}
-                                rows={3}
-                            />
-                            <Button onClick={() => onSendMessage(application.id, messageText)} disabled={!messageText.trim()} size="sm">
-                                <MessageSquare className="mr-2 h-4 w-4" />
-                                Send Message
-                            </Button>
-                        </CardContent>
-                    </Card>
                 </div>
 
                 {/* Approve Confirmation Dialog */}

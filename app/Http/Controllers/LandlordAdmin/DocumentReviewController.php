@@ -45,10 +45,6 @@ class DocumentReviewController extends Controller
         ]);
 
 
-        if ($lease->units->landlord_id !== Auth::id()) {
-            abort(403, 'Unauthorized access');
-        }
-
         $success = $lease->approveAndActivateLease(Auth::id(), $request->notes);
 
         if ($success) {
@@ -64,10 +60,7 @@ class DocumentReviewController extends Controller
             'reason' => 'required|string|max:1000',
         ]);
 
-        // Ensure landlord owns the unit
-        if ($lease->units->landlord_id !== Auth::id()) {
-            abort(403, 'Unauthorized access');
-        }
+
 
         $success = $lease->rejectDocuments(Auth::id(), $request->reason);
 
@@ -80,10 +73,7 @@ class DocumentReviewController extends Controller
 
     public function downloadDocument(Lease $lease, string $documentType)
     {
-        // Ensure landlord owns the unit
-        if ($lease->units->landlord_id !== Auth::id()) {
-            abort(403, 'Unauthorized access');
-        }
+
 
         $filePath = match ($documentType) {
             'signed_lease' => $lease->onboarding_signed_lease_path,

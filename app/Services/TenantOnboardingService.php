@@ -38,9 +38,9 @@ class TenantOnboardingService
 
     }
 
-    public function markFeesAsPaid(Lease $lease, float $amount, UploadedFile $proofOfPayment): bool
+    public function markFeesAsPaid(Lease $lease, float $amount, UploadedFile $proofOfPayment): void
     {
-        // Store the proof of payment image
+        // this creates a path for the proof of payment, and gets it's path
         $proofPath = $proofOfPayment->store('payment_proofs', 'public');
 
         $lease->update([
@@ -49,11 +49,10 @@ class TenantOnboardingService
             'onboarding_fees_amount' => $amount,
             'onboarding_proof_of_payment_path' => $proofPath,
         ]);
-
-        return $lease->sendLeaseForReview();
+        $lease->sendLeaseForReview();
     }
 
-    public function markSignedLeaseAsUploaded(Lease $lease, UploadedFile $signedLease): bool
+    public function markSignedLeaseAsUploaded(Lease $lease, UploadedFile $signedLease): void
     {
         $leasePath = $signedLease->store('signed_leases', 'public');
 
@@ -63,10 +62,10 @@ class TenantOnboardingService
             'onboarding_signed_lease_path' => $leasePath,
         ]);
 
-        return $lease->sendLeaseForReview();
+        $lease->sendLeaseForReview();
     }
 
-    public function markIdAsUploaded(Lease $lease, UploadedFile $idDocument): bool
+    public function markIdAsUploaded(Lease $lease, UploadedFile $idDocument): void
     {
         $idPath = $idDocument->store('tenant_ids', 'public');
 
@@ -76,32 +75,9 @@ class TenantOnboardingService
             'onboarding_id_document_path' => $idPath,
         ]);
 
-        return $lease->sendLeaseForReview();
+        $lease->sendLeaseForReview();
     }
 
-    public function requiresOnboarding(User $tenant): bool
-    {
-        return $this->getPendingOnboardingLease($tenant) !== null;
-    }
-
-    public function getOnboardingStatus(User $tenant): ?array
-    {
-        $lease = $this->getPendingOnboardingLease($tenant);
-
-        if (!$lease) {
-            return null;
-        }
-
-        return [
-            'lease_id' => $lease->id,
-            'status' => $lease->getOnboardingStatus(),
-            'completion_percentage' => $lease->getOnboardingCompletionPercentage(),
-            'onboarding_steps' => $lease->getOnboardingSteps(),
-            'landlord_review_status' => $lease->landlord_review_status,
-            'landlord_review_notes' => $lease->landlord_review_notes,
-            'pending_requirements' => $lease->getPendingOnboardingRequirements(),
-        ];
-    }
 
     /**
     * Check if tenant can re-upload documents after rejection
