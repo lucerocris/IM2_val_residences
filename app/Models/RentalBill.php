@@ -219,7 +219,14 @@ class RentalBill extends Model
             ->having('balance', '>', 0)
             ->get();
     }
+
+    public static function getNumberOfOverdue() {
+        return DB::table('rental_bills')->where('payment_status', '=', 'overdue')->count();
+    }
 }
+
+
+
 
 //export interface RentalBill {
 //id: number,

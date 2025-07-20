@@ -136,9 +136,8 @@ const DashboardPage = ({
             title: 'Monthly Revenue',
             metric: paidRentalBillsThisMonth,
             metricDescription: (
-                <p className="mt-1 flex items-center text-xs text-green-600">
-                    <TrendingUp className="mr-1 h-3 w-3" />
-                    +8.2% from last month
+                <p className="mt-1 flex items-center text-xs ">
+                    Revenue this month
                 </p>
             ),
             icon: <PhilippinePeso className="h-4 w-4 text-muted-foreground" />,

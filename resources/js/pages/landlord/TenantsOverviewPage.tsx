@@ -101,10 +101,13 @@ export const leaseStatuses = [
 interface TenantsOverviewPageProps {
     tenants: Tenant[];
     numberOfActiveTenants: number;
+    monthRevenue: number;
+    pendingReviews: number;
+    expiringLeases: number;
 
 }
 
-const TenantsOverviewPage = ({ tenants, numberOfActiveTenants }: TenantsOverviewPageProps) => {
+const TenantsOverviewPage = ({ expiringLeases,  tenants, numberOfActiveTenants, monthRevenue, pendingReviews }: TenantsOverviewPageProps) => {
     const metricData = [
         {
             title: 'Active Tenants',
@@ -114,20 +117,20 @@ const TenantsOverviewPage = ({ tenants, numberOfActiveTenants }: TenantsOverview
         },
         {
             title: 'Lease Expiring Soon',
-            metric: '2',
+            metric: expiringLeases,
             metricDescription: 'Within next 90 days',
             icon: <Calendar className="h-4 w-4 text-muted-foreground" />,
         },
         {
             title: 'Monthly Revenue',
-            metric: '$12,800',
-            metricDescription: '+8.5% from last month',
+            metric: monthRevenue,
+            metricDescription: 'Revenue this month',
             icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
         },
         {
-            title: 'Issues to Address',
-            metric: '2',
-            metricDescription: '1 expired lease, 1 unemployed tenant',
+            title: 'Pending Reviews',
+            metric: pendingReviews,
+            metricDescription: 'Pending documents to be reviewed',
             icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
         },
     ];

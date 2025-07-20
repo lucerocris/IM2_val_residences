@@ -170,10 +170,10 @@ const GcashPayment = () => {
                                             <Upload className="size-5" />
                                             Proof of Payment
                                         </Label>
-                                        <p className="text-sm">Upload your GCash transaction screenshot</p>
+                                        <p className="text-sm mb-4">Upload your GCash transaction screenshot</p>
 
                                         <div
-                                            className="rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-gray-400"
+                                            className=" mb-6 rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-gray-400"
                                             onDrop={(e) => {
                                                 e.preventDefault();
                                                 const files = e.dataTransfer.files;

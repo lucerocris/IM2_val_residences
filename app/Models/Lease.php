@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -119,6 +120,23 @@ class Lease extends Model
     public function isOnboardingComplete(): bool
     {
         return $this->onboarding_fees_paid && $this->onboarding_signed_lease_uploaded && $this->onboarding_id_uploaded;
+    }
+
+    public static function getNumberOfPendingReviews() {
+        return Lease::where('documents_submitted_for_review', true)
+            ->where('landlord_review_status', 'pending')
+            ->count();
+    }
+
+    public static function getNumberOfExpiringLeases() {
+        return Lease::where('lease_status', 'active')
+            ->whereBetween('end_date', [
+                Carbon::today(),
+                Carbon::today()->addDays(90)
+            ])
+            ->with(['tenant:id,user_name,email', 'unit:id,address,unit_number'])
+            ->orderBy('end_date', 'asc')
+            ->count();
     }
 
     /**

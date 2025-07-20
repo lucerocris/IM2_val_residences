@@ -9,10 +9,10 @@ interface LeasesPageProps {
     numberOfLeases: number;
     numberOfActiveLease: number;
     numberOfPendingApplication: number;
-    numberOfOverDueBills: number;
+    numberOfOverdue: number;
 }
 
-const LeasesPage = ({leases, numberOfLeases, numberOfActiveLease, numberOfPendingApplication, numberOfOverDueBills}: LeasesPageProps) => {
+const LeasesPage = ({leases, numberOfLeases, numberOfActiveLease, numberOfPendingApplication, numberOfOverdue}: LeasesPageProps) => {
 
     const leaseStatuses = [
         { label: 'Active', value: 'active' },
@@ -49,7 +49,7 @@ const LeasesPage = ({leases, numberOfLeases, numberOfActiveLease, numberOfPendin
         },
         {
             title: 'With Overdue Bills',
-            metric: numberOfOverDueBills,
+            metric: numberOfOverdue ?? 0,
             metricDescription: 'Outstanding payment issues',
             icon: <AlertTriangle className="h-4 w-4 text-red-600" />,
         },

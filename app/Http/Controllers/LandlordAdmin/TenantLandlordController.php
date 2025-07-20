@@ -8,8 +8,10 @@ use App\Models\User;
 use App\Models\Lease;
 use App\Models\RentalBill;
 use App\Models\Tenant;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
@@ -17,12 +19,26 @@ use Illuminate\Support\Facades\DB;
 class TenantLandlordController extends Controller
 {
     public function index() {
+
+        $startOfMonth = Carbon::now()
+            ->startOfMonth()
+            ->toDateString();
+        $endOfMonth = Carbon::now()
+            ->endOfMonth()
+            ->toDateString();
+        $paidRentalBillsThisMonth = Number::currency(RentalBill::getPaidRevenueThisMonth($startOfMonth, $endOfMonth), in: 'PHP');
+
         $tenants = Tenant::getTableData();
         $numberOfActiveTenant = Tenant::getNumberOfActiveTenants();
+        $numberOfPendingReviews = Lease::getNumberOfPendingReviews();
+        $numberOfExpiringLeases = Lease::getNumberOfExpiringLeases();
 
         return Inertia::render('landlord/TenantsOverviewPage', [
             'numberOfActiveTenants' => $numberOfActiveTenant,
             'tenants' => $tenants,
+            'monthRevenue' => $paidRentalBillsThisMonth,
+            'pendingReviews' => $numberOfPendingReviews,
+            'expiringLeases'=> $numberOfExpiringLeases,
         ]);
     }
 
