@@ -44,6 +44,8 @@ const ListingsFilter = ({ propertyTypeFilter, setPropertyTypeFilter, maxRentFilt
                             <SelectItem value = "all">All Types</SelectItem>
                             <SelectItem value = "duplex">Duplex</SelectItem>
                             <SelectItem value = "triplex">Triplex</SelectItem>
+                            <SelectItem value = "loft">Loft</SelectItem>
+                            <SelectItem value = "studio">Studio</SelectItem>
                         </SelectContent>
                     </Select>
 

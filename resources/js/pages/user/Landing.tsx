@@ -1,19 +1,21 @@
 import ListingsLayout from "@/layout/ListingsLayout";
 import ListingsMain from "@/components/main/ui/Listings/main";
-import { ListingsData } from "@/types/tenantDashboard.types";
+import { ListingsData, UserInfo } from "@/types/tenantDashboard.types";
 
 interface UserListingsProps {
     ListingsData: ListingsData[];
+    userInfo: UserInfo[];
 }
 
-const UserListings = ({ListingsData}: UserListingsProps) => {
-    const title = "Welcome, Cris"
+const UserListings = ({ListingsData, userInfo}: UserListingsProps) => {
+    const userName = userInfo && userInfo.length > 0 ? userInfo[0].user_name : "Guest";
+    const title = `Welcome, ${userName}`
     const subtitle = "Discover your perfect home among our premium rental collection in the heart of Cebu."
     const buttonLabel = "VIEW LISTINGS"
 
     const headerLinks = [
-        {label: "VIEW LISTINGS", href: "/user"},
-        {label: "USER DASHBOARD", href: "/user/application"}
+        {label: "VIEW LISTINGS", href: "/user/listings"},
+        {label: "USER DASHBOARD", href: "/user"}
 
     ];
 
