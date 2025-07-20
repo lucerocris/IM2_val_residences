@@ -271,9 +271,15 @@ export const usersColumns: ColumnDef<User>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => router.visit(`/admin/users/${user.id}/edit`)}>
-                            <Edit className="mr-2 h-4 w-4" /> Edit user
-                        </DropdownMenuItem>
+
+                        {user.user_type === 'tenant' && (
+                            <>
+                                <DropdownMenuItem onClick={() => router.visit(`/landlord/tenants/${user.id}/edit`)}>
+                                    <Edit className="mr-2 h-4 w-4" /> Edit tenant
+                                </DropdownMenuItem>
+                            </>
+                        )}
+
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                             className="text-red-600"
