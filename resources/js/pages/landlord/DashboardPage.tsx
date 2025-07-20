@@ -208,31 +208,39 @@ const DashboardPage = ({
                                 cardTitle={"Overdue Bills"}
                                 cardDescription={"Outstanding payments past due date"}
                             />
-                            <DashboardCardContent
-                                items={overdueBills}
-                                renderItems={(bill: OverDueBills) => {
-                                    const daysOverdue = getDaysOverdue(bill.due_date);
 
-                                    return (
-                                        <div className="flex items-center justify-between rounded-lg border p-3">
-                                            <div>
-                                                <p className="font-medium">{bill.user_name}</p>
-                                                <p className="text-sm text-gray-600">Lease ID: {bill.lease_id}</p>
+                            {overdueBills.length === 0 ? (
+                                <div className = "p-6 text-center text-muted-foreground">
+                                    <AlertCircle className = "mx-auto mb-2 size-8 text-gray-400" />
+                                    <p>No overdue bills at the moment.</p>
+                                </div>
+                            ) : (
+                                <DashboardCardContent
+                                    items={overdueBills}
+                                    renderItems={(bill: OverDueBills) => {
+                                        const daysOverdue = getDaysOverdue(bill.due_date);
+
+                                        return (
+                                            <div className="flex items-center justify-between rounded-lg border p-3">
+                                                <div>
+                                                    <p className="font-medium">{bill.user_name}</p>
+                                                    <p className="text-sm text-gray-600">Lease ID: {bill.lease_id}</p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <Badge variant="destructive">
+                                                        {daysOverdue} days overdue
+                                                    </Badge>
+                                                    <p className="mt-1 text-sm font-medium">
+                                                        {formatCurrency(bill.balance)}
+                                                    </p>
+                                                    <p className="text-xs text-gray-500">Due: {bill.due_date}</p>
+                                                </div>
                                             </div>
-                                            <div className="text-right">
-                                                <Badge variant="destructive">
-                                                    {daysOverdue} days overdue
-                                                </Badge>
-                                                <p className="mt-1 text-sm font-medium">
-                                                    {formatCurrency(bill.balance)}
-                                                </p>
-                                                <p className="text-xs text-gray-500">Due: {bill.due_date}</p>
-                                            </div>
-                                        </div>
-                                    );
-                                }}
-                                getKey={(bill) => bill.lease_id}
-                            />
+                                        );
+                                    }}
+                                    getKey={(bill) => bill.lease_id}
+                                />
+                            )}
                         </Card>
 
                         {/* Maintenance Requests */}
@@ -242,28 +250,35 @@ const DashboardPage = ({
                                 cardTitle={'Maintenance Requests'}
                                 cardDescription={'Current maintenance and repair requests'}
                             />
-                            <DashboardCardContent
-                                items={maintenanceRequests}
-                                renderItems={(request: MaintenanceRequest) => (
-                                    <div key={request.id} className="flex items-start gap-3 rounded-lg border p-3">
-                                        <div className={`mt-1 h-3 w-3 rounded-full ${getPriorityColor(request.priority_level)}`}></div>
-                                        <div className="flex-1">
-                                            <div className="flex items-center justify-between">
-                                                <p className="font-medium">{request.unit_number}</p>
-                                                <Badge className={getStatusColor(request.request_status)}>
-                                                    {request.request_status.replace('_', ' ').charAt(0).toUpperCase() +
-                                                        request.request_status.replace('_', ' ').slice(1)}
-                                                </Badge>
+                            {maintenanceRequests.length === 0 ? (
+                                <div className = "p-6 text-center text-muted-foreground">
+                                    <AlertCircle className = "mx-auto mb-2 size-8 text-gray-400"/>
+                                    <p>No maintenance requests at the moment.</p>
+                                </div>
+                            ) : (
+                                <DashboardCardContent
+                                    items={maintenanceRequests}
+                                    renderItems={(request: MaintenanceRequest) => (
+                                        <div key={request.id} className="flex items-start gap-3 rounded-lg border p-3">
+                                            <div className={`mt-1 h-3 w-3 rounded-full ${getPriorityColor(request.priority_level)}`}></div>
+                                            <div className="flex-1">
+                                                <div className="flex items-center justify-between">
+                                                    <p className="font-medium">{request.unit_number}</p>
+                                                    <Badge className={getStatusColor(request.request_status)}>
+                                                        {request.request_status.replace('_', ' ').charAt(0).toUpperCase() +
+                                                            request.request_status.replace('_', ' ').slice(1)}
+                                                    </Badge>
+                                                </div>
+                                                <p className="mt-1 text-sm text-gray-600">{request.maintenance_description}</p>
+                                                <p className="mt-1 text-xs text-gray-500">
+                                                    Priority: {request.priority_level} • {request.request_date}
+                                                </p>
                                             </div>
-                                            <p className="mt-1 text-sm text-gray-600">{request.maintenance_description}</p>
-                                            <p className="mt-1 text-xs text-gray-500">
-                                                Priority: {request.priority_level} • {request.request_date}
-                                            </p>
                                         </div>
-                                    </div>
-                                )}
-                                getKey={(request) => request.id}
-                            />
+                                    )}
+                                    getKey={(request) => request.id}
+                                />
+                            )}
                         </Card>
                     </div>
                 </div>
