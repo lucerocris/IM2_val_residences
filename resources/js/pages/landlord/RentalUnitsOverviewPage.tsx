@@ -27,19 +27,19 @@ const RentalUnitsOverviewPage = ({unitsTableData, numberOfUnits, availableUnits,
         {
             title: 'Available',
             metric: availableUnits,
-            metricDescription: '18 occupied, 6 available',
+            metricDescription: 'Number of available units',
             icon: <CheckSquare className="h-4 w-4 text-muted-foreground" />,
         },
         {
             title: 'Occupied',
             metric: numberOfOccupiedUnits,
-            metricDescription: '18 occupied, 6 available',
+            metricDescription: 'Number of occupied units',
             icon: <Users className="h-4 w-4 text-muted-foreground" />,
         },
         {
             title: 'Maintenance',
             metric: numberOfMaintenanceRequests,
-            metricDescription: '18 occupied, 6 available',
+            metricDescription: 'Number of maintenance requests',
             icon: <Wrench className="h-4 w-4 text-muted-foreground" />,
         },
     ];

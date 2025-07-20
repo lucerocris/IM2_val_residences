@@ -20,11 +20,6 @@ class FinanceController extends Controller
         ]);
     }
 
-    //    public function report() {
-    //        $financialData = $this->getFinancialReportData();
-    //
-    //        return Inertia::render('landlord/FinancialReport', $financialData);
-    //    }
 
     private function getFinancialReportData()
     {

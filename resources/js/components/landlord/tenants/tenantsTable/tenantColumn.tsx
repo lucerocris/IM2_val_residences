@@ -11,8 +11,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Link } from '@inertiajs/react';
 
 export type Tenant = {
     id: string

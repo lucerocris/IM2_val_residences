@@ -22,6 +22,7 @@ class LeaseController extends Controller
         $numberOfLeases = Lease::getNumberOfLeases();
         $numberOfActiveLease = Lease::getNumberOfActiveLeases();
         $numberOfPendingApplications = RentalApplication::getNumberOfPendingApplications();
+        $numberOfOverdueBills = RentalBill::getNumberOfOverdue();
 
 
         return Inertia::render('landlord/LeasesPage', [
@@ -29,6 +30,7 @@ class LeaseController extends Controller
             'numberOfLeases' => $numberOfLeases,
             'numberOfActiveLease' => $numberOfActiveLease,
             'numberOfPendingApplication' => $numberOfPendingApplications,
+            'numberOfOverdue' => $numberOfOverdueBills
 
         ]);
     }
