@@ -14,6 +14,7 @@ import { useForm, usePage, router } from '@inertiajs/react';
 interface paymentAmountType {
     amount: number;
     leaseid: number;
+    billid: number; // Added billid to match GCash structure
 }
 
 type PageProps = {
@@ -21,10 +22,8 @@ type PageProps = {
 }
 
 type PaymentFormData = {
-    lease_id: number;
     reference_number: string;
     amount_paid: number | string;
-    payment_status: 'paid' | 'overdue' | 'partial' | 'pending';
     paid_date: string;
     proof_of_payment: File | null;
     notes?: string;
@@ -36,16 +35,15 @@ const BankTransferPayment = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const { data, setData, post, errors, processing } = useForm<PaymentFormData>({
-        lease_id: paymentData.leaseid,
         reference_number: '',
-        payment_status: 'pending',
         paid_date: '',
         amount_paid: paymentData.amount,
         proof_of_payment: null,
         notes: '',
     });
 
-    console.log(paymentData.leaseid);
+    console.log(paymentData.billid);
+    console.log(data);
 
     const bankDetails = {
         bankName: "BPI (Bank of the Philippine Islands)",
@@ -62,16 +60,24 @@ const BankTransferPayment = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
         if (!data.proof_of_payment || !data.reference_number) {
             return;
         }
 
-        const updatedData = {
-            ...data,
-            paid_date: new Date().toISOString()
-        };
+        const formData = new FormData();
+        formData.append('reference_number', data.reference_number);
+        formData.append('amount_paid', data.amount_paid.toString());
+        formData.append('proof_of_payment', data.proof_of_payment); // File object
+        formData.append('paid_date', new Date().toISOString().split('T')[0]); // Format: YYYY-MM-DD
+        if (data.notes) {
+            formData.append('notes', data.notes);
+        }
+        formData.append('_method', 'PATCH'); // Method spoofing for Laravel
 
-        router.post('/tenant/payments/bank-transfer', updatedData, {
+        router.post(`/tenant/payments/bank/${paymentData.billid}`, formData, {
+            preserveScroll: true,
+            forceFormData: true, // Ensure Inertia uses FormData
             onSuccess: () => {
                 setIsSubmitted(true);
             },
@@ -212,7 +218,7 @@ const BankTransferPayment = () => {
                                         <p className="mb-4 text-sm">Upload your bank transfer receipt or screenshot</p>
 
                                         <div
-                                            className="rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-gray-400"
+                                            className="mb-6 rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-gray-400"
                                             onDrop={(e) => {
                                                 e.preventDefault();
                                                 const files = e.dataTransfer.files;
@@ -273,7 +279,7 @@ const BankTransferPayment = () => {
                                                     <p className="text-sm text-gray-600">{data.proof_of_payment.name}</p>
                                                     <Label
                                                         htmlFor="proof-upload"
-                                                        className="cursor-pointer text-sm text-purple-600 hover:text-purple-700"
+                                                        className="cursor-pointer text-sm text-blue-600 hover:text-blue-800"
                                                     >
                                                         Change file
                                                     </Label>
