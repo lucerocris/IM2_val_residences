@@ -53,6 +53,8 @@ const RentalUnitsOverviewPage = ({unitsTableData, numberOfUnits, availableUnits,
     const propertyTypeOptions = [
         { label: 'Duplex', value: 'duplex' },
         { label: 'Triplex', value: 'triplex' },
+        { label: 'Loft', value: 'loft'},
+        { label: 'Studio', value: 'studio'},
     ];
 
     return (
