@@ -22,6 +22,7 @@ import {
     Smartphone,
     Upload,
     University,
+    Clock,
 } from "lucide-react"
 import type React from "react"
 import { useState } from "react"
@@ -559,17 +560,17 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                     </div>
 
                     {allStepsCompleted && (
-                        <Card className="mt-6 border-green-200 bg-green-50">
+                        <Card className="mt-6 border-yellow-200 bg-yellow-50">
                             <CardContent className="pt-6">
                                 <div className="text-center">
-                                    <CheckCircle className="mx-auto mb-4 h-16 w-16 text-green-600" />
-                                    <h3 className="mb-2 text-xl font-semibold text-green-800">
-                                        Congratulations! Your lease is now active.
+                                    <Clock className="mx-auto mb-4 h-16 w-16 text-yellow-600" />
+                                    <h3 className="mb-2 text-xl font-semibold text-yellow-800">
+                                        Documents Submitted for Review
                                     </h3>
-                                    <p className="mb-4 text-green-700">
-                                        You have successfully completed all requirements. You can now access all tenant features.
+                                    <p className="mb-4 text-yellow-700">
+                                        Your documents have been successfully submitted and are currently under review by the landlord. We will notify you once the review is complete.
                                     </p>
-                                    <Button asChild className="bg-green-600 hover:bg-green-700">
+                                    <Button asChild className="bg-yellow-600 hover:bg-yellow-700">
                                         <Link href="/tenant/dashboard">Go to Dashboard</Link>
                                     </Button>
                                 </div>
