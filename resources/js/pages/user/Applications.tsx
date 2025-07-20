@@ -8,8 +8,8 @@ const tenantHome = ({ applicationData }:UserApplicationProps) => {
         <>
             <Header 
             links = {[
-                {label: "VIEW LISTINGS", href: "/user"},
-                {label: "USER DASHBOARD", href: "/user/application"},
+                {label: "VIEW LISTINGS", href: "/user/listings"},
+                {label: "USER DASHBOARD", href: "/user"},
             ]}
             links2 = {[
                 {label: "LOG OUT", href: "/logout", method: 'post'}
