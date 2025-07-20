@@ -77,6 +77,7 @@ export function RentCollectionDataTable<TData, TValue>({ columns, data = [] }: R
         { label: 'Pending', value: 'pending' },
         { label: 'Overdue', value: 'overdue' },
         { label: 'Partial', value: 'partial' },
+        { label: 'For Review', value: 'for review'},
     ];
 
     const hasActiveFilters = table.getState().columnFilters.length > 0;

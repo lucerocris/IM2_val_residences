@@ -287,25 +287,6 @@ const LandlordSidebar = () => {
                                 sideOffset={4}
                             >
                                 <DropdownMenuItem asChild>
-                                    <Link href="/profile" className="flex items-center gap-2">
-                                        <User className="size-4" />
-                                        Profile
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
-                                    <Link href="/settings" className="flex items-center gap-2">
-                                        <Settings className="size-4" />
-                                        Settings
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
-                                    <Link href="/help" className="flex items-center gap-2">
-                                        <HelpCircle className="size-4" />
-                                        Help & Support
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
                                     <Link
                                         href="/logout"
                                         method="post"
