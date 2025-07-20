@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2, User, Phone, Mail, Building } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2, User, Phone, Mail, Building, RotateCcw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { router } from '@inertiajs/react';
@@ -25,6 +25,7 @@ export type Tenant = {
     move_in_date: string | null
     created_at: string
     updated_at: string
+    deleted_at: string | null
     current_lease?: {
         id: string
         units: {
@@ -37,7 +38,6 @@ export type Tenant = {
         monthly_rent: number
         lease_status: 'active' | 'expired' | 'terminated' | 'pending'
     } | null
-
 
     total_leases: number
     active_maintenance_requests: number
@@ -129,6 +129,14 @@ const handleDelete = (tenantId: string) => {
     }
 };
 
+const handleRestore = (tenantId: string) => {
+    if (confirm('Are you sure you want to restore this tenant?')) {
+        router.patch(`/landlord/tenants/${tenantId}/restore`, {}, {
+            preserveScroll: true,
+        });
+    }
+};
+
 export const tenantColumns: ColumnDef<Tenant>[] = [
     {
         accessorKey: 'user_name',
@@ -143,13 +151,25 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
         },
         cell: ({ row }) => {
             const tenant = row.original;
+            const isDeleted = tenant.deleted_at !== null;
 
             return (
                 <div className="flex flex-col pl-3">
-                    <span className="font-medium">{tenant.user_name}</span>
+                    <div className="flex items-center gap-2">
+                        <span className={`font-medium ${isDeleted ? 'text-muted-foreground line-through' : ''}`}>
+                            {tenant.user_name}
+                        </span>
+                        {isDeleted && (
+                            <Badge variant="outline" className="text-xs text-red-600 border-red-200">
+                                Deleted
+                            </Badge>
+                        )}
+                    </div>
                     <span className="text-xs text-muted-foreground">ID: {tenant.id}</span>
                     {tenant.tenant_occupation && (
-                        <span className="text-xs text-muted-foreground">{tenant.tenant_occupation}</span>
+                        <span className={`text-xs ${isDeleted ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>
+                            {tenant.tenant_occupation}
+                        </span>
                     )}
                 </div>
             );
@@ -160,19 +180,22 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
         header: 'Contact Information',
         cell: ({ row }) => {
             const tenant = row.original;
+            const isDeleted = tenant.deleted_at !== null;
 
             return (
                 <div className="flex flex-col space-y-1">
                     <div className="flex items-center text-sm">
                         <Mail className="mr-2 h-3 w-3 text-muted-foreground" />
-                        <span className="truncate max-w-[200px]">{tenant.email}</span>
+                        <span className={`truncate max-w-[200px] ${isDeleted ? 'text-muted-foreground/60' : ''}`}>
+                            {tenant.email}
+                        </span>
                     </div>
                     <div className="flex items-center text-sm">
                         <Phone className="mr-2 h-3 w-3 text-muted-foreground" />
-                        <span>{tenant.user_contact_number}</span>
+                        <span className={isDeleted ? 'text-muted-foreground/60' : ''}>{tenant.user_contact_number}</span>
                     </div>
                     {tenant.emergency_contact && (
-                        <div className="text-xs text-muted-foreground">
+                        <div className={`text-xs ${isDeleted ? 'text-muted-foreground/50' : 'text-muted-foreground'}`}>
                             Emergency: {tenant.emergency_contact}
                         </div>
                     )}
@@ -186,9 +209,10 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
         header: 'Employment',
         cell: ({ row }) => {
             const status = row.getValue('employment_status') as string | null;
+            const isDeleted = row.original.deleted_at !== null;
 
             if (!status) {
-                return <span className="text-muted-foreground">Not specified</span>;
+                return <span className={`${isDeleted ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>Not specified</span>;
             }
 
             const config = employmentStatusConfig[status.toLowerCase() as keyof typeof employmentStatusConfig] ||
@@ -206,7 +230,8 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
                         backgroundColor: config.backgroundColor,
                         color: config.color,
                         borderColor: config.borderColor,
-                        border: '1px solid'
+                        border: '1px solid',
+                        opacity: isDeleted ? 0.6 : 1
                     }}
                     className="capitalize font-medium"
                 >
@@ -224,10 +249,11 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
         header: 'Current Property',
         cell: ({ row }) => {
             const lease = row.original.current_lease;
+            const isDeleted = row.original.deleted_at !== null;
 
             if (!lease) {
                 return (
-                    <div className="text-muted-foreground text-sm">
+                    <div className={`text-sm ${isDeleted ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>
                         No active lease
                     </div>
                 );
@@ -237,14 +263,16 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
                 <div className="flex flex-col">
                     <div className="flex items-center text-sm font-medium">
                         <Building className="mr-2 h-3 w-3" />
-                        <span className="truncate max-w-[150px]">{lease.units.address}</span>
+                        <span className={`truncate max-w-[150px] ${isDeleted ? 'text-muted-foreground/60' : ''}`}>
+                            {lease.units.address}
+                        </span>
                     </div>
                     {lease.units.unit_number && (
-                        <span className="text-xs text-muted-foreground">
+                        <span className={`text-xs ${isDeleted ? 'text-muted-foreground/50' : 'text-muted-foreground'}`}>
                             Unit: {lease.units.unit_number}
                         </span>
                     )}
-                    <span className="text-xs text-muted-foreground">
+                    <span className={`text-xs ${isDeleted ? 'text-muted-foreground/50' : 'text-muted-foreground'}`}>
                         ${lease.monthly_rent.toLocaleString()}/month
                     </span>
                 </div>
@@ -259,6 +287,7 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
         cell: ({ row }) => {
             const lease = row.original.current_lease;
             const status = lease?.lease_status || 'no-lease';
+            const isDeleted = row.original.deleted_at !== null;
 
             const config = leaseStatusConfig[status as keyof typeof leaseStatusConfig];
 
@@ -270,22 +299,55 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
                             backgroundColor: config.backgroundColor,
                             color: config.color,
                             borderColor: config.borderColor,
-                            border: '1px solid'
+                            border: '1px solid',
+                            opacity: isDeleted ? 0.6 : 1
                         }}
                         className="font-medium"
                     >
                         {config.label}
                     </Badge>
                     {lease && (
-                        <span className="text-xs text-muted-foreground mt-1">
-                        Until: {new Date(lease.end_date).toLocaleDateString()}
-                    </span>
+                        <span className={`text-xs mt-1 ${isDeleted ? 'text-muted-foreground/50' : 'text-muted-foreground'}`}>
+                            Until: {new Date(lease.end_date).toLocaleDateString()}
+                        </span>
                     )}
                 </div>
             );
         },
         filterFn: (row, id, value) => {
             const status = row.original.current_lease?.lease_status || 'no-lease';
+            return value.includes(status);
+        }
+    },
+    {
+        // Add status column for filtering
+        id: 'status',
+        accessorFn: (row) => row.deleted_at ? 'deleted' : 'active',
+        header: 'Status',
+        cell: ({ row }) => {
+            const isDeleted = row.original.deleted_at !== null;
+
+            if (isDeleted) {
+                return (
+                    <div className="flex flex-col">
+                        <Badge variant="outline" className="text-red-600 border-red-200">
+                            Deleted
+                        </Badge>
+                        <span className="text-xs text-muted-foreground mt-1">
+                            {new Date(row.original.deleted_at!).toLocaleDateString()}
+                        </span>
+                    </div>
+                );
+            }
+
+            return (
+                <Badge variant="outline" className="text-green-600 border-green-200">
+                    Active
+                </Badge>
+            );
+        },
+        filterFn: (row, id, value) => {
+            const status = row.original.deleted_at ? 'deleted' : 'active';
             return value.includes(status);
         }
     },
@@ -301,16 +363,17 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
         },
         cell: ({ row }) => {
             const moveInDate = row.getValue('move_in_date') as string | null;
+            const isDeleted = row.original.deleted_at !== null;
 
             if (!moveInDate) {
-                return <span className="text-muted-foreground pl-4">Not set</span>;
+                return <span className={`pl-4 ${isDeleted ? 'text-muted-foreground/60' : 'text-muted-foreground'}`}>Not set</span>;
             }
 
             const date = new Date(moveInDate);
             return (
                 <div className="flex flex-col pl-4">
-                    <span>{date.toLocaleDateString()}</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className={isDeleted ? 'text-muted-foreground/60' : ''}>{date.toLocaleDateString()}</span>
+                    <span className={`text-xs ${isDeleted ? 'text-muted-foreground/50' : 'text-muted-foreground'}`}>
                         {Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))} days ago
                     </span>
                 </div>
@@ -329,10 +392,12 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
         },
         cell: ({ row }) => {
             const date = new Date(row.getValue('created_at'));
+            const isDeleted = row.original.deleted_at !== null;
+
             return (
                 <div className="pl-3 flex flex-col">
-                    <span>{date.toLocaleDateString()}</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className={isDeleted ? 'text-muted-foreground/60' : ''}>{date.toLocaleDateString()}</span>
+                    <span className={`text-xs ${isDeleted ? 'text-muted-foreground/50' : 'text-muted-foreground'}`}>
                         {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                 </div>
@@ -343,7 +408,8 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
         id: 'actions',
         cell: ({ row }) => {
             const tenant = row.original;
-``
+            const isDeleted = tenant.deleted_at !== null;
+
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -355,16 +421,33 @@ export const tenantColumns: ColumnDef<Tenant>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => router.visit(`/landlord/tenants/${tenant.id}/edit`)}>
-                            <Edit className="mr-2 h-4 w-4" /> Edit tenant
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(tenant.id)}>
-                            <div className="flex">
-                                <Trash2 className="mr-2 h-4 w-4 text-red-600" />
-                                <span>Remove tenant</span>
-                            </div>
-                        </DropdownMenuItem>
+
+                        {!isDeleted ? (
+                            <>
+                                <DropdownMenuItem onClick={() => router.visit(`/landlord/tenants/${tenant.id}`)}>
+                                    <Eye className="mr-2 h-4 w-4" /> View tenant
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => router.visit(`/landlord/tenants/${tenant.id}/edit`)}>
+                                    <Edit className="mr-2 h-4 w-4" /> Edit tenant
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(tenant.id)}>
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    Delete tenant
+                                </DropdownMenuItem>
+                            </>
+                        ) : (
+                            <>
+                                <DropdownMenuItem onClick={() => router.visit(`/landlord/tenants/${tenant.id}`)}>
+                                    <Eye className="mr-2 h-4 w-4" /> View tenant
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem className="text-green-600" onClick={() => handleRestore(tenant.id)}>
+                                    <RotateCcw className="mr-2 h-4 w-4" />
+                                    Restore tenant
+                                </DropdownMenuItem>
+                            </>
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

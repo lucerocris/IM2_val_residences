@@ -58,7 +58,7 @@ class Tenant extends User implements CanResetPassword
 
     public static function getTableData()
     {
-        return Tenant::with(['leases:id,unit_id', 'currentLease.units:id,address,unit_number'])->withCount(['leases as total_leases', 'maintenanceRequests'])->get();
+        return Tenant::with(['leases:id,unit_id', 'currentLease.units:id,address,unit_number'])->withCount(['leases as total_leases', 'maintenanceRequests'])->withTrashed()->get();
     }
 
     public static function getTenantInfo()
