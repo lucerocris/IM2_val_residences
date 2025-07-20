@@ -20,11 +20,21 @@ class TenantOnboardingService
      */
     public function getPendingOnboardingLease(User $tenant): ?Lease
     {
-        return Lease::where('tenant_id', $tenant->id)->where('lease_status', 'pending')->where(function ($query) {
-            $query->where('onboarding_fees_paid', false)
-                ->orWhere('onboarding_signed_lease_uploaded', false)
-                ->orWhere('onboarding_id_uploaded', false);
-        })->first();
+        return Lease::where('tenant_id', $tenant->id)
+            ->where(function ($query) {
+                $query->where('lease_status', 'pending')
+                    ->where(function ($q) {
+                        $q->where('onboarding_fees_paid', false)
+                            ->orWhere('onboarding_signed_lease_uploaded', false)
+                            ->orWhere('onboarding_id_uploaded', false);
+                    });
+            })
+            ->orWhere(function ($query) use ($tenant) {
+                $query->where('tenant_id', $tenant->id)
+                    ->where('lease_status', 'for_review');
+            })
+            ->first();
+
 
     }
 

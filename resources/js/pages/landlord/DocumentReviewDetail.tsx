@@ -77,9 +77,6 @@ export default function DocumentReviewDetail({ lease }: Props) {
         reason: "",
     })
 
-    const handleBack = () => {
-        router.get(route("landlord.document-review"))
-    }
 
     const handleDownload = (documentType: string) => {
         window.open(
@@ -92,22 +89,20 @@ export default function DocumentReviewDetail({ lease }: Props) {
 
     const handleApprove = (e: React.FormEvent) => {
         e.preventDefault()
-        approveForm.post(route("landlord.document-review.approve", lease.id), {
+        approveForm.post(`/document-review/${lease.id}/approve`, {
             onSuccess: () => {
                 setShowApproveForm(false)
-                router.get(route("landlord.document-review"))
             },
         })
     }
 
     const handleReject = (e: React.FormEvent) => {
         e.preventDefault()
-        rejectForm.post(route("landlord.document-review.reject", lease.id), {
+        rejectForm.post(`/document-review/${lease.id}/reject`, {
             onSuccess: () => {
-                setShowRejectForm(false)
-                router.get(route("landlord.document-review"))
+                setShowRejectForm(false);
             },
-        })
+        });
     }
 
     const getInitials = (name: string) => {
@@ -151,10 +146,6 @@ export default function DocumentReviewDetail({ lease }: Props) {
             <div className="space-y-6">
                 {/* Header */}
                 <div className="flex items-center space-x-4">
-                    <Button variant="ghost" size="sm" onClick={handleBack}>
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Reviews
-                    </Button>
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">Document Review</h1>
                         <p className="text-gray-600 mt-1">Review and approve tenant document submission</p>

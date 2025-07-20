@@ -11,29 +11,6 @@ use App\Models\Lease;
 
 class DocumentReviewController extends Controller
 {
-    public function index(){
-        $landlordId = Auth::id();
-        $pendingReviews = Lease::getPendingReviewLeases($landlordId);
-
-        return Inertia::render('landlord/DocumentReviewPage', [
-            'pendingReviews' => $pendingReviews->map(function ($lease) {
-                return [
-                    'id' => $lease->id,
-                    'tenant' => $lease->tenant,
-                    'unit' => $lease->units,
-                    'monthly_rent' => $lease->monthly_rent,
-                    'deposit_amount' => $lease->deposit_amount,
-                    'documents_submitted_at' => $lease->documents_submitted_at,
-                    'onboarding_fees_amount' => $lease->onboarding_fees_amount,
-                    'document_paths' => [
-                        'signed_lease' => $lease->onboarding_signed_lease_path,
-                        'id_document' => $lease->onboarding_id_document_path,
-                        'payment_proof' => $lease->onboarding_payment_proof_path,
-                    ],
-                ];
-            })
-        ]);
-    }
 
     public function show(Lease $lease)
     {
@@ -75,7 +52,7 @@ class DocumentReviewController extends Controller
         $success = $lease->approveAndActivateLease(Auth::id(), $request->notes);
 
         if ($success) {
-            return redirect('leases.index')->with('success', 'Documents approved and lease activated successfully!');
+            return redirect()->route('leases.index')->with('success', 'Documents approved and lease activated successfully!');
         } else {
             return back()->with('error', 'Failed to activate lease. Please check the documents again.');
         }
@@ -95,7 +72,7 @@ class DocumentReviewController extends Controller
         $success = $lease->rejectDocuments(Auth::id(), $request->reason);
 
         if ($success) {
-            return redirect('landlord.document-review')->with('success', 'Documents rejected. Tenant will be notified to re-upload.');
+            return redirect()->route('leases.index')->with('success', 'Documents rejected. Tenant will be notified to re-upload.');
         } else {
             return back()->with('error', 'Failed to reject documents.');
         }
@@ -111,7 +88,7 @@ class DocumentReviewController extends Controller
         $filePath = match ($documentType) {
             'signed_lease' => $lease->onboarding_signed_lease_path,
             'id_document' => $lease->onboarding_id_document_path,
-            'payment_proof' => $lease->onboarding_payment_proof_path,
+            'payment_proof' => $lease->onboarding_proof_of_payment_path,
             default => null,
         };
 

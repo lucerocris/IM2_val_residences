@@ -140,8 +140,6 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
     Route::post('/landlord/applications/{application}/message', [RentalApplicationController::class, 'sendMessage'])->name('landlord.applications.send-message');
 
 // Landlord Document Viewing
-    Route::get('/landlord/document-review', [DocumentReviewController::class, 'index'])
-        ->name('landlord.document-review');
     Route::get('/landlord/document-review/{lease}', [DocumentReviewController::class, 'show'])
         ->name('landlord.document-review.show');
     Route::post('/document-review/{lease}/approve', [DocumentReviewController::class, 'approve'])
