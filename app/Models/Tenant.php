@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,6 +13,7 @@ class Tenant extends User implements CanResetPassword
 {
 
     use CanResetPasswordTrait;
+    use SoftDeletes;
 
     protected static $singleTableType = 'tenant';
 

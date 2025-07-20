@@ -152,5 +152,6 @@ Route::middleware('auth', 'user.type:landlord')->group(function () {
 
 //    Lanlord Users
     Route::get('/landlord/users', [UserTableController::class, 'index']);
+    Route::delete('/landlord/users/{id}', [UserTableController::class, 'destroy']);
 
 });

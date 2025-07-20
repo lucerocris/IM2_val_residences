@@ -122,7 +122,14 @@ class User extends Authenticatable implements CanResetPassword
     }
 
     public static function fetchUser() {
-        return DB::table('users')->where('user_type', '<>', 'landlord')->select('id', 'user_name', 'email', 'user_contact_number', 'user_type', 'move_in_date', 'employment_status', 'emergency_contact', 'tenant_occupation', 'monthly_income', 'current_address', 'created_at')->get()->toArray();
+        return User::where('user_type', '<>', 'landlord')
+            ->select(
+                'id', 'user_name', 'email', 'user_contact_number', 'user_type',
+                'move_in_date', 'employment_status', 'emergency_contact', 'tenant_occupation',
+                'monthly_income', 'current_address', 'created_at'
+            )
+            ->get()
+            ->toArray();
     }
 
 

@@ -2,9 +2,12 @@
 
     namespace App\Models;
 
+    use Illuminate\Database\Eloquent\SoftDeletes;
+
     class ProspectiveTenant extends User
     {
         protected static $singleTableType = 'prospective_tenant';
+        use SoftDeletes;
 
 
         public function rentalApplications()
