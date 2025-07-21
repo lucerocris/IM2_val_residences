@@ -6,13 +6,14 @@ use App\Http\Requests\StoreUserApplicationRequest;
 use App\Models\RentalApplication;
 use App\Models\RentalUnit;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\User;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
     public function index() {
 
+        $userInfo = User::getSelfInfo(Auth::id());
         $Listings = RentalUnit::getListingsData();
         return Inertia::render('user/Landing',[
             'ListingsData' => $Listings

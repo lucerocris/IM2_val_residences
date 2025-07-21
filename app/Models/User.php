@@ -185,5 +185,9 @@ class User extends Authenticatable implements CanResetPassword
             ->count();
     }
 
+    public static function getSelfInfo(int $id) {
+        return DB::table('users')->where('id', '=', $id)->select('user_name')->get()->toArray();
+    }
+
 
 }
