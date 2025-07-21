@@ -61,6 +61,9 @@ class DatabaseSeeder extends Seeder
     /**
      * Create realistic rental bills for a lease
      */
+    /**
+     * Create realistic rental bills for a lease
+     */
     private function createRealisticBills($lease, $monthsToGenerate = 12)
     {
         $currentDate = Carbon::now();
@@ -73,12 +76,15 @@ class DatabaseSeeder extends Seeder
 //            $currentDate->copy()                // Current month
         ];
 
-        foreach ($monthsToCreate as $billingDate) {
-            $leaseStartDay = Carbon::parse($lease->start_date)->day;
-            $dueDate = $billingDate->copy()->day(min($leaseStartDay, $billingDate->daysInMonth()));
+        foreach ($monthsToCreate as $monthDate) {
+            // Set billing date to the 1st of the month
+            $billingDate = $monthDate->copy()->startOfMonth();
+
+            // Set due date to 15 days after billing date
+            $dueDate = $billingDate->copy()->addDays(15);
 
             // Determine payment status based on billing month
-            $paymentStatus = $this->determinePaymentStatusByMonth($billingDate, $currentDate);
+            $paymentStatus = $this->determinePaymentStatusByMonth($monthDate, $currentDate);
 
             // Calculate amount paid based on status
             $amountPaid = $this->calculateAmountPaid($rentAmount, $paymentStatus);
