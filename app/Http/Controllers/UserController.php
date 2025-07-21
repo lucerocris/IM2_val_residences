@@ -16,7 +16,8 @@ class UserController extends Controller
         $userInfo = User::getSelfInfo(Auth::id());
         $Listings = RentalUnit::getListingsData();
         return Inertia::render('user/Landing',[
-            'ListingsData' => $Listings
+            'ListingsData' => $Listings,
+            'UserInfo' => $userInfo,
         ]);
     }
 
