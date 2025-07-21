@@ -318,7 +318,7 @@ const TenantOnboarding: React.FC<OnboardingProps> = ({ lease }) => {
                                                                 <div className="flex flex-col items-center space-y-3 rounded-lg border-2 border-dashed border-gray-300 p-6">
                                                                     <div className="flex h-32 w-32 items-center justify-center rounded-lg bg-gray-100">
                                                                         <img
-                                                                            src="/placeholder.svg?height=128&width=128"
+                                                                            src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
                                                                             alt="GCash QR Code"
                                                                             className="h-full w-full rounded-lg object-cover"
                                                                         />

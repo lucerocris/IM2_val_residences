@@ -113,8 +113,9 @@ const GcashPayment = () => {
                                 <div className="flex justify-center">
                                     <div className="flex size-48 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100">
                                         <div className="text-center">
-                                            <QrCode className="mx-auto mb-2 size-12 text-gray-400" />
-                                            <p className="text-sm text-gray-500">GCash QR Code</p>
+                                            {/* <QrCode className="mx-auto mb-2 size-12 text-gray-400" /> */}
+                                            <img src = "https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" />
+                                            {/* <p className="text-sm text-gray-500">GCash QR Code</p> */}
                                         </div>
                                     </div>
                                 </div>
